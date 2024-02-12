@@ -1,0 +1,69 @@
+
+.activeAccent{
+    color: #FCF6F6 !important;
+    background-color: #990012 !important;
+}
+
+
+.activeSecondary{
+    color: #FCF6F6 !important;
+    background-color: #242323 !important;
+}
+
+
+
+.image-container {
+    height: 150px; /* Set a fixed height for the container */
+}
+
+.custom-image {
+    width: 100%; /* Ensure the image takes 100% of the container width */
+    height: 100%; /* Ensure the image takes 100% of the container height */
+    object-fit : contain; /* Maintain aspect ratio while covering the container */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.checked {
+    color: orange;
+  }
+
+
+.custom-container {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.custom-container:hover {
+    transform: scale(1.1);
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.custom-container:hover .overlay {
+    opacity: 1;
+}
+
+
+

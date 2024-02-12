@@ -1,0 +1,20 @@
+.bg-primary-color{
+  background-color: #FCF6F6 !important;
+}
+.bg-secondary-color{
+  background-color: #242323 !important;
+}
+.bg-secondary-accent{
+  background-color: #990012 !important;
+}
+.text-primary{
+  color: #FCF6F6;
+}
+
+.text-secondary{
+  color: #242323;
+}
+
+.text-accent{
+  color: #990012;
+}

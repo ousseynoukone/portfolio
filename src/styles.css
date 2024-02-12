@@ -1,1 +1,60 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
+
+.onhoverAccent:hover{
+    color: #FCF6F6 !important;
+    background-color: #990012 !important;
+    transition: background-color 0.3s ease;
+
+}
+.activeAccent{
+    color: #FCF6F6 !important;
+    background-color: #990012 !important;
+}
+
+.onhoverPrimary:hover{
+    color: #990012 !important;
+    background-color: #FCF6F6 !important;
+    transition: background-color 0.3s ease;
+
+}
+.activePrimary{
+    color: #990012 !important;
+    background-color: #FCF6F6 !important;
+}
+
+.onhoverSecondary:hover{
+    color: #FCF6F6 !important;
+    background-color: #242323 !important;
+    transition: background-color 0.3s ease;
+
+}
+
+
+
+.activeSecondary{
+    color: #FCF6F6 !important;
+    background-color: #242323 !important;
+}
+
+.bg-primary-color{
+    background-color: #FCF6F6 !important;
+}
+.bg-secondary-color{
+    background-color: #242323 !important;
+}
+.bg-accent-color{
+    background-color: #990012 !important;
+}
+.text-primary-color{
+    color: #FCF6F6;
+}
+
+.text-secondary-color{
+    color: #242323;
+}
+
+.text-accent-color{
+    color: #990012;
+}
+

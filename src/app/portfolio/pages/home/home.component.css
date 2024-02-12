@@ -1,0 +1,6 @@
+@media (max-width: 991px) {
+    /* Styles for screens up to 767px wide (typical mobile screens) */
+    .col-lg-6 .col-md-7.offset-md-4 img {
+        display: none;
+    }
+}

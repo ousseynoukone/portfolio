@@ -1,0 +1,38 @@
+/* styles.css */
+
+/* Initially hide subMenu items */
+.nav-item .subMenu {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.nav-item:hover .subMenu {
+    display: block;
+    opacity: 1;
+}
+
+
+
+.decoration {
+    background-color: #990012;
+    height: 1em;
+    width: 25%;
+}
+
+.active{
+    background-color: #990012!important;
+    color: #FCF6F6 !important;
+}
+
+.on-hover:hover{
+    text-decoration: underline;
+    color:#FCF6F6;
+    transition: all 0.35s ease-in-out;
+    background-color: #242323!important;
+
+}
+
+@media (max-width: 768px) {
+    .decoration {display: none;}
+}
