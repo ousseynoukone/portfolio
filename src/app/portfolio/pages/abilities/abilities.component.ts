@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef  } from '@angular/core';
 
 @Component({
   selector: 'app-abilities',
@@ -42,12 +42,14 @@ export class AbilitiesComponent implements OnInit {
     this.frameworkButton.classList.add("activeAccent");
   }
 
+  constructor(private el: ElementRef) {}
+
+
   showInformation(choice: string) {
     // Hide all sections before showing the selected one
     this.hideAllSections();
     // Remove activeAccent class from all buttons
     this.removeActiveAccentClassFromButtons();
-
     // Show the selected section
     switch (choice) {
       case "framework":
@@ -74,7 +76,12 @@ export class AbilitiesComponent implements OnInit {
         this.autreCompetence.removeAttribute("hidden");
         this.autreCompetenceButton.classList.add("activeAccent");
         break;
+
+    
     }
+
+    this.scrollToElement(choice)
+
   }
 
   hideAllSections() {
@@ -93,5 +100,14 @@ export class AbilitiesComponent implements OnInit {
     buttons.forEach(button => {
       button.classList.remove('activeAccent');
     });
+  }
+
+
+
+  scrollToElement(elementId: string): void {
+    const element = this.el.nativeElement.querySelector(`#${elementId}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+    }
   }
 }

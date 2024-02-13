@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ElementRef, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PortfolioRoutingModule } from './portfolio-routing.module';
@@ -21,11 +21,14 @@ import { ProjectsDetailsComponent } from './pages/projects-details/projects-deta
     ContactComponent,
     AbilitiesComponent,
     ProjectsComponent,
-    ProjectsDetailsComponent
+    ProjectsDetailsComponent,
+    
   ],
   imports: [
     CommonModule,
-    PortfolioRoutingModule
+    PortfolioRoutingModule,
+    
+    
   ]
 })
 export class PortfolioModule { }
