@@ -35,434 +35,112 @@
 <!-- Framework -->
 <div id="framework" class="container rounded bg-accent-color p-5 mt-5" hidden>
     <h5 class="text-primary-color">Les frameworks que j'utilise :</h5>
-
+  
     <div class="row">
-        <!-- Item 1 -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/springboot.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Spring Boot</div>
-            </div>
+      <!-- Iterate over frameworks array -->
+      <div *ngFor="let framework of frameworks" class="col mt-2">
+        <div class="container rounded image-container bg-primary-color custom-container">
+          <img [src]="framework.image" alt="" class="img-fluid custom-image">
+          <div class="overlay">
+            <span *ngFor="let star of getStarArray(5); let i = index;"
+                  class="fa fa-star"
+                  [ngClass]="{ 'checked': i < framework.rating }">
+            </span>
+          </div>
         </div>
-
-        <!-- Item 2 -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                
-                <img src="../../../../assets/imgs/angular.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                </div>
-            </div>
-       
-            <div class="container mt-3 mb-1 text-center transformText ">
-                                <hr>
-
-                <div class="badge bg-primary-color text-black onhoverSecondary">Angular</div>
-            </div>
-            
+        <div class="container mt-3 mb-1 text-center transformText">
+          <hr>
+          <div class="badge bg-primary-color text-black onhoverSecondary">{{ framework.name }}</div>
         </div>
-
-        <!-- Item 3 -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/laravel.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Laravel</div>
-            </div>
-        </div>
-
-        <!-- Item 4 -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/flutter.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Flutter</div>
-            </div>
-        </div>
-
-        <!-- Item 5 -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/bootstrap.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Bootstrap</div>
-            </div>
-        </div>
+      </div>
+      <!-- End of iteration -->
     </div>
-</div>
+  </div>
 
-
-
+  
 <!-- Langages de Programmation -->
 <div id="langProg" class="container rounded bg-accent-color p-5 mt-5" hidden>
     <h5 class="text-primary-color">Les langages de programmation que j'utilise : </h5>
-
+  
     <div class="row">
-        <!-- PHP -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/php.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-     
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">PHP</div>
-            </div>
+      <!-- Iterate over langageDeProgs array -->
+      <div *ngFor="let langage of langageDeProgs" class="col mt-2">
+        <div class="container rounded image-container bg-primary-color custom-container">
+          <img [src]="langage.image" alt="" class="img-fluid custom-image">
+          <div class="overlay">
+            <span *ngFor="let star of getStarArray(5); let i = index;"
+                  class="fa fa-star"
+                  [ngClass]="{ 'checked': i < langage.rating }">
+            </span>
+          </div>
         </div>
-
-        <!-- Java -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/java.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Java</div>
-            </div>
+        <div class="container mt-3 mb-1 text-center transformText">
+          <hr>
+          <div class="badge bg-primary-color text-black onhoverSecondary">{{ langage.name }}</div>
         </div>
-
-        <!-- JavaScript (JS) -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/js.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">JavaScript (JS)</div>
-            </div>
-        </div>
-
-        <!-- Dart -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/dart.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Dart</div>
-            </div>
-        </div>
-
-        <!-- Python -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/python.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Python</div>
-            </div>
-        </div>
-
-        <!-- C# -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/csharp.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">C#</div>
-            </div>
-        </div>
-
-        <!-- C -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/c.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">C</div>
-            </div>
-        </div>
-
-        <!-- C++ -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/cplus.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">C++</div>
-            </div>
-        </div>
-
-        <!-- TypeScript -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/ts.png" alt="" class="img-fluid custom-image">
-                <div class="overlay">
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                </div>
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">TypeScript</div>
-            </div>
-        </div>
+      </div>
+      <!-- End of iteration -->
     </div>
-</div>
-
-
+  </div>
+  
 
 <!-- Architecture et Concepts -->
 <div id="archiConcept" class="container rounded bg-accent-color p-5 mt-5" hidden>
-    <h5 class="text-primary-color">Mes notions  en architecture et systéme d'information : </h5>
-
+    <h5 class="text-primary-color">Mes notions en architecture et système d'information :</h5>
+  
     <div class="row">
-        <!-- RESTful / SOAP -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/archi.png" alt="" class="img-fluid custom-image">
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-                <hr>
-                <div class="badge bg-primary-color text-black  onhoverSecondary">RESTful / SOAP</div>
-            </div>
+      <!-- Iterate over archiConcepts array -->
+      <div *ngFor="let archiConcept of archiConcepts" class="col mt-2">
+        <div class="container rounded image-container bg-primary-color custom-container">
+          <img [src]="archiConcept.image" alt="" class="img-fluid custom-image">
         </div>
-
-        <!-- API (Application Programming Interface) -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/api.png" alt="" class="img-fluid custom-image">
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">API (Application Programming Interface)</div>
-            </div>
+        <div class="container mt-3 mb-1 text-center transformText">
+          <hr>
+          <div class="badge bg-primary-color text-black onhoverSecondary">{{ archiConcept.name }}</div>
         </div>
-
-        <!-- Modèle-Vue-Contrôleur (MVC) -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/mvc.png" alt="" class="img-fluid custom-image">
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Modèle-Vue-Contrôleur (MVC)</div>
-            </div>
-        </div>
-
-        <!-- Sécurité -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color custom-container">
-                <img src="../../../../assets/imgs/security.png" alt="" class="img-fluid custom-image">
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Sécurité</div>
-            </div>
-        </div>
+      </div>
+      <!-- End of iteration -->
     </div>
-</div>
-
-
-    
-    <!-- Gestion de Projet -->
-
-    <div id="gestionProjet" class="container rounded bg-accent-color p-5 mt-5" hidden>
-        <h5 class="text-primary-color">Mes compétences  en gestion de projet : </h5>
-
-        <div class="row">
-        <!-- Méthodologies Agile (SCRUM)  -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color ">
-                <img src="../../../../assets/imgs/scrum.png" alt="" class="img-fluid custom-image">
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-                <hr>
-                <div class="badge bg-primary-color text-black  onhoverSecondary">Méthodologies Agile (SCRUM) </div>
-            </div>
+  </div>
+  
+  <!-- Gestion de Projet -->
+  <div id="gestionProjet" class="container rounded bg-accent-color p-5 mt-5" hidden>
+    <h5 class="text-primary-color">Mes compétences en gestion de projet :</h5>
+  
+    <div class="row">
+      <!-- Iterate over gestionProj array -->
+      <div *ngFor="let gestion of gestionProjs" class="col mt-2">
+        <div class="container rounded image-container bg-primary-color">
+          <img [src]="gestion.image" alt="" class="img-fluid custom-image">
         </div>
-
-        <!-- Cascade -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color ">
-                <img src="../../../../assets/imgs/cascade.png" alt="" class="img-fluid custom-image">
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Cascade</div>
-            </div>
+        <div class="container mt-3 mb-1 text-center transformText">
+          <hr>
+          <div class="badge bg-primary-color text-black onhoverSecondary">{{ gestion.name }}</div>
         </div>
-
+      </div>
+      <!-- End of iteration -->
     </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    <!-- Modélisation -->
-
-    
-    <div id="modelisation" class="container rounded bg-accent-color p-5 mt-5" hidden>
-        <h5 class="text-primary-color">Mes compétences en modélisation : </h5>
-
-        <div class="row">
-        <!-- Méthodologies Agile (SCRUM)  -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color ">
-                <img src="../../../../assets/imgs/uml.png" alt="" class="img-fluid custom-image">
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-                <hr>
-                <div class="badge bg-primary-color text-black  onhoverSecondary">UML(Unified Modeling Language)</div>
-            </div>
+  </div>
+  
+  <!-- Modélisation -->
+  <div id="modelisation" class="container rounded bg-accent-color p-5 mt-5" hidden>
+    <h5 class="text-primary-color">Mes compétences en modélisation :</h5>
+  
+    <div class="row">
+      <!-- Iterate over modelisations array -->
+      <div *ngFor="let modelisation of modelisations" class="col mt-2">
+        <div class="container rounded image-container bg-primary-color">
+          <img [src]="modelisation.image" alt="" class="img-fluid custom-image">
         </div>
-
-        <!-- Cascade -->
-        <div class="col mt-2">
-            <div class="container rounded image-container bg-primary-color ">
-                <img src="../../../../assets/imgs/merise.png" alt="" class="img-fluid custom-image">
-            </div>
-            <div class="container mt-3 mb-1 text-center transformText">
-                <hr>
-                <div class="badge bg-primary-color text-black onhoverSecondary">Merise</div>
-            </div>
+        <div class="container mt-3 mb-1 text-center transformText">
+          <hr>
+          <div class="badge bg-primary-color text-black onhoverSecondary">{{ modelisation.name }}</div>
         </div>
-
+      </div>
+      <!-- End of iteration -->
     </div>
-</div>
-
-
-
-
-
+  </div>
+  
 
 
 

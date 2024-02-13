@@ -1,11 +1,12 @@
 import { Component, OnInit, ElementRef  } from '@angular/core';
-
+import { Ability } from 'src/app/models/abilitie';
 @Component({
   selector: 'app-abilities',
   templateUrl: './abilities.component.html',
   styleUrls: ['./abilities.component.css']
 })
 export class AbilitiesComponent implements OnInit {
+  //html elemetns
   framework: any;
   langageDeProg: any;
   archiConcept: any;
@@ -13,12 +14,24 @@ export class AbilitiesComponent implements OnInit {
   modelisation: any;
   autreCompetence: any;
 
+  //button
   frameworkButton: any;
   langProgButton: any;
   archiConceptButton: any;
   gestionProjetButton: any;
   modelisationButton: any;
   autreCompetenceButton: any;
+  
+  //array of models
+  frameworks: Ability[] = [];
+  langageDeProgs: Ability[] = [];
+  archiConcepts: Ability[] = [];
+  modelisations: Ability[] = [];
+  autreCompetences: Ability[] = [];
+  gestionProjs: Ability[] = [];
+
+
+  constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
     // Initialize elements in ngOnInit
@@ -40,10 +53,93 @@ export class AbilitiesComponent implements OnInit {
     this.framework.removeAttribute("hidden");
     // Add activeAccent class to frameworkButton by default
     this.frameworkButton.classList.add("activeAccent");
+
+    
+    // Fill frameworks array
+    this.addFrameworksCaller();
+    // Fill langageDeProgs array
+    this.addLangageDeProgsCaller();
+    // Fill archiConcepts array
+    this.addArchiConceptsCaller();
+    // Fill gestionProj array
+    this.addGestionProjCaller();
+    // Fill modelisations array
+    this.addModelisationsCaller();
+
   }
 
-  constructor(private el: ElementRef) {}
+  
 
+
+  addFrameworksCaller(){
+    this.addFrameworks('springboot.png', 'Spring Boot', 4);
+    this.addFrameworks('angular.png', 'Angular', 5);
+    this.addFrameworks('laravel.png', 'Laravel', 4);
+    this.addFrameworks('flutter.png', 'Flutter', 5);
+    this.addFrameworks('bootstrap.png', 'Bootstrap', 5);
+  }
+
+
+  addFrameworks(imgName:string , name : string  , rating  : number ){
+    this.frameworks.push(new Ability(name,"../../../../assets/imgs/"+imgName,rating));
+  }
+
+
+
+
+
+  addLangageDeProgsCaller() {
+    this.addLangageDeProgs('php.png', 'PHP', 5);
+    this.addLangageDeProgs('java.png', 'Java', 4);
+    this.addLangageDeProgs('js.png', 'JavaScript (JS)', 4);
+    this.addLangageDeProgs('dart.png', 'Dart', 5);
+    this.addLangageDeProgs('python.png', 'Python', 5);
+    this.addLangageDeProgs('csharp.png', 'C#', 4);
+    this.addLangageDeProgs('c.png', 'C', 3);
+    this.addLangageDeProgs('cplus.png', 'C++', 4);
+    this.addLangageDeProgs('ts.png', 'TypeScript', 4);
+  }
+
+  addLangageDeProgs(imgName: string, name: string, rating: number) {
+    this.langageDeProgs.push(new Ability(name, "../../../../assets/imgs/" + imgName,rating));
+  }
+
+
+
+
+
+  addArchiConceptsCaller() {
+    this.addArchiConcepts('archi.png', 'RESTful / SOAP');
+    this.addArchiConcepts('api.png', 'API (Application Programming Interface)');
+    this.addArchiConcepts('mvc.png', 'Modèle-Vue-Contrôleur (MVC)');
+    this.addArchiConcepts('security.png', 'Sécurité');
+  }
+
+  addArchiConcepts(imgName: string, name: string) {
+    this.archiConcepts.push(new Ability(name, "../../../../assets/imgs/" + imgName,0  ));
+  }
+  
+
+
+  addGestionProjCaller() {
+    this.addGestionProj('scrum.png', 'Méthodologies Agile (SCRUM)');
+    this.addGestionProj('cascade.png', 'Cascade');
+  }
+
+  addGestionProj(imgName: string, name: string) {
+    this.gestionProjs.push(new Ability(name, "../../../../assets/imgs/" + imgName,0));
+  }
+
+
+
+  addModelisationsCaller() {
+    this.addModelisations('uml.png', 'UML (Unified Modeling Language)');
+    this.addModelisations('merise.png', 'Merise');
+  }
+
+  addModelisations(imgName: string, name: string) {
+    this.modelisations.push(new Ability(name, "../../../../assets/imgs/" + imgName, 0));
+  }
 
   showInformation(choice: string) {
     // Hide all sections before showing the selected one
@@ -110,4 +206,39 @@ export class AbilitiesComponent implements OnInit {
       element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
     }
   }
+
+
+
+
+  getStarArray(length: number) {
+    return new Array(length).fill(0);
+  }
+
+
+
+
+// Function to generate ability arrays
+ generateAbilities(names: string[], images: string[], descriptions: string[] | null ,rating : number | null): Ability[] {
+  return names.map((name, index) => ({
+    name,
+    image: images[index],
+    description: descriptions![index]?? "",
+    rating: rating? rating : 0, 
+  }));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
