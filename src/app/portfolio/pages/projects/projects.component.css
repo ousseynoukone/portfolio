@@ -1,0 +1,22 @@
+
+.svg-icon{
+    height: 50 !;
+}
+
+
+.activeAccent{
+    color: #FCF6F6 !important;
+    background-color: #990012 !important;
+}
+
+
+.activeSecondary{
+    color: #FCF6F6 !important;
+    background-color: #242323 !important;
+}
+
+.carousel-caption {
+    background-color: rgba(36, 35, 35, 0.5); 
+}
+
+

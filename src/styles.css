@@ -30,6 +30,14 @@
 
 }
 
+.onhoverAccent:hover{
+    color: #FCF6F6 !important;
+    background-color: #990012 !important;
+    transition: background-color 0.3s ease;
+
+}
+
+
 
 
 .activeSecondary{
@@ -58,3 +66,7 @@
     color: #990012 !important;
 }
 
+html, body {
+    height:100%;
+    width:100%;
+  }

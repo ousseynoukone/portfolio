@@ -1,0 +1,79 @@
+
+
+
+.social-button{
+  text-decoration: none;
+}
+
+
+
+.text-wrap {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .text-wrap {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+  }
+}
+
+
+input{
+  border: none;
+  background-color: #FCF6F6;
+  border-bottom: 1px solid #242323;
+
+}
+
+input:focus {
+  outline: none;
+  border-bottom: 2px solid #990012;
+
+}
+
+textarea:focus {
+  outline: none;
+  border-bottom: 2px solid #990012;
+
+}
+
+textarea{
+  border:none;
+  background-color: #FCF6F6;
+  border-bottom: 1px solid #242323;
+
+}
+
+
+
+
+.sendButton{
+  border: none;
+  background-color: #242323;
+  color: #FCF6F6;
+  float: right;
+}
+
+
+
+.border-left-slice{
+  border-radius: 0px 3% 0% 0px;
+}
+
+
+
+
+.border-right-slice{
+  border-radius: 3% 0% 0% 0px;
+}
+
+
+
+
+
+
+

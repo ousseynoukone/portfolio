@@ -171,12 +171,13 @@ export class AbilitiesComponent implements OnInit {
       case "autreCompetence":
         this.autreCompetence.removeAttribute("hidden");
         this.autreCompetenceButton.classList.add("activeAccent");
+        this.scrollToElement(choice)
+
         break;
 
     
     }
 
-    this.scrollToElement(choice)
 
   }
 
