@@ -1,4 +1,4 @@
-<div class="container-fluid  mt-4 pt-2 pb-5 mainContainer">
+<div class="container-fluid  mt-4 pt-2 mainContainer">
 
 
     <div class="row ">
@@ -49,47 +49,68 @@
 
 
         <div class="col-md-7 bg-primary-color border-right-slice mt-1" >
+            <form action=""  [formGroup]="contactForm"  (submit)="sendMessage()">
             <div class="row m-3">
 
-                <div class="col-md-6 d-flex flex-column mt-1 mb-1 ">
-                    <label for="prenom">Prénom</label>
-
-                    <input placeholder="Saisir votre prénom" type="text" id="prenom">
+                <div class="col-md-6 d-flex flex-column mt-1 mb-1">
+                    <label for="prenom">Prénom *</label>
+                    <input placeholder="Saisir votre prénom" type="text" formControlName="prenom">
+                    <div *ngIf="contactForm.get('prenom')?.errors && contactForm.get('prenom')?.touched">
+                        <p class="badge bg-danger" *ngIf="contactForm.get('prenom')?.hasError('required')">Le prénom est obligatoire</p>
+                    </div>
                 </div>
 
                 <div class="col-md-6 d-flex flex-column mt-1 mb-1">
-                    <label for="nom">Nom</label>
-                    <input placeholder="Saisir votre nom" type="text" id="nom">
+                    <label for="nom">Nom *</label>
+                    <input placeholder="Saisir votre nom" type="text" formControlName="nom">
+					<div *ngIf="contactForm.get('nom')?.errors && contactForm.get('nom')?.touched">
+                        <p class="badge bg-danger" *ngIf="contactForm.get('nom')?.hasError('required') ">Le nom est obligatoire</p>
+                    </div>
 
+                    
                 </div>
 
             </div>
             <div class="row m-3">
                 <div class="col-md-6 d-flex flex-column mt-1 mb-1">
-                    <label for="email">Email</label>
-                    <input placeholder="Saisir votre adresse email" type="text" id="email">
+                    <label for="email">Email *</label>
+                    <input placeholder="Saisir votre adresse email" type="text" formControlName="email">
+					<div *ngIf="contactForm.get('email')?.errors && contactForm.get('email')?.touched">
+                        <p class="badge bg-danger" *ngIf="contactForm.get('email')?.hasError('required') ">L'adresse email est obligatoire</p>
+                        <p   class="badge bg-danger" *ngIf="contactForm.get('email')?.hasError('email') ">adresse email invalide</p>
+                    </div>
+
 
                 </div>
                 <div class="col-md-6 d-flex flex-column mt-1 mb-1">
                     <label for="phone">Téléphone</label>
 
-                    <input placeholder="Saisir votre numéro de téléphone" type="text" id="phone">
+                    <input placeholder="Saisir votre numéro de téléphone" type="text" formControlName="phone">
+
+                    <div *ngIf="contactForm.get('phone')?.errors && contactForm.get('phone')?.touched">
+                        <p class="badge bg-danger" *ngIf="contactForm.get('phone')?.hasError('required') ">Le numéro est obligatoire</p>
+                        <p class="badge bg-danger" *ngIf="contactForm.get('phone')?.hasError('pattern') ">Numéro de téléphone incorrecte</p>
+                    </div>
 
                 </div>
             </div>
 
 
             <div class="textarea-input mt-5 col-12  d-flex flex-column">
-            <label for="message">Message</label>
+            <label for="message">Message *</label>
 
-            <textarea name="" id="message" cols="30" rows="5" placeholder="Saisir votre message"></textarea>
+            <textarea name="" formControlName="message" cols="30" rows="5" placeholder="Saisir votre message"></textarea>
+            <div *ngIf="contactForm.get('message')?.errors && contactForm.get('message')?.touched">
+                <p class="badge bg-danger" *ngIf="contactForm.get('message')?.hasError('required') ">Le message est obligatoire</p>
+            </div>
 
 
         </div>
 
-        <button class="sendButton onhoverAccent rounded p-2 mt-3 mb-3 "  type="button">Envoyer</button>
-
-
+        <button class="sendButton onhoverAccent rounded p-2 mt-3 mb-3" type="submit" [disabled]="isSending">
+            Envoyer
+          </button>
+        </form>
 
         </div>
     </div>
