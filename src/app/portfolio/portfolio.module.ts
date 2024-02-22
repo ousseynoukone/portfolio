@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PortfolioRoutingModule } from './portfolio-routing.module';
 import { HeaderComponent } from './static/header/header.component';
 import { FooterComponent } from './static/footer/footer.component';
-import { MainLayoutComponent } from './static/main-layout/main-layout.component';
+import { MainLayoutComponent } from './static/home-layout/home-layout.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { AbilitiesComponent } from './pages/abilities/abilities.component';
@@ -13,6 +13,7 @@ import { ProjectsDetailsComponent } from './pages/projects-details/projects-deta
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { LayoutComponent } from './static/layout/layout.component';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -23,6 +24,7 @@ import { ToastrModule } from 'ngx-toastr';
     AbilitiesComponent,
     ProjectsComponent,
     ProjectsDetailsComponent,
+    LayoutComponent,
     
   ],
   imports: [

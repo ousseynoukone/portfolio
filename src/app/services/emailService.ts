@@ -1,7 +1,7 @@
 // email-sender.service.ts
 import { Injectable } from '@angular/core';
 import { Email } from '../models/email';
-import { getEmailJsPublicKey, getReceiverEmail } from '../constent/constant';
+import { emailJsPublicKey, receiverEmail } from '../constent/constant';
 import emailjs from '@emailjs/browser';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class EmailSenderService {
   sendEmail(email: Email): Promise<any> {
 
     emailjs.init({
-        publicKey: getEmailJsPublicKey(),
+        publicKey: emailJsPublicKey,
         blockHeadless: true,
         // blockList: {
         //   list: ['foo@emailjs.com', 'bar@emailjs.com'],
@@ -27,7 +27,7 @@ export class EmailSenderService {
         number: email.phone,
         email: email.email,
         message: email.message,
-        reply_to: getReceiverEmail(),
+        reply_to: receiverEmail,
       })
   }
 }

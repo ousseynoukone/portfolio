@@ -1,9 +1,3 @@
-export function getReceiverEmail() : string{
-    return "ousseynou781227@gmail.com";
-    
-}
+export const receiverEmail = "ousseynou781227@gmail.com";
+export const emailJsPublicKey = "H-rrgqZVF8hP_A0VM";
 
-export function getEmailJsPublicKey() : string {
-    return "H-rrgqZVF8hP_A0VM";
-    
-}

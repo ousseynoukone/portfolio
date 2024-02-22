@@ -1,37 +1,36 @@
 <nav class="navbar navbar-expand-lg bg-primary-color navbar-fixed-top">
     <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="decoration"></div>
-            <ul class="navbar-nav mx-auto justify-content-evenly flex-grow-1  ">
-                <li class="nav-item">
-                    <a class="nav-link active on-hover d-inline-flex p-2 m-3" aria-current="page" href="#">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link on-hover d-inline-flex p-2 m-3" aria-current="page" href="#">Compétences</a>
-                </li>
-
-
-                <li class="nav-item position-relative">
-                    <a class="nav-link on-hover d-inline-flex p-2 m-3 " i aria-current="page" href="#">Projets</a>
-                    <ul class="navbar-nav subMenu  bg-accent-color ms-3  position-absolute" >
-                        <li class="nav-item " >
-                            <a class="nav-link on-hover text-white  text-center" aria-current="page" href="#">Mobile</a>
-                        </li>
-                        <li class="nav-item "  >
-                            <a class="nav-link on-hover text-white text-center" aria-current="page" href="#">Web</a>
-                        </li>
-                    </ul>
-                </li>
-
-
-                <li class="nav-item">
-                    <a class="nav-link on-hover d-inline-flex p-2 m-3" aria-current="page" href="#">Contact</a>
-                </li>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="decoration"></div>
+        <ul class="navbar-nav mx-auto justify-content-evenly flex-grow-1">
+          <li class="nav-item">
+            <a class="nav-link on-hover d-inline-flex p-2 m-3" routerLink="home" routerLinkActive="active">Accueil</a>
+        </li>
+          <li class="nav-item">
+            <a class="nav-link on-hover d-inline-flex p-2 m-3"   href="/home#competences">Compétences</a>
+          </li>
+  
+          <li class="nav-item position-relative">
+            <a class="nav-link on-hover d-inline-flex p-2 m-3 "  [class.active]="isRouteActive('/project-details')" aria-current="page" href="/home#projets">Projets</a>
+            <ul class="navbar-nav subMenu  bg-accent-color ms-3  position-absolute">
+              <li class="nav-item">
+                <a class="nav-link on-hover text-white  text-center"  aria-current="page" href="/home#web">Mobile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link on-hover text-white text-center" aria-current="page" href="/home#mobile">Web</a>
+              </li>
             </ul>
-            <div class="decoration"></div>
-        </div>
+          </li>
+  
+          <li class="nav-item">
+            <a class="nav-link on-hover d-inline-flex p-2 m-3" [class.active]="isRouteActive('/contact')" href="/home#contact">Contact</a>
+          </li>
+        </ul>
+        <div class="decoration"></div>
+      </div>
     </div>
-</nav>
+  </nav>
+  
