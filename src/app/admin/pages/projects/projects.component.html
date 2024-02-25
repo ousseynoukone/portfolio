@@ -1,0 +1,52 @@
+
+  
+  <main class="p-3">
+    <section class="project-list">
+      <h2>Projects</h2>
+      <ul *ngIf="projects && projects.length > 0" class="list-unstyled">
+        <li *ngFor="let project of projects" class="mb-3">
+          <div class="project-card border p-3">
+            <h3>{{ project.title }}</h3>
+            <p>{{ project.minDescription }}</p>
+            <a href="{{ project.demo }}" target="_blank" class="btn btn-primary">Live Demo</a>
+            <button (click)="editProject(project)" class="btn btn-warning">Edit</button>
+            <button (click)="deleteProject(project.id)" class="btn btn-danger">Delete</button>
+          </div>
+        </li>
+      </ul>
+      <p *ngIf="!projects || projects.length === 0">No projects found.</p>
+    </section>
+  
+    <section class="add-project">
+      <h2>{{ editMode ? 'Edit Project' : 'Add Project' }}</h2>
+      <form [formGroup]="projectForm" (ngSubmit)="editMode ? updateProject() : addProject()">
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <input type="text" id="title" name="title" formControlName="title" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="minDescription">Short Description:</label>
+          <textarea id="minDescription" name="minDescription" formControlName="minDescription" class="form-control" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="fullDescription">Full Description:</label>
+          <textarea id="fullDescription" name="fullDescription" formControlName="fullDescription" class="form-control" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="imgs">Images (comma separated URLs):</label>
+          <input type="text" id="imgs" name="imgs" formControlName="imgs" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="usedTools">Used Tools (comma separated):</label>
+          <input type="text" id="usedTools" name="usedTools" formControlName="usedTools" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="demo">Live Demo URL:</label>
+          <input type="url" id="demo" name="demo" formControlName="demo" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-success mt-3"> {{ editMode ? 'Update Project' : 'Add Project' }} </button>
+        <button type="button"  *ngIf="editMode" (click)="cancelEdit()" class="btn btn-secondary mt-3">Cancel</button>
+      </form>
+    </section>
+  </main>
+  
