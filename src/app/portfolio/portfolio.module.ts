@@ -11,8 +11,7 @@ import { AbilitiesComponent } from './pages/abilities/abilities.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { ProjectsDetailsComponent } from './pages/projects-details/projects-details.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
+
 import { LayoutComponent } from './static/layout/layout.component';
 @NgModule({
   declarations: [
@@ -31,8 +30,7 @@ import { LayoutComponent } from './static/layout/layout.component';
     CommonModule,
     PortfolioRoutingModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule, // Required for animations
-    ToastrModule.forRoot() // Initialize Toastr globally
+
     
     
   ]
