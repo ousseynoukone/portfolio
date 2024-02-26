@@ -11,7 +11,7 @@ export class HomeComponent {
 
   constructor(private fService : FireBaseAuthService) {}
 
-  showComponentName: string | null = null;
+  showComponentName: string = "abilities"
 
 
   

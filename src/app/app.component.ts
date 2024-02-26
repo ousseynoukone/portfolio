@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FireBaseAuthService } from './services/firebaseService';
 import { Router } from '@angular/router';
 
@@ -9,15 +9,17 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'portfolio';
+  isLoading = true;
 
-  constructor(private authService: FireBaseAuthService, private router: Router) {
-  }
+  constructor(private authService: FireBaseAuthService, private router: Router) {}
 
   ngOnInit() {
     this.authService.isAuthenticated.subscribe(isAuthenticated => {
       if (!isAuthenticated) {
-        this.router.navigate(['/admin/login']); 
+        this.router.navigate(['/admin/login']);
       }
+      // Authentication check is complete, hide the loader
+      this.isLoading = false;
     });
   }
 }

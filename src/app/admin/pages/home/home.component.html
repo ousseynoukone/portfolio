@@ -6,10 +6,10 @@
 
 <main class="p-3">
   <button class="btn bg-accent-color text-white m-3" (click)="showComponent('projects')">Show  Projects</button>
-  <button class="btn bg-accent-color text-white m-3" (click)="showComponent('abilites')">Show  Abilites</button>
+  <button class="btn bg-accent-color text-white m-3" (click)="showComponent('abilities')">Show  Abilities</button>
 
   <app-projects *ngIf="showComponentName === 'projects'"></app-projects>
 
-  <app-abilities *ngIf="showComponentName === 'abilites'"></app-abilities>
+  <app-abilities *ngIf="showComponentName === 'abilities'"></app-abilities>
   
 </main>

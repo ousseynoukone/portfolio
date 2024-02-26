@@ -1,6 +1,6 @@
 
   
-  <main class="p-3">
+  <main class="p-3 text-dark rounded bg-primary-color">
     <section class="project-list">
       <h2>Projects</h2>
       <ul *ngIf="projects && projects.length > 0" class="list-unstyled">
@@ -44,8 +44,8 @@
           <label for="demo">Live Demo URL:</label>
           <input type="url" id="demo" name="demo" formControlName="demo" class="form-control">
         </div>
-        <button type="submit" class="btn btn-success mt-3"> {{ editMode ? 'Update Project' : 'Add Project' }} </button>
-        <button type="button"  *ngIf="editMode" (click)="cancelEdit()" class="btn btn-secondary mt-3">Cancel</button>
+        <button type="submit" class="btn bg-secondary-color text-white mt-3"> {{ editMode ? 'Update Project' : 'Add Project' }} </button>
+        <button type="button"  *ngIf="editMode" (click)="cancelEdit()" class="btn bg-accent-colormt-3 text-white">Cancel</button>
       </form>
     </section>
   </main>

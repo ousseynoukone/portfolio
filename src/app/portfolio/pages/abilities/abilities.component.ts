@@ -81,7 +81,7 @@ export class AbilitiesComponent implements OnInit {
 
 
   addFrameworks(imgName:string , name : string  , rating  : number ){
-    this.frameworks.push(new Ability(name,"../../../../assets/imgs/"+imgName,rating));
+    this.frameworks.push(new Ability(null,name,"../../../../assets/imgs/"+imgName,rating));
   }
 
 
@@ -101,7 +101,7 @@ export class AbilitiesComponent implements OnInit {
   }
 
   addLangageDeProgs(imgName: string, name: string, rating: number) {
-    this.langageDeProgs.push(new Ability(name, "../../../../assets/imgs/" + imgName,rating));
+    this.langageDeProgs.push(new Ability(null,name, "../../../../assets/imgs/" + imgName,rating));
   }
 
 
@@ -116,7 +116,7 @@ export class AbilitiesComponent implements OnInit {
   }
 
   addArchiConcepts(imgName: string, name: string) {
-    this.archiConcepts.push(new Ability(name, "../../../../assets/imgs/" + imgName,0  ));
+    this.archiConcepts.push(new Ability(null,name, "../../../../assets/imgs/" + imgName,0  ));
   }
   
 
@@ -127,7 +127,7 @@ export class AbilitiesComponent implements OnInit {
   }
 
   addGestionProj(imgName: string, name: string) {
-    this.gestionProjs.push(new Ability(name, "../../../../assets/imgs/" + imgName,0));
+    this.gestionProjs.push(new Ability(null,name, "../../../../assets/imgs/" + imgName,0));
   }
 
 
@@ -138,7 +138,7 @@ export class AbilitiesComponent implements OnInit {
   }
 
   addModelisations(imgName: string, name: string) {
-    this.modelisations.push(new Ability(name, "../../../../assets/imgs/" + imgName, 0));
+    this.modelisations.push(new Ability(null,name, "../../../../assets/imgs/" + imgName, 0));
   }
 
   showInformation(choice: string) {
@@ -217,16 +217,6 @@ export class AbilitiesComponent implements OnInit {
 
 
 
-
-// Function to generate ability arrays
- generateAbilities(names: string[], images: string[], descriptions: string[] | null ,rating : number | null): Ability[] {
-  return names.map((name, index) => ({
-    name,
-    image: images[index],
-    description: descriptions![index]?? "",
-    rating: rating? rating : 0, 
-  }));
-}
 
 
 
