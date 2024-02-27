@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { Ability } from 'src/app/models/abilitie';
 import { FireBaseStorageService } from 'src/app/services/firebaseService';
+declare var $: any; // Declare $ as a variable to access jQuery
 
 @Component({
   selector: 'app-abilities',
@@ -25,10 +26,12 @@ export class AbilitiesComponent implements OnInit {
 
   toastr: ToastrService = inject(ToastrService);
 
+  //pagination limit
+  limit : number = 5
+
   constructor(private fb: FormBuilder) {}
 
-    // Reference to MatPaginator
-    // @ViewChild(MatPaginator) paginator !: MatPaginator;
+
 
   ngOnInit() {
     this.abilityForm = this.fb.group({
@@ -41,20 +44,20 @@ export class AbilitiesComponent implements OnInit {
     this.fetchAbilities();
   }
 
-  // ngAfterViewInit() {
-  //   // Set the paginator for the data source
-  //   this.abilitiesDataSource.paginator = this.paginator;
-  // }
+
   
   fetchAbilities() {
     this.isDataComing = true;
-    this.fireBaseStorage.getAbilities();
+    this.fireBaseStorage.getAbilities(this.limit);
     this.fireBaseStorage.abilitiesSubject.subscribe((abilities) => {
       this.isDataComing = false;
       this.abilities = abilities;
       this.abilitiesDataSource = new MatTableDataSource<Ability>(abilities);
     });
+    $('#example').DataTable();
+
   }
+  
 
   onImageChange(event: any) {
     const file = event.target.files[0];
@@ -66,9 +69,10 @@ export class AbilitiesComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isLoading = true;
     this.abilityForm.markAllAsTouched();
     if (this.abilityForm.valid) {
+      this.isLoading = true;
+
       let formData = this.abilityForm.value;
       let ability = formData as Ability;
       this.fireBaseStorage.percentage.subscribe((percentage) => {
@@ -87,5 +91,13 @@ export class AbilitiesComponent implements OnInit {
 
   getStarArray(length: number) {
     return new Array(length).fill(0);
+  }
+
+  getNext(){
+    this.fireBaseStorage.getNextAbilities()
+  }
+
+  getPrevious(){
+    this.fireBaseStorage.getPreviousAbilities()
   }
 }

@@ -32,6 +32,8 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
+              "src/assets/js/dataTables.js",
+              "src/assets/js/dataTables.bootstrap5.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           },

@@ -1,5 +1,6 @@
 
-
+<div class="container bg-primary-color mt-3 ">
+  <h3 class="bg-secondary-color text-white p-3 text-center ">Ablities Section</h3>
 <div class="row">
   <div *ngIf="isDataComing" class="col-md-12 text-center mt-5">
     <div class="spinner-grow text-danger" role="status">
@@ -8,65 +9,63 @@
   </div>
 
 <!-- abilities.component.html -->
-<div *ngIf="!isDataComing" class="bg-accent-color">
-  <table mat-table [dataSource]="abilitiesDataSource" class="mat-elevation-z8">
+<div *ngIf="!isDataComing" class="bg-accent-color rounded">
+  <div class="container mt-3">
+    <table id="example" class="table table-striped" style="width:100%">
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let ability">{{ ability.name }}</td>
-    </ng-container>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Rating</th>
+          <th>Image</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ability of abilities">
+          <td>{{ ability.name }}</td>
+          <td>
+            <div class="overlay">
+              <span *ngFor="let star of getStarArray(5); let i = index;"
+                    class="fa fa-star"
+                    [ngClass]="{ 'checked': i < ability.rating }">
+              </span>
+            </div>
+          </td>
+          <td>
+            <img [src]="ability.image" alt="{{ ability.name }} Image" style="max-height: 50px;">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="badge bg-secondary-color text-white ">Total de  {{fireBaseStorage.totalOfItems}}  affichés par    {{limit}}</div>
+  </div>
+  
 
-    <!-- Rating Column -->
-    <ng-container matColumnDef="rating">
-      <th mat-header-cell *matHeaderCellDef>Rating</th>
-      <td mat-cell *matCellDef="let ability">
-        <div class="overlay">
-          <span *ngFor="let star of getStarArray(5); let i = index;"
-                class="fa fa-star"
-                [ngClass]="{ 'checked': i < ability.rating }">
-          </span>
-        </div>
-      </td>
-    </ng-container>
+  <button class="btn bg-secondary-color m-2 text-white" [disabled]="fireBaseStorage.weAreOntFirstElement" (click)="getPrevious()">Precedent</button>
 
-    <!-- Image Column -->
-    <ng-container matColumnDef="image">
-      <th mat-header-cell *matHeaderCellDef>Image</th>
-      <td mat-cell *matCellDef="let ability">
-        <img [src]="ability.image" alt="{{ ability.name }} Image" style="max-height: 50px;">
-      </td>
-    </ng-container>
+  <button class="btn  bg-secondary-color m-2  text-white" [disabled]="fireBaseStorage.weAreOntLastElement" (click)="getNext()">Suivant</button>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-
-
-  </table>
-
-  <mat-paginator class="bg-primary-color " [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true"
+  <!-- <mat-paginator class="bg-primary-color" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true"
   [length]="abilitiesDataSource.data.length" showFirstLastButtons>
-</mat-paginator>
+  </mat-paginator> -->
+  
 </div>
-
+<!-- //TODO PAGINATINO IS NOT WORKING WELL !!! -->
   
 
 </div>
 
 
+</div>
 
 
 
 
 
 
-
-
-
-
+<div class="container mt-3 bg-primary-color">
 <form [formGroup]="abilityForm" (ngSubmit)="onSubmit()" class="mt-4 col-12 ">
-  <div class="badge bg-secondary-color text-white p-2 mt-3 mb-3">Add ability</div>
+  <div class="h5 text-center bg-secondary-color text-white p-2 mt-3 mb-3">Add ability</div>
     <div class="form-group ">
       <label for="libelle">Libelle : </label>
       <input type="text" id="libelle" class="form-control" formControlName="name" required>
@@ -111,13 +110,17 @@
     </div>
 </div>
 
-<button type="submit" class="btn bg-accent-color p-2 mt-3 text-white" >
+<button type="submit" [disabled]="isLoading" class="btn bg-accent-color p-2 mt-3 text-white" >
 
   <span *ngIf="isLoading" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
-  <span *ngIf="!isLoading">Add</span>
+  <span *ngIf="!isLoading" >Add</span>
 
  </button> 
 
 
   </form>
-  
+</div>
+
+
+
+

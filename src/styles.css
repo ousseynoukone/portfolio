@@ -2,6 +2,8 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 
+@import url('./assets/css/dataTables.bootstrap5.css');
+
 .onhoverAccent:hover{
     color: #FCF6F6 !important;
     background-color: #990012 !important;

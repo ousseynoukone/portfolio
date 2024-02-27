@@ -61,17 +61,35 @@ export class FireBaseAuthService {
 @Injectable({
   providedIn: 'root',
 })
-export class FireBaseStorageService{
+export class FireBaseStorageService {
 
   abilitiyDB !: AngularFirestoreCollection<any>;
   private basePath = '/uploads';
-  //Stream
+
+  // Streams for percentage and abilities
   private _percentageSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  //default value not requireed
   private _abilitiesSubject: Subject<Ability[]> = new Subject<Ability[]>();
+
+
+  //for pagination
+  private lastVisibleByDoc: any;
+  private firstVisibleByDoc: any;
+  private firstDocId : any
+
+  //for pagination
+  public limit : number = 0
+  public weAreOntFirstElement : boolean = false;
+  public weAreOntLastElement : boolean = false;
+  public totalOfItems : number = 0;
+
 
   constructor(private firestore : AngularFirestore, private storage: AngularFireStorage){
     this.abilitiyDB = firestore.collection('abilities');
+
+    this.abilitiesSubject.subscribe(abilities => {
+      this.weAreOntFirstElement = abilities.some(ability => ability.id === this.firstDocId);
+    });
+    this.getAbilitiesNumber()
   }
 
   get percentage(): Observable<Number> {
@@ -81,7 +99,15 @@ export class FireBaseStorageService{
   get abilitiesSubject():Observable<Ability[]> {
     return this._abilitiesSubject.asObservable();
   }
-    
+
+
+  get getLastVisibleByName(): String{
+    return this.lastVisibleByDoc
+  }
+  
+  get getFirstVisibleByName(): String{
+    return this.firstVisibleByDoc
+  }
 
 
   async addAbility(ability: Ability, file: File): Promise<ResponseDto> {
@@ -100,36 +126,116 @@ export class FireBaseStorageService{
   })
   );
 
-
-  // Assuming this.abilitiyDB is an AngularFirestoreCollection<Ability>
+    const newId = this.firestore.createId();
+    ability.id = newId;
+    
   await this.abilitiyDB.add(ability);
   return { status: true, message: 'Ability added successfully.' };
 
     } catch (error) {
        return { status: false, message: String(error) };
-  
    }
-
   }
 
+
+
+  
  
-  getAbilities() {
-    
-    this.abilitiyDB.valueChanges().subscribe(querySnapshot => {
+
+
+
+  getAbilities(limit : any) {
+    this.limit=limit
+    this.firestore.collection('abilities',ref=>ref.limit(this.limit).orderBy('id','desc')).valueChanges().subscribe(querySnapshot => {
       let abilities: Ability[] = [];
       querySnapshot.forEach(doc => {
-        
         const ability = doc as Ability;
-        console.log(ability)
-
         abilities.push(ability);
+        //For saving the last displated ability
+        this.lastVisibleByDoc = ability.id
       });
+
+      this.firstDocId = abilities.at(0)?.id;
+
       this._abilitiesSubject.next(abilities);
     });
   }
+
+  getAbilitiesNumber() {
+    this.abilitiyDB.valueChanges().subscribe(querySnapshot => {
+      this.totalOfItems=querySnapshot.length
+    });
+  }
+
+
+
+//For the pagination
+getNextAbilities() {
+    this.firestore.collection('abilities',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
+      
+      let abilities: Ability[] = [];
+      querySnapshot.forEach(doc => {
+        const ability = doc as Ability;
+        abilities.push(ability);
+      });
+      this._abilitiesSubject.next(abilities);
+      this.firstVisibleByDoc = abilities.at(0)?.id;
+
+      console.log("firstVisibleByDoc " + this.firstVisibleByDoc)
+
+      this.lastVisibleByDoc = abilities.at(abilities.length-1)?.id;
+
+
+      //This is only to ensure that we are  on the last elements soo the suivant button is disabled
+    this.firestore.collection('abilities',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
+      console.log(querySnapshot.length)
+      if(querySnapshot.length==0){
+        this.weAreOntLastElement=true;
+      }}); 
+    }); 
+
+
+
+
+
+  } 
+
+
+
+  getPreviousAbilities() {
+    this.firestore.collection('abilities', ref =>
+      ref.limitToLast(this.limit).orderBy('id','desc').endBefore(this.firstVisibleByDoc)
+    ).valueChanges().subscribe(querySnapshot => {
+      let abilities: Ability[] = [];
+      querySnapshot.forEach(doc => {
+        const ability = doc as Ability;
+        abilities.push(ability);
+      });
+      console.log(abilities)
+
+      this.firstVisibleByDoc = abilities.length > 0 ? abilities[0].id : null; // Update firstVisibleByDoc
+      this.lastVisibleByDoc = abilities.at(abilities.length-1)?.id;
+
+      this._abilitiesSubject.next(abilities);
+    });
+
+    //so the suivant button is enabled
+    this.weAreOntLastElement=false;
+
+      
+  }
+  
 
 
   
   
 
 }
+
+
+
+
+
+
+
+
