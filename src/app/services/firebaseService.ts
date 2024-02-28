@@ -158,6 +158,15 @@ export class FireBaseStorageService {
       this.firstDocId = abilities.at(0)?.id;
 
       this._abilitiesSubject.next(abilities);
+
+      //This is only to ensure that we are  on the last elements soo the suivant button is disabled
+      this.firestore.collection('abilities',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
+        console.log(querySnapshot.length)
+        if(querySnapshot.length==0){
+          this.weAreOntLastElement=true;
+        }}); 
+  
+      
     });
   }
 

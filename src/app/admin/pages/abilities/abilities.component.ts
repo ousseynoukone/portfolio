@@ -1,12 +1,9 @@
 // abilities.component.ts
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { Ability } from 'src/app/models/abilitie';
 import { FireBaseStorageService } from 'src/app/services/firebaseService';
-declare var $: any; // Declare $ as a variable to access jQuery
 
 @Component({
   selector: 'app-abilities',
@@ -21,13 +18,16 @@ export class AbilitiesComponent implements OnInit {
   isLoading: boolean = false;
   isDataComing: boolean = false;
   abilities: Ability[] = [];
-  abilitiesDataSource = new MatTableDataSource<Ability>();
   displayedColumns: string[] = ['name', 'rating', 'image'];
 
   toastr: ToastrService = inject(ToastrService);
 
   //pagination limit
-  limit : number = 5
+  limit : number = 10
+
+
+  dtOptions: DataTables.Settings = {};
+
 
   constructor(private fb: FormBuilder) {}
 
@@ -42,6 +42,11 @@ export class AbilitiesComponent implements OnInit {
     });
 
     this.fetchAbilities();
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      lengthMenu : [5, 10, 25],
+      processing: true
+    };
   }
 
 
@@ -52,10 +57,7 @@ export class AbilitiesComponent implements OnInit {
     this.fireBaseStorage.abilitiesSubject.subscribe((abilities) => {
       this.isDataComing = false;
       this.abilities = abilities;
-      this.abilitiesDataSource = new MatTableDataSource<Ability>(abilities);
     });
-    $('#example').DataTable();
-
   }
   
 
