@@ -1,5 +1,5 @@
 // abilities.component.ts
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Ability } from 'src/app/models/abilitie';
@@ -22,31 +22,34 @@ export class AbilitiesComponent implements OnInit {
 
   toastr: ToastrService = inject(ToastrService);
 
+  
   //pagination limit
   limit : number = 10
 
+  editMode : boolean = false;
 
-  dtOptions: DataTables.Settings = {};
+  //To check if file has been chosen while wanting to update
+  withFile : boolean = false;
+
+//uncomment for dataTable
+ // dtOptions: DataTables.Settings = {};
 
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,private el: ElementRef) {}
 
 
 
   ngOnInit() {
     this.abilityForm = this.fb.group({
       id: [null],
-      name: ['', Validators.required],
+      type: ["",Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(10)]],
       image: ['', Validators.required],
       rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
     });
 
     this.fetchAbilities();
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      lengthMenu : [5, 10, 25],
-      processing: true
-    };
+
   }
 
 
@@ -55,6 +58,11 @@ export class AbilitiesComponent implements OnInit {
     this.isDataComing = true;
     this.fireBaseStorage.getAbilities(this.limit);
     this.fireBaseStorage.abilitiesSubject.subscribe((abilities) => {
+      // this.dtOptions = {
+      //   pagingType: 'full_numbers',
+      //   lengthMenu : [5, 10, 25],
+      //   processing: true
+      // };
       this.isDataComing = false;
       this.abilities = abilities;
     });
@@ -68,6 +76,12 @@ export class AbilitiesComponent implements OnInit {
       return;
     }
     this.file = file;
+
+    //Si on charge une image alors qu'on a edit mode , l'image dois etre mise a jour dans le db
+    if(this.editMode){
+      this.withFile = true
+
+    }
   }
 
   onSubmit() {
@@ -81,13 +95,21 @@ export class AbilitiesComponent implements OnInit {
         this.percentage = percentage;
       });
 
-      this.fireBaseStorage.addAbility(ability, this.file).then((value) => {
-        this.isLoading = false;
-        if (value.status) {
-          this.abilityForm.reset();
-          this.toastr.success('Ability saved successfully :)');
-        }
-      });
+      if(this.editMode){
+        this.updateAbility(ability)
+
+      }else{
+        
+        this.fireBaseStorage.addAbility(ability, this.file).then((value) => {
+          this.isLoading = false;
+          if (value.status) {
+            this.abilityForm.reset();
+            this.toastr.success('Ability saved successfully :)');
+          }
+        });
+      }
+
+
     }
   }
 
@@ -102,4 +124,89 @@ export class AbilitiesComponent implements OnInit {
   getPrevious(){
     this.fireBaseStorage.getPreviousAbilities()
   }
+
+
+async deleteAbility(ability:Ability){
+ let response = await this.fireBaseStorage.deleteAbility(ability);
+ response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
+}
+
+switchToEditMode(ability : Ability){
+  this.editMode = true
+  this.abilityForm = this.fb.group({
+    id: [null],
+    name: ['', Validators.required],
+    image: [''],
+    rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
+  });
+
+  this.abilityForm.patchValue({
+    id: ability.id,
+    name: ability.name,
+    rating: ability.rating,
+
+  })
+  this.scrollToElement("abilityForm")
+}
+
+async updateAbility(ability : Ability){
+  let response = await this.fireBaseStorage.updateAbility(ability,this.file,this.withFile);
+  this.editMode = false;
+  this.isLoading = false;
+  this.abilityForm.reset();
+
+
+  this.abilityForm = this.fb.group({
+    id: [null],
+    type: ["",Validators.required],
+    name: ['', Validators.required],
+    image: ['', Validators.required],
+    rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
+  });
+
+
+  this.file = new File([], 'none'); 
+
+  response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
+}
+
+
+
+
+
+
+
+
+
+cancelEditing(){
+  this.abilityForm.reset()
+  this.editMode = false;
+}
+
+scrollToElement(elementId: string): void {
+  const element = this.el.nativeElement.querySelector(`#${elementId}`);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+  }
+}
+
+
+truncateText(text: string): string {
+  const screenWidth = window.innerWidth;
+
+  if (screenWidth < 600) {
+    // Truncate to a shorter length for smaller screens
+    return text.length > 5 ? text.substring(0, 5) + '...' : text;
+  } else {
+    // Default truncation length for larger screens
+    return text.length > 30 ? text.substring(0, 30) + '...' : text;
+  }
+}
+
+
+
+
+
+
+
 }

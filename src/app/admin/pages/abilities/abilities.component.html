@@ -10,12 +10,14 @@
 
 <!-- abilities.component.html -->
 <div *ngIf="!isDataComing" class="bg-primary-color rounded">
-  <div class="container mt-3">
-    <table datatable id="example" [dtOptions]="dtOptions" class="table table-striped" style="width:100%">
+  <div class="container-fluid mt-3">
+    <!-- add this to table if u want DATATABLE datatable [dtOptions]="dtOptions"  -->
+    <table    id="example" class="table table-striped table-responsive" >
 
       <thead>
         <tr>
           <th>Name</th>
+          <th>Type</th>
           <th>Rating</th>
           <th>Image</th>
           <th>Options</th>
@@ -23,8 +25,15 @@
       </thead>
       <tbody>
         <tr *ngFor="let ability of abilities">
-          <td>{{ ability.name }}</td>
           <td>
+            {{ truncateText(ability.name) }}
+          </td>
+          
+          <td>
+            {{ ability!.type}}
+          </td>
+          
+                    <td>
             <div class="overlay">
               <span *ngFor="let star of getStarArray(5); let i = index;"
                     class="fa fa-star"
@@ -37,8 +46,8 @@
           </td>
 
           <td>
-            <span class="btn btn-success m-1">Edit</span>
-            <span class="btn btn-danger  m-1">Delete</span>
+            <button class="btn btn-success m-1" (click)="switchToEditMode(ability)" >Edit</button>
+            <button class="btn btn-danger  m-1" (click)="deleteAbility(ability)">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -68,15 +77,36 @@
 
 
 <div class="container mt-3 bg-primary-color">
-<form [formGroup]="abilityForm" (ngSubmit)="onSubmit()" class="mt-4 col-12 ">
-  <div class="h5 text-center bg-secondary-color text-white p-2 mt-3 mb-3">Add ability</div>
+<form [formGroup]="abilityForm" (ngSubmit)="onSubmit()" class="mt-4 col-12 " id="abilityForm">
+  <div class="h5 text-center bg-secondary-color text-white p-2 mt-3 mb-3">
+    <span *ngIf="this.editMode" >Update ability</span>
+    <span *ngIf="!this.editMode" >Add ability</span>
+    
+    </div>
+
+    <select formControlName="type" class="form-select form-group" aria-label="Default select example">
+      <option disabled selected value="">Select an option</option> <!-- Add an empty value for initial state -->
+      <option value="fr">Framework</option>
+      <option value="lg">Language</option>
+      <option value="ac">Architecture & Concept</option>
+    </select>
+  
+    <!-- Display validation message if the control is touched and not valid -->
+    <div *ngIf="abilityForm.get('type')?.errors && abilityForm.get('type')?.touched">
+      
+      <p class="badge bg-danger mt-1" > Type is required.</p>
+
+    </div>
+
+
     <div class="form-group ">
       <label for="libelle">Libelle : </label>
       <input type="text" id="libelle" class="form-control" formControlName="name" required>
 
       <div *ngIf="abilityForm.get('name')?.errors && abilityForm.get('name')?.touched">
-          <p class="badge bg-danger mt-1" *ngIf="abilityForm.get('name')!.hasError('required')">        libelle is required.
-        </p>
+        <p class="badge bg-danger mt-1" *ngIf="abilityForm.get('name')!.hasError('required')">        libelle is required.</p>
+          <p class="badge bg-danger mt-1" *ngIf="abilityForm.get('name')!.hasError('maxlength')">        10 char max.</p>
+          
       </div>
 
 
@@ -117,9 +147,13 @@
 <button type="submit" [disabled]="isLoading" class="btn bg-accent-color p-2 mt-3 text-white" >
 
   <span *ngIf="isLoading" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
-  <span *ngIf="!isLoading" >Add</span>
+  <span *ngIf="!isLoading && !this.editMode" >Add</span>
+  <span *ngIf="!isLoading && this.editMode" >Update</span>
 
- </button> 
+</button> 
+<button type="button" (click)="cancelEditing()" *ngIf="this.editMode && !isLoading" class="btn bg-secondary-color p-2 mt-3  text-white mx-1" >
+  Cancel
+</button> 
 
 
   </form>

@@ -4,5 +4,6 @@ export  class Ability {
       public name: string,
       public image: string | null,
       public rating : number,
+      public type : string | null
     ) {}
   }
