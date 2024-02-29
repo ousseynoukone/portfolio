@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Ability } from 'src/app/models/abilitie';
 import { FireBaseStorageService } from 'src/app/services/firebaseService';
 
+declare var $: any; // Declare $ as a variable to access jQuery
+
 @Component({
   selector: 'app-abilities',
   templateUrl: './abilities.component.html',
@@ -22,6 +24,12 @@ export class AbilitiesComponent implements OnInit {
 
   toastr: ToastrService = inject(ToastrService);
 
+  options = [
+    { value: '', label: 'Select an option' }, // Default option
+    { value: 'fr', label: 'Framework' },
+    { value: 'lg', label: 'Language' },
+    { value: 'ac', label: 'Architecture & Concept' },
+  ];
   
   //pagination limit
   limit : number = 10
@@ -34,6 +42,8 @@ export class AbilitiesComponent implements OnInit {
 //uncomment for dataTable
  // dtOptions: DataTables.Settings = {};
 
+ //for the select type
+  previousSelectedValue !: string 
 
   constructor(private fb: FormBuilder,private el: ElementRef) {}
 
@@ -42,15 +52,15 @@ export class AbilitiesComponent implements OnInit {
   ngOnInit() {
     this.abilityForm = this.fb.group({
       id: [null],
-      type: ["",Validators.required],
-      name: ['', [Validators.required, Validators.maxLength(10)]],
+      type: ['',Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(40)]],
       image: ['', Validators.required],
       rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
     });
 
     this.fetchAbilities();
-
   }
+
 
 
   
@@ -65,6 +75,7 @@ export class AbilitiesComponent implements OnInit {
       // };
       this.isDataComing = false;
       this.abilities = abilities;
+
     });
   }
   
@@ -85,6 +96,7 @@ export class AbilitiesComponent implements OnInit {
   }
 
   onSubmit() {
+
     this.abilityForm.markAllAsTouched();
     if (this.abilityForm.valid) {
       this.isLoading = true;
@@ -99,7 +111,6 @@ export class AbilitiesComponent implements OnInit {
         this.updateAbility(ability)
 
       }else{
-        
         this.fireBaseStorage.addAbility(ability, this.file).then((value) => {
           this.isLoading = false;
           if (value.status) {
@@ -132,10 +143,13 @@ async deleteAbility(ability:Ability){
 }
 
 switchToEditMode(ability : Ability){
+  this.previousSelectedValue=ability.type!;
+
   this.editMode = true
   this.abilityForm = this.fb.group({
     id: [null],
-    name: ['', Validators.required],
+    name: ['', [Validators.required, Validators.maxLength(40)]],
+    type: [ability.type,Validators.required],
     image: [''],
     rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
   });
@@ -156,16 +170,17 @@ async updateAbility(ability : Ability){
   this.abilityForm.reset();
 
 
-  this.abilityForm = this.fb.group({
-    id: [null],
-    type: ["",Validators.required],
-    name: ['', Validators.required],
-    image: ['', Validators.required],
-    rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
-  });
+  // this.abilityForm = this.fb.group({
+  //   id: [null],
+  //   type: ["",Validators.required],
+  //   name: ['', Validators.required],
+  //   image: ['', Validators.required],
+  //   rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
+  // });
 
 
   this.file = new File([], 'none'); 
+  this.previousSelectedValue="default";
 
   response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
 }
@@ -179,8 +194,10 @@ async updateAbility(ability : Ability){
 
 
 cancelEditing(){
+  this.previousSelectedValue="default"
   this.abilityForm.reset()
   this.editMode = false;
+  
 }
 
 scrollToElement(elementId: string): void {

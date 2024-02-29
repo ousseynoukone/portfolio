@@ -83,13 +83,15 @@
     <span *ngIf="!this.editMode" >Add ability</span>
     
     </div>
+    <div class="form-group ">
+      <label for="libelle">Type : </label>
+      <select formControlName="type" class="form-select form-group" aria-label="Default select example">
+        <option *ngFor="let option of options" [value]="option.value"  [disabled]="option.value === '' " [selected]="option.value === ''">
+          {{ option.label }}
+        </option>
 
-    <select formControlName="type" class="form-select form-group" aria-label="Default select example">
-      <option disabled selected value="">Select an option</option> <!-- Add an empty value for initial state -->
-      <option value="fr">Framework</option>
-      <option value="lg">Language</option>
-      <option value="ac">Architecture & Concept</option>
-    </select>
+      </select>
+      
   
     <!-- Display validation message if the control is touched and not valid -->
     <div *ngIf="abilityForm.get('type')?.errors && abilityForm.get('type')?.touched">
@@ -98,14 +100,19 @@
 
     </div>
 
+    
+
+    
+  </div>
+
 
     <div class="form-group ">
       <label for="libelle">Libelle : </label>
       <input type="text" id="libelle" class="form-control" formControlName="name" required>
 
       <div *ngIf="abilityForm.get('name')?.errors && abilityForm.get('name')?.touched">
-        <p class="badge bg-danger mt-1" *ngIf="abilityForm.get('name')!.hasError('required')">        libelle is required.</p>
-          <p class="badge bg-danger mt-1" *ngIf="abilityForm.get('name')!.hasError('maxlength')">        10 char max.</p>
+        <p class="badge bg-danger mt-1" *ngIf="abilityForm.get('name')!.hasError('required')">libelle is required.</p>
+          <p class="badge bg-danger mt-1" *ngIf="abilityForm.get('name')!.hasError('maxlength')">30 char max.</p>
           
       </div>
 

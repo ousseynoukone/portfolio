@@ -288,6 +288,7 @@ getNextAbilities() {
       }else{
         abilityWithoutImage = {
           name: ability.name,
+          type: ability.type!,
           id : ability.id,
           rating : ability.rating
         };
