@@ -6,6 +6,7 @@ import { Ability } from 'src/app/models/abilitie';
 import { FireBaseStorageService } from 'src/app/services/firebaseService';
 
 declare var $: any; // Declare $ as a variable to access jQuery
+declare var window: any; // Declare $ as a variable to access jQuery
 
 @Component({
   selector: 'app-abilities',
@@ -23,6 +24,11 @@ export class AbilitiesComponent implements OnInit {
   displayedColumns: string[] = ['name', 'rating', 'image'];
 
   toastr: ToastrService = inject(ToastrService);
+
+  formModal: any;
+
+  toUpdateImageUrl : String  = ""
+
 
   options = [
     { value: '', label: 'Select an option' }, // Default option
@@ -50,6 +56,20 @@ export class AbilitiesComponent implements OnInit {
 
 
   ngOnInit() {
+    this.iniForm()
+
+    this.fetchAbilities();
+    this.initFormModal();
+  }
+
+  initFormModal(){
+    this.formModal = new window.bootstrap.Modal(
+     $('#formModal')
+    )
+  }
+
+
+  iniForm(){
     this.abilityForm = this.fb.group({
       id: [null],
       type: ['',Validators.required],
@@ -57,10 +77,13 @@ export class AbilitiesComponent implements OnInit {
       image: ['', Validators.required],
       rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
     });
-
-    this.fetchAbilities();
   }
 
+
+
+  addNewAbility(){
+    this.formModal.show();
+  }
 
 
   
@@ -114,7 +137,9 @@ export class AbilitiesComponent implements OnInit {
         this.fireBaseStorage.addAbility(ability, this.file).then((value) => {
           this.isLoading = false;
           if (value.status) {
-            this.abilityForm.reset();
+            this.formModal.hide();
+
+            this.abilityForm.reset({type : ['']})
             this.toastr.success('Ability saved successfully :)');
           }
         });
@@ -142,8 +167,13 @@ async deleteAbility(ability:Ability){
  response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
 }
 
+
+
+
+
 switchToEditMode(ability : Ability){
   this.previousSelectedValue=ability.type!;
+  this.toUpdateImageUrl=ability.image!;
 
   this.editMode = true
   this.abilityForm = this.fb.group({
@@ -160,25 +190,21 @@ switchToEditMode(ability : Ability){
     rating: ability.rating,
 
   })
-  this.scrollToElement("abilityForm")
+  this.formModal.show();
 }
+
+
+
+
+
 
 async updateAbility(ability : Ability){
   let response = await this.fireBaseStorage.updateAbility(ability,this.file,this.withFile);
   this.editMode = false;
   this.isLoading = false;
-  this.abilityForm.reset();
-
-
-  // this.abilityForm = this.fb.group({
-  //   id: [null],
-  //   type: ["",Validators.required],
-  //   name: ['', Validators.required],
-  //   image: ['', Validators.required],
-  //   rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
-  // });
-
-
+  this.formModal.hide();
+  this.abilityForm.reset({type : ['']})
+  this.iniForm()
   this.file = new File([], 'none'); 
   this.previousSelectedValue="default";
 
@@ -194,10 +220,10 @@ async updateAbility(ability : Ability){
 
 
 cancelEditing(){
-  this.previousSelectedValue="default"
-  this.abilityForm.reset()
+  this.abilityForm.reset({type : ['']})
   this.editMode = false;
-  
+  this.formModal.hide();
+  this.iniForm()
 }
 
 scrollToElement(elementId: string): void {
@@ -213,7 +239,7 @@ truncateText(text: string): string {
 
   if (screenWidth < 600) {
     // Truncate to a shorter length for smaller screens
-    return text.length > 5 ? text.substring(0, 5) + '...' : text;
+    return text.length > 7 ? text.substring(0, 7) + '...' : text;
   } else {
     // Default truncation length for larger screens
     return text.length > 30 ? text.substring(0, 30) + '...' : text;

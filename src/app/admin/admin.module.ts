@@ -9,7 +9,6 @@ import { HomeComponent } from './pages/home/home.component';
 import { AbilitiesComponent } from './pages/abilities/abilities.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { DataTablesModule } from 'angular-datatables';
-import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -24,9 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
     CommonModule,
     AdminRoutingModule,
     ReactiveFormsModule,
-    DataTablesModule,
-    MatSelectModule
+    DataTablesModule
   ]
 })
 export class AdminModule { }
-  

@@ -1,5 +1,6 @@
-import { Component, OnInit, ElementRef  } from '@angular/core';
+import { Component, OnInit, ElementRef, inject  } from '@angular/core';
 import { Ability } from 'src/app/models/abilitie';
+import { FireBaseStorageService } from 'src/app/services/firebaseService';
 @Component({
   selector: 'app-abilities',
   templateUrl: './abilities.component.html',
@@ -30,8 +31,12 @@ export class AbilitiesComponent implements OnInit {
   autreCompetences: Ability[] = [];
   gestionProjs: Ability[] = [];
 
+  isDataComing: boolean = false;
+  fireBaseStorage = inject(FireBaseStorageService);
+  abilities: Ability[] = [];
 
   constructor(private el: ElementRef) {}
+
 
   ngOnInit(): void {
     // Initialize elements in ngOnInit
@@ -55,68 +60,32 @@ export class AbilitiesComponent implements OnInit {
     this.frameworkButton.classList.add("activeAccent");
 
     
-    // Fill frameworks array
-    this.addFrameworksCaller();
-    // Fill langageDeProgs array
-    this.addLangageDeProgsCaller();
-    // Fill archiConcepts array
-    this.addArchiConceptsCaller();
-    // Fill gestionProj array
     this.addGestionProjCaller();
-    // Fill modelisations array
-    this.addModelisationsCaller();
+    this.addModelisationsCaller()
+    this.fetchAbilities();
 
   }
 
   
 
 
-  addFrameworksCaller(){
-    this.addFrameworks('springboot.png', 'Spring Boot', 4);
-    this.addFrameworks('angular.png', 'Angular', 5);
-    this.addFrameworks('laravel.png', 'Laravel', 4);
-    this.addFrameworks('flutter.png', 'Flutter', 5);
-    this.addFrameworks('bootstrap.png', 'Bootstrap', 5);
-  }
-
-
   addFrameworks(imgName:string , name : string  , rating  : number ){
-    this.frameworks.push(new Ability(null,name,"../../../../assets/imgs/"+imgName,rating,null));
+    this.frameworks.push(new Ability(null,name,imgName,rating,null));
   }
 
 
 
 
-
-  addLangageDeProgsCaller() {
-    this.addLangageDeProgs('php.png', 'PHP', 5);
-    this.addLangageDeProgs('java.png', 'Java', 4);
-    this.addLangageDeProgs('js.png', 'JavaScript (JS)', 4);
-    this.addLangageDeProgs('dart.png', 'Dart', 5);
-    this.addLangageDeProgs('python.png', 'Python', 5);
-    this.addLangageDeProgs('csharp.png', 'C#', 4);
-    this.addLangageDeProgs('c.png', 'C', 3);
-    this.addLangageDeProgs('cplus.png', 'C++', 4);
-    this.addLangageDeProgs('ts.png', 'TypeScript', 4);
-  }
 
   addLangageDeProgs(imgName: string, name: string, rating: number) {
-    this.langageDeProgs.push(new Ability(null,name, "../../../../assets/imgs/" + imgName,rating,null));
+    this.langageDeProgs.push(new Ability(null,name, imgName,rating,null));
   }
 
 
 
-
-
-  addArchiConceptsCaller() {
-    this.addArchiConcepts('archi.png', 'RESTful / SOAP');
-    this.addArchiConcepts('api.png', 'API (Application Programming Interface)');
-    this.addArchiConcepts('mvc.png', 'Modèle-Vue-Contrôleur (MVC)');
-    this.addArchiConcepts('security.png', 'Sécurité');
-  }
 
   addArchiConcepts(imgName: string, name: string) {
-    this.archiConcepts.push(new Ability(null,name, "../../../../assets/imgs/" + imgName,0 ,null ));
+    this.archiConcepts.push(new Ability(null,name, imgName,0 ,null ));
   }
   
 
@@ -215,6 +184,48 @@ export class AbilitiesComponent implements OnInit {
     return new Array(length).fill(0);
   }
 
+
+
+  //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  fetchAbilities() {
+    this.isDataComing = true;
+    this.fireBaseStorage.getAbilitiesClient();
+    this.fireBaseStorage.abilitiesSubject.subscribe((abilities) => {
+      this.isDataComing = false;
+      this.abilities = abilities;
+    });
+  }
 
 
 

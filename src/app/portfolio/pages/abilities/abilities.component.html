@@ -1,10 +1,20 @@
 <div class="container-fluid bg-secondary-color mt-4 pb-5 pt-2 " id="competences">
     <div class="text-center">
         <div class="badge bg-accent-color fs-5 m-4 p-2">Mes compétences</div>
+
+    </div>
+    <div class="row d-flex justify-content-center m-2">
+      <div *ngIf="isDataComing" class="spinner-border text-danger" role="status">
+        <span class="visually-hidden">Chargement</span>
+      </div>
     </div>
 
-    <div class="container d-flex justify-content-center">
+
+<div  class="container-fluid">
+    <div class="container d-flex justify-content-center" >
+
     <div class="row" >
+
         <div class="col mt-1 ">
             <button class="badge bg-primary-color text-black     p-2 onhoverAccent" (click)="showInformation('framework')" id="frameworkButton">Framework</button>
         </div>
@@ -35,26 +45,33 @@
 <!-- Framework -->
 <div id="framework" class="container rounded bg-accent-color p-5 mt-5" hidden>
     <p class="text-primary-color fw-bold">Les frameworks que j'utilise :</p>
-  
-    <div class="row">
+   <div class="row">
+    <ng-container *ngFor="let ability of abilities">
+      <ng-container *ngIf="ability.type === 'fr'">
+
+   
       <!-- Iterate over frameworks array -->
-      <div *ngFor="let framework of frameworks" class="col mt-2">
+      <div  class="col mt-2">
         <div class="container rounded image-container bg-primary-color custom-container">
-          <img [src]="framework.image" alt="" class="img-fluid custom-image">
+          <img [src]="ability.image" alt="" class="img-fluid custom-image">
           <div class="overlay">
             <span *ngFor="let star of getStarArray(5); let i = index;"
                   class="fa fa-star"
-                  [ngClass]="{ 'checked': i < framework.rating }">
+                  [ngClass]="{ 'checked': i < ability.rating }">
             </span>
           </div>
         </div>
         <div class="container mt-3 mb-1 text-center transformText">
           <hr>
-          <div class="badge bg-primary-color text-black onhoverSecondary">{{ framework.name }}</div>
+          <div class="badge bg-primary-color text-black onhoverSecondary">{{ ability.name }}</div>
         </div>
       </div>
       <!-- End of iteration -->
-    </div>
+  
+  </ng-container>
+</ng-container>
+  </div>
+    
   </div>
 
   
@@ -63,22 +80,31 @@
     <p class="text-primary-color fw-bold">Les langages de programmation que j'utilise:</p>
   
     <div class="row">
+      <ng-container *ngFor="let ability of abilities">
+        <ng-container *ngIf="ability.type === 'lg'">
+
+
       <!-- Iterate over langageDeProgs array -->
-      <div *ngFor="let langage of langageDeProgs" class="col mt-2">
+      <div  class="col mt-2">
         <div class="container rounded image-container bg-primary-color custom-container">
-          <img [src]="langage.image" alt="" class="img-fluid custom-image">
+          <img [src]="ability.image" alt="" class="img-fluid custom-image">
           <div class="overlay">
             <span *ngFor="let star of getStarArray(5); let i = index;"
                   class="fa fa-star"
-                  [ngClass]="{ 'checked': i < langage.rating }">
+                  [ngClass]="{ 'checked': i < ability.rating }">
             </span>
           </div>
         </div>
         <div class="container mt-3 mb-1 text-center transformText">
           <hr>
-          <div class="badge bg-primary-color text-black onhoverSecondary">{{ langage.name }}</div>
+          <div class="badge bg-primary-color text-black onhoverSecondary">{{ ability.name }}</div>
         </div>
       </div>
+  
+    </ng-container>
+  </ng-container>
+
+
       <!-- End of iteration -->
     </div>
   </div>
@@ -87,20 +113,30 @@
 <!-- Architecture et Concepts -->
 <div id="archiConcept" class="container rounded bg-accent-color p-5 mt-5" hidden>
     <p class="text-primary-color fw-bold">Mes notions en architecture et système d'information :</p>
-  
+
+
+        
     <div class="row">
+        
+    <ng-container *ngFor="let ability of abilities">
+      <ng-container *ngIf="ability.type === 'ac'">
       <!-- Iterate over archiConcepts array -->
-      <div *ngFor="let archiConcept of archiConcepts" class="col mt-2">
+      <div class="col mt-2">
         <div class="container rounded image-container bg-primary-color custom-container">
-          <img [src]="archiConcept.image" alt="" class="img-fluid custom-image">
+          <img [src]="ability.image" alt="" class="img-fluid custom-image">
         </div>
         <div class="container mt-3 mb-1 text-center transformText">
           <hr>
-          <div class="badge bg-primary-color text-black onhoverSecondary">{{ archiConcept.name }}</div>
+          <div class="badge bg-primary-color text-black onhoverSecondary">{{ ability.name }}</div>
         </div>
       </div>
       <!-- End of iteration -->
+
+    </ng-container>
+  </ng-container>
     </div>
+
+
   </div>
   
   <!-- Gestion de Projet -->
@@ -197,7 +233,7 @@
 
     </div>
 </div>
-
+</div>
 
 
 </div>

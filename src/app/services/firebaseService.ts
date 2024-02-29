@@ -358,7 +358,18 @@ getNextAbilities() {
   }
   
 
-
+  getAbilitiesClient(){
+    this.abilitiyDB.valueChanges().subscribe(querySnapshot => {
+      let abilities: Ability[] = [];
+      querySnapshot.forEach(doc => {
+        const ability = doc as Ability;
+        abilities.push(ability);
+        //For saving the last displated ability
+        this.lastVisibleByDoc = ability.id
+      });
+      this._abilitiesSubject.next(abilities); 
+    });
+  }
 
 
 
