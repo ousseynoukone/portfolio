@@ -8,17 +8,17 @@ import { FireBaseAuthService } from 'src/app/services/firebaseService';
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent {
-  isLoading = true;
+  // isLoading = true;
 
   constructor(private authService: FireBaseAuthService, private router: Router) {}
 
-  ngOnInit() {
-    this.authService.isAuthenticated.subscribe(isAuthenticated => {
-      if (!isAuthenticated) {
-        this.router.navigate(['/admin/login']);
-      }
-      // Authentication check is complete, hide the loader
-      this.isLoading = false;
-    });
-  }
+  // ngOnInit() {
+  //   this.authService.isAuthenticated.subscribe(isAuthenticated => {
+  //     if (!isAuthenticated) {
+  //       this.router.navigate(['/admin/login']);
+  //     }
+  //     // Authentication check is complete, hide the loader
+  //     this.isLoading = false;
+  //   });
+  // }
 }

@@ -64,7 +64,7 @@ export class FireBaseAuthService {
 export class FireBaseStorageService {
 
   abilitiyDB !: AngularFirestoreCollection<any>;
-  private basePath = '/uploads';
+  private basePath = '/abilities';
 
   // Streams for percentage and abilities
   private _percentageSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -111,7 +111,9 @@ export class FireBaseStorageService {
 
 
   async addAbility(ability: Ability, file: File): Promise<ResponseDto> {
-    const filePath = `${this.basePath}/${ability.name}`;
+    this._percentageSubject.next(0);
+
+    const filePath = `${this.basePath}/${file.name}`;
     const storageRef = this.storage.ref(filePath);
     const uploadTask = this.storage.upload(filePath, file);
     
@@ -250,9 +252,9 @@ getNextAbilities() {
 
 
 
-  async deleteItemFromStorage(filePath: string) {
+  async deleteItemFromStorage(fileUrl: string) {
     try {
-      const storageRef = this.storage.refFromURL(filePath); // Get reference to file
+      const storageRef = this.storage.refFromURL(fileUrl); // Get reference to file
       await storageRef.delete(); // Delete the file
       console.log('File deleted successfully!');
       // Handle successful deletion (e.g., update UI, notify user)
@@ -263,58 +265,53 @@ getNextAbilities() {
   }
 
 
-
-  async updateAbility(ability: Ability,file : File,withFile : boolean): Promise<ResponseDto> {
-    var abilityWithoutImage : AbilityUpdateDto ;
-    try {
-
-      const snapshot = await this.abilitiyDB.ref.where('id', '==', ability.id).get();
-
-      
-      if(withFile){
-        const filePath = `${this.basePath}/${ability.name}`;
-        const uploadTask = this.storage.upload(filePath, file);
-  
-      uploadTask.percentageChanges().subscribe((percentage) => {
-        //update the stream
-        this._percentageSubject.next(percentage!)
-      });
-    
-      await  uploadTask.then((uploadSnapshot) =>
-      uploadSnapshot.ref.getDownloadURL().then(url=>{
-        ability.image = url
-      })
-      );
-      }else{
-        abilityWithoutImage = {
-          name: ability.name,
-          type: ability.type!,
-          id : ability.id,
-          rating : ability.rating
-        };
-      }
-    
-  
-      // Check if the document matching the condition exists
-      if (!snapshot.empty) {
-        // Delete the document
-        snapshot.forEach(doc => {
-          doc.ref.update( withFile ? ability : abilityWithoutImage);
-        });
-      }else{
-        return { status: false, message: 'Docs not found!' };
-
-      }
-      // If update is successful
-      return { status: true, message: 'Ability updated successfully!' };
-    } catch (error) {
-      console.error('Error updating ability:', error);
-      
-      // If there's an error during update
-      // Handle errors appropriately (e.g., display error message to user)
-      return { status: false, message: 'Error updating ability.' };
-    }
+  async getFileRef(fileUrl:string) {
+    return  this.storage.refFromURL(fileUrl); // Get reference to file  
   }
+
+
+  async updateAbility(ability: Ability, file: File, withFile: boolean): Promise<ResponseDto> {
+    var abilityWithoutImage: AbilityUpdateDto;
+    this._percentageSubject.next(0);
+    try {
+        const snapshot = await this.abilitiyDB.ref.where('id', '==', ability.id).get();
+
+        if (withFile) {
+            let fileRef = await this.getFileRef(ability.image!);
+            const updateTask = fileRef.put(file);
+
+            updateTask.percentageChanges().subscribe((percentage) => {
+                this._percentageSubject.next(percentage!);
+            });
+
+            const uploadSnapshot = await updateTask;
+            const url = await uploadSnapshot.ref.getDownloadURL();
+
+            ability.image = url;
+        } else {
+            abilityWithoutImage = {
+                name: ability.name,
+                type: ability.type!,
+                id: ability.id,
+                rating: ability.rating
+            };
+        }
+
+        if (!snapshot.empty) {
+            snapshot.forEach(doc => {
+                doc.ref.update(withFile ? ability : abilityWithoutImage);
+            });
+        } else {
+            return { status: false, message: 'Docs not found!' };
+        }
+
+        return { status: true, message: 'Ability updated successfully!' };
+    } catch (error) {
+        console.error('Error updating ability:', error);
+        return { status: false, message: 'Error updating ability.' };
+    }
+}
+
   
 
 
@@ -374,3 +371,11 @@ getNextAbilities() {
 
 
 }
+function updateMetadata(forestRef: any, newMetadata: {
+  contentType: string; customMetadata: {
+    fileName: string; // Update the file name here
+  };
+}) {
+  throw new Error('Function not implemented.');
+}
+

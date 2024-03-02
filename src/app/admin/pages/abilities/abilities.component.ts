@@ -27,7 +27,7 @@ export class AbilitiesComponent implements OnInit {
 
   formModal: any;
 
-  toUpdateImageUrl : String  = ""
+  toUpdateImageUrl : string  = ""
 
 
   options = [
@@ -119,13 +119,14 @@ export class AbilitiesComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.percentage=0;
     this.abilityForm.markAllAsTouched();
     if (this.abilityForm.valid) {
       this.isLoading = true;
 
       let formData = this.abilityForm.value;
       let ability = formData as Ability;
+      
       this.fireBaseStorage.percentage.subscribe((percentage) => {
         this.percentage = percentage;
       });
@@ -138,15 +139,20 @@ export class AbilitiesComponent implements OnInit {
           this.isLoading = false;
           if (value.status) {
             this.formModal.hide();
+            this.toastr.success(value.message??"");
 
             this.abilityForm.reset({type : ['']})
-            this.toastr.success('Ability saved successfully :)');
+          }
+
+          if(!value.status){
+            this.toastr.error(value.message??"");
           }
         });
       }
 
 
     }
+    
   }
 
   getStarArray(length: number) {
@@ -180,7 +186,7 @@ switchToEditMode(ability : Ability){
     id: [null],
     name: ['', [Validators.required, Validators.maxLength(40)]],
     type: [ability.type,Validators.required],
-    image: [''],
+    image: [],
     rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
   });
 
@@ -199,6 +205,7 @@ switchToEditMode(ability : Ability){
 
 
 async updateAbility(ability : Ability){
+  ability.image= this.toUpdateImageUrl
   let response = await this.fireBaseStorage.updateAbility(ability,this.file,this.withFile);
   this.editMode = false;
   this.isLoading = false;
@@ -207,7 +214,7 @@ async updateAbility(ability : Ability){
   this.iniForm()
   this.file = new File([], 'none'); 
   this.previousSelectedValue="default";
-
+  this.withFile=false
   response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
 }
 

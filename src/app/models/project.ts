@@ -1,12 +1,14 @@
 export class Project {
     constructor(
-        public id : Number,
+        public id : string,
         public minDescription : string,
         public fullDescription : string,
-        public imgs : string[],
+        public imgsLink : string [],
         public usedTools : string[],
-        public demo :  string,
+        public demoLink :  string,
         public title : string ,
+        public imgsFile : FileList,
+        public videoFile : File
         ) {
     }
 }

@@ -1,52 +1,257 @@
 
+<div class="container-fluid bg-primary-color mt-3 ">
+  <h3 class="bg-secondary-color text-white p-3 text-center ">Project Section</h3>
+<div class="row">
+  <div *ngIf="isDataComing" class="col-md-12 text-center mt-5">
+    <div class="spinner-grow text-danger" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <button class="btn bg-secondary-color m-2 text-white" (click)="addNewProject()">Add new Project</button>
+  </div>
+
+
+<!-- abilities.component.html -->
+<div *ngIf="!isDataComing" class="bg-primary-color rounded">
+  <div class="container mt-3">
+    <!-- add this to table if u want DATATABLE datatable [dtOptions]="dtOptions"  -->
+    <table    id="example" class="table table-striped" style="width: 100% !important;" >
+
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Min Description</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let project of projects">
+
+
+          <td>
+            {{ truncateText(project.title) }}
+          </td>
+          
+          <td >
+            {{ project!.minDescription}}
+          </td>
+          
+      
+ 
+          <td>
+            <button class="btn btn-success btn-sm m-1" (click)="switchToEditMode(project)" >Details</button>
+            <button class="btn btn-danger btn-sm m-1" (click)="deleteproject(project)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="badge bg-secondary-color mt-1 text-white ">Total de  {{fireBaseStorage.totalOfItems}}  affiché par    {{limit}}</div>
+  </div>
   
-  <main class="p-3 text-dark rounded bg-primary-color">
-    <section class="project-list">
-      <h2>Projects</h2>
-      <ul *ngIf="projects && projects.length > 0" class="list-unstyled">
-        <li *ngFor="let project of projects" class="mb-3">
-          <div class="project-card border p-3">
-            <h3>{{ project.title }}</h3>
-            <p>{{ project.minDescription }}</p>
-            <a href="{{ project.demo }}" target="_blank" class="btn btn-primary">Live Demo</a>
-            <button (click)="editProject(project)" class="btn btn-warning">Edit</button>
-            <button (click)="deleteProject(project.id)" class="btn btn-danger">Delete</button>
+
+  <button class="btn bg-secondary-color m-2 text-white" [disabled]="fireBaseStorage.weAreOntFirstElement" (click)="getPrevious()">Precedent</button>
+
+  <button class="btn  bg-secondary-color m-2  text-white" [disabled]="fireBaseStorage.weAreOntLastElement" (click)="getNext()">Suivant</button>
+
+
+  
+</div>
+<!-- //TODO PAGINATINO IS NOT WORKING WELL !!! -->
+  
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- Modal Client -->
+<div class="modal fade" id="formModalProject" tabindex="-1" role="dialog" aria-labelledby="formModalProjectLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-accent-color d-flex justify-content-center ">
+        <div class="h5 rounded  modal-title bg-secondary-color text-white p-2">
+          <span *ngIf="this.editMode" >Update project</span>
+          <span *ngIf="!this.editMode" >Add project</span>
+          
           </div>
-        </li>
-      </ul>
-      <p *ngIf="!projects || projects.length === 0">No projects found.</p>
-    </section>
+      </div>
+      <div class="modal-body ">
+        <div class="row">
+          <div class="col-12 col-md-6">
+        <div class="container">
+          <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="mt-4 col-12 " id="projectForm">
+          
+          
+              <div class="form-group ">
+                <label for="libelle">Title : </label>
+                <input type="text" maxlength="40" id="libelle" class="form-control" formControlName="title" required>
+          
+                <div *ngIf="projectForm.get('title')?.errors && projectForm.get('title')?.touched">
+                  <p class="badge bg-danger mt-1" *ngIf="projectForm.get('title')!.hasError('required')">Title is required.</p>
+                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('title')!.hasError('maxlength')">40 char max.</p>
+                    
+                </div>
+              </div>
+
+
+
+
+                        
+              <div class="form-group ">
+                <label for="minDescription">Min Description : </label>
+                <textarea type="text" id="minDescription" maxlength="90" class="form-control" formControlName="minDescription" required> </textarea>
+          
+                <div *ngIf="projectForm.get('minDescription')?.errors && projectForm.get('minDescription')?.touched">
+                  <p class="badge bg-danger mt-1" *ngIf="projectForm.get('minDescription')!.hasError('required')">minDescription is required.</p>
+                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('minDescription')!.hasError('maxlength')">90 char max.</p>
+                    
+                </div>
+              </div>
+
+
+
+              <div class="form-group ">
+                <label for="fullDescription">Full Description : </label>
+                <textarea type="text" id="fullDescription" maxlength="500" class="form-control" formControlName="fullDescription" required> </textarea>
+          
+                <div *ngIf="projectForm.get('fullDescription')?.errors && projectForm.get('fullDescription')?.touched">
+                  <p class="badge bg-danger mt-1" *ngIf="projectForm.get('fullDescription')!.hasError('required')">fullDescription is required.</p>
+                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('fullDescription')!.hasError('maxlength')">500 char max.</p>
+                    
+                </div>
+              </div>
+
+
+
+              <div class="form-group ">
+                <label for="usedTools">Usez Tools : (Please separed it with coma " , ")</label>
+                <textarea type="text" id="usedTools" placeholder="Please separed it with coma " maxlength="100" class="form-control" formControlName="usedTools" required> </textarea>
+          
+                <div *ngIf="projectForm.get('usedTools')?.errors && projectForm.get('usedTools')?.touched">
+                  <p class="badge bg-danger mt-1" *ngIf="projectForm.get('usedTools')!.hasError('required')">Used Tools is required.</p>
+                  <p class="badge bg-danger mt-1" *ngIf="projectForm.get('usedTools')!.hasError('maxlength')">100 char max.</p>
+                  <p class="badge bg-danger mt-1" *ngIf="projectForm.get('usedTools')!.hasError('pattern')">Format non respecté.</p>
+                    
+                </div>
+              </div>
+
+
+              
+
+
+
+              <div class="form-group ">
+                      <label for="imgsFile">Images :</label>
+                      <input type="file" id="imgsFile" class="form-control" multiple="multiple" formControlName="imgsFile" accept="image/*" (change)="onImageChange($event)">
+                      <div *ngIf="projectForm.get('imgsFile')?.errors && projectForm.get('imgsFile')?.touched">
+                          <p class="badge bg-danger mt-1" *ngIf="projectForm.get('imgsFile')!.hasError('required')" >  Img File  is required.
+                        </p>
+                      </div>
+          
+                      <div *ngIf="isLoading">
+                        <p class="badge bg-success mt-1" >     {{percentageImg}}%
+                      </p>
+                    </div>
+              </div>
+
+
+              <div class="form-group ">
+                <label for="videoFile">Video :</label>
+                <input type="file" id="videoFile" class="form-control" multiple="multiple" formControlName="videoFile" accept="video/*" (change)="onVideoChange($event)">
+                <div *ngIf="projectForm.get('videoFile')?.errors && projectForm.get('videoFile')?.touched" >
+                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('videoFile')!.hasError('required')"> Video File  is required.
+                  </p>
+                </div>
+    
+                <div *ngIf="isLoading">
+                  <p class="badge bg-success mt-1" >     {{percentageVideo}}%
+                </p>
+              </div>
+        </div>
+          
+          
+          
+ 
+          <div class="d-flex justify-content-center">
+            <hr>  
+            <button type="submit" [disabled]="isLoading" class="btn bg-accent-color p-2 mt-3 text-white" >
+          
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
+              <span *ngIf="!isLoading && !this.editMode" >Add</span>
+              <span *ngIf="!isLoading && this.editMode" >Update</span>
+            
+            </button>
+            <button type="button" (click)="cancelEditing()" *ngIf="this.editMode && !isLoading" class="btn bg-secondary-color p-2 mt-3  text-white mx-1" >
+            Cancel
+          </button> 
+
+
+          <button type="button" data-bs-dismiss="modal"  *ngIf="!this.editMode" class="btn bg-secondary-color p-2 mt-3  text-white mx-1" >
+            Close
+          </button> 
+          </div>
+
+          
+          
+            </form>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+        <div *ngIf="this.editMode" class="col-12 col-md-6 mt-3 card">
+          <div class="badge bg-secondary-color m-2 text-white ">Choose an image to update</div>
+
+                  <div class="scrollable ">
+ 
+                    <div *ngFor="let image of toUpdateImageUrls; let i = index;">
+                      <div class="card-body d-flex justify-content-center align-items-center">
+                        <img [src]="image" class="img-fluid"  [class.highlight]="i === selectedImageIndex" (click)="OnImageClicked(image,i)" >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="container bg-accent-color p-2 rounded mt-3 mb-1 d-flex justify-content-center align-items-center">
+                    <video [src]="toUpdateVideoUrl" height="200" class="img-fluid" controls muted ></video>
   
-    <section class="add-project">
-      <h2>{{ editMode ? 'Edit Project' : 'Add Project' }}</h2>
-      <form [formGroup]="projectForm" (ngSubmit)="editMode ? updateProject() : addProject()">
-        <div class="form-group">
-          <label for="title">Title:</label>
-          <input type="text" id="title" name="title" formControlName="title" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="minDescription">Short Description:</label>
-          <textarea id="minDescription" name="minDescription" formControlName="minDescription" class="form-control" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="fullDescription">Full Description:</label>
-          <textarea id="fullDescription" name="fullDescription" formControlName="fullDescription" class="form-control" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="imgs">Images (comma separated URLs):</label>
-          <input type="text" id="imgs" name="imgs" formControlName="imgs" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="usedTools">Used Tools (comma separated):</label>
-          <input type="text" id="usedTools" name="usedTools" formControlName="usedTools" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="demo">Live Demo URL:</label>
-          <input type="url" id="demo" name="demo" formControlName="demo" class="form-control">
-        </div>
-        <button type="submit" class="btn bg-secondary-color text-white mt-3"> {{ editMode ? 'Update Project' : 'Add Project' }} </button>
-        <button type="button"  *ngIf="editMode" (click)="cancelEdit()" class="btn bg-accent-colormt-3 text-white">Cancel</button>
-      </form>
-    </section>
-  </main>
-  
+                  </div>
+                </div>
+ 
+
+
+        
+
+
+           
+          </div>        
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
