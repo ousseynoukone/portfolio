@@ -7,3 +7,18 @@ export interface ProjectDto {
      demoLink :  string,
      title : string 
 }
+
+export interface WithImgVideoDto{
+     withImage: boolean,
+     withVideo: boolean,
+     imgTpUpdateLink:string
+     demoLink:string
+}
+
+
+export interface ProjectFileUpdateDto {
+     projectID : string,
+     videoFile : File
+     imgFile : File
+     projectImgsLinks : string [   ]
+}

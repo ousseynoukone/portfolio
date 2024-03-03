@@ -2,6 +2,7 @@
 import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from 'src/app/models/dtos/projectDto';
 import { Project } from 'src/app/models/project';
 import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
 
@@ -14,6 +15,11 @@ declare var window: any; // Declare $ as a variable to access jQuery
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent {
+  @ViewChild('imageInput') imageInputRef !: ElementRef<HTMLInputElement>;
+  @ViewChild('imageAddInput') imageAddInput !: ElementRef<HTMLInputElement>;
+  @ViewChild('videoInput') videoInputRef ! : ElementRef<HTMLInputElement>;
+
+
 
   projectForm !: FormGroup;
   fireBaseStorage = inject(FireBaseStorageService2);
@@ -21,7 +27,9 @@ export class ProjectsComponent {
   percentageImg: Number = 0;
   percentageVideo: Number = 0;
   isLoading: boolean = false;
+  isUpdatingMultimedia: boolean = false;
   isDataComing: boolean = false;
+  isAddinggNewImage: boolean = false;
   projects: Project[] = [];
   displayedColumns: string[] = ['name', 'rating', 'image'];
 
@@ -33,15 +41,16 @@ export class ProjectsComponent {
 
   FileImg ! : FileList
   FileVideo! : File ;
+
+  newImgToAdd! : File;
   
   //pagination limit
   limit : number = 10
 
   editMode : boolean = false;
 
-  //To check if fileImg has been chosen while wanting to update
-  withFileImg : boolean = false;
-  withFileVideo : boolean = false;
+  imgToBeUpdatedWith !: File ;
+  videoToBeUpdatedWith !: File ;
 
 //uncomment for dataTable
  // dtOptions: DataTables.Settings = {};
@@ -54,6 +63,11 @@ export class ProjectsComponent {
 
 //to highlight selected image
   selectedImageIndex: number = -1;
+  selectedImageToUpdateUrl !: string;
+
+
+  updateProjectDetailForUpdateImgAndVideoOnly : any = {}
+  isDeletingOneImage: boolean = false;
 
 
   constructor(private fb: FormBuilder,private el: ElementRef) {}
@@ -93,7 +107,7 @@ export class ProjectsComponent {
   }
 
 
-  onImageChange(event: any) {
+  onImageChange(event: any,isEditMode : boolean,isForAddingOneImage : boolean) {
     const fileList  =  event.target.files as FileList;
     if (!fileList[0].type.startsWith('image/') && !fileList[1].type.startsWith('image/')) {
       alert('Please select an image file.');
@@ -107,15 +121,37 @@ export class ProjectsComponent {
     //   this.withFile = true
 
     // }
+
+    if(isEditMode){
+      this.imgToBeUpdatedWith = event.target.files[0]
+    }
+
+    if(isForAddingOneImage){
+      this.newImgToAdd =  event.target.files[0];
+    }
+
+
+
+
   }
 
-  onVideoChange(event: any) {
+
+
+
+
+
+
+  onVideoChange(event: any,isEditMode : boolean) {
     const file = event.target.files[0];
     if (!file.type.startsWith('video/')) {
       alert('Please select an video file.');
       return;
     }
     this.FileVideo = file;
+
+    if(isEditMode){
+      this.videoToBeUpdatedWith = file;
+    }
 
     // //Si on charge une image alors qu'on a edit mode , l'image dois etre mise a jour dans le db
     // if(this.editMode){
@@ -136,38 +172,6 @@ export class ProjectsComponent {
   }
   
 
-  // onImageChange(event: any) {
-  //   const fileImg = event.target.files[0];
-  //   if (!fileImg.type.startsWith('image/')) {
-  //     alert('Please select an image file.');
-  //     return;
-  //   }
-  //   this.fileImg = fileImg;
-
-  //   //Si on charge une image alors qu'on a edit mode , l'image dois etre mise a jour dans le db
-  //   if(this.editMode){
-  //     this.withFileImg = true
-  //     this.withFileVideo= true
-
-  //   }
-  // }
-
-
-  // onVideoChange(event: any) {
-  //   const fileVideo = event.target.files[0];
-  //   if (!fileVideo.type.startsWith('video/')) {
-  //     alert('Please select an vide file.');
-  //     return;
-  //   }
-  //   this.fileVideo = fileVideo;
-
-  //   //Si on charge une image alors qu'on a edit mode , l'image dois etre mise a jour dans le db
-  //   if(this.editMode){
-  //     this.withFileImg = true
-  //     this.withFileVideo = true
-
-  //   }
-  // }
 
 
   onSubmit() {
@@ -191,7 +195,7 @@ export class ProjectsComponent {
       });
 
       if(this.editMode){
-       // this.updateProject(Project)
+       this.updateProjectOnly(project)
 
       }else{
         this.fireBaseStorage.addProject(project).then((value) => {
@@ -238,26 +242,30 @@ async deleteproject(Project:Project){
 switchToEditMode(project : Project){
   this.toUpdateImageUrls=project.imgsLink!;
   this.toUpdateVideoUrl = project.demoLink;
-  console.log("tstounet"+this.toUpdateVideoUrl)
+
+  this.updateProjectDetailForUpdateImgAndVideoOnly.projectID = project.id
+  this.updateProjectDetailForUpdateImgAndVideoOnly.imgsLink = project.imgsLink
+  this.updateProjectDetailForUpdateImgAndVideoOnly.demoLink = project.demoLink
 
 
   this.editMode = true
 
   //pour cutumize validation
-  // this.projectForm = this.fb.group({
-  //   id: [null],
-  //   name: ['', [Validators.required, Validators.maxLength(40)]],
-  //   type: [Project.type,Validators.required],
-  //   image: [''],
-  //   rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
-  // });
+  this.projectForm = this.fb.group({
+    id: [null],
+    title: ['', [Validators.required, Validators.maxLength(40)]],
+    minDescription: ['', [Validators.required, Validators.maxLength(90)]],
+    fullDescription: ['', [Validators.required, Validators.maxLength(500)]],
+    usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern('^(?:[a-zA-Z0-9]+,)*[a-zA-Z0-9]+$')]],
+  });
+
 
   this.projectForm.patchValue({
     id: project.id,
     title: project.title,
     minDescription: project.minDescription,
     fullDescription: project.fullDescription,
-    usedTools: project.usedTools,
+    usedTools: this.arrayToString(project.usedTools),
 
   })
   this.formModalProject.show();
@@ -267,24 +275,111 @@ switchToEditMode(project : Project){
 
 
 
+async updateProjectOnly(project : Project){
+  const projectDto :  ProjectDto = {
+    id  : project.id,
+    minDescription : project.minDescription,
+    fullDescription :  project.fullDescription,
+    imgsLink : project.imgsLink,
+    usedTools : project.usedTools,
+    demoLink : project.demoLink,
+    title : project.title 
+  }
 
-// async updateProject(Project : Project){
-//   let response = await this.fireBaseStorage.updateProject(Project,this.fileImg,this.withFileImg,this.withFileVideo);
-//   this.editMode = false;
-//   this.isLoading = false;
-//   this.formModalProject.hide();
-//   this.projectForm.reset({type : ['']})
-//   this.iniForm()
-//   this.fileImg = new File([], 'none'); 
-//   this.previousSelectedValue="default";
+  let response = await this.fireBaseStorage.updateProjectOnly(projectDto);
+  // this.editMode = false;
+  this.isLoading = false;
+  // this.formModal.hide();
+  // this.abilityForm.reset({type : ['']})
+  // this.iniForm()
+ // this.file = new File([], 'none'); 
 
-//   response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
-// }
+  response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
+}
 
 
 
+  async updateVideoImage(){
+    this.isUpdatingMultimedia = true;
 
-cancelEditing(){
+    let withImage = false
+    let withVideo = false
+
+    if(this.imgToBeUpdatedWith)
+    {
+      withImage = true
+    }
+    if(this.videoToBeUpdatedWith){
+      withVideo = true
+    }
+
+    let projectFileUpdateDto : ProjectFileUpdateDto = {
+      projectID:   this.updateProjectDetailForUpdateImgAndVideoOnly.projectID,
+      videoFile: this.videoToBeUpdatedWith,
+      imgFile: this.imgToBeUpdatedWith,
+      projectImgsLinks: this.updateProjectDetailForUpdateImgAndVideoOnly.imgsLink
+    }
+  
+
+    let withImgVideoDto: WithImgVideoDto = {
+      withImage: withImage,
+      withVideo: withVideo,
+      imgTpUpdateLink: this.selectedImageToUpdateUrl,
+      demoLink: this.updateProjectDetailForUpdateImgAndVideoOnly.demoLink
+    }
+
+
+  let response = await this.fireBaseStorage.updateProjectVideoImgOnly(projectFileUpdateDto,withImgVideoDto);
+  this.resetInputs()
+ 
+  this.isUpdatingMultimedia = false;
+
+  // this.file = new File([], 'none'); 
+  // this.previousSelectedValue="default";
+  // this.withFile=false
+  response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!)
+
+}
+
+
+
+
+
+
+async deleteOnImage(imgLink:string){
+  this.isDeletingOneImage= true
+ let projectID =   this.updateProjectDetailForUpdateImgAndVideoOnly.projectID;
+ let projectImgsLinks =  this.updateProjectDetailForUpdateImgAndVideoOnly.imgsLink;
+ let imgToDeleteLink = imgLink
+ let response = await this.fireBaseStorage.deleteOneImage(projectImgsLinks,imgToDeleteLink,projectID)
+ response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!)
+ this.isDeletingOneImage=false
+
+}
+
+
+  async addNewImageToProject(){
+    if(this.newImgToAdd==undefined){
+    
+      this.toastr.error("Please choose an image on the field above")
+    }else{
+      this.isAddinggNewImage= true
+      let img = this.newImgToAdd
+      let projectImgsLinks =  this.updateProjectDetailForUpdateImgAndVideoOnly.imgsLink;
+      let projectID =   this.updateProjectDetailForUpdateImgAndVideoOnly.projectID;
+      let response = await this.fireBaseStorage.addOneImageToProject(img,projectImgsLinks,projectID)
+      response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!)
+      this.resetInputs()
+      this.isAddinggNewImage= false
+
+    }
+
+
+}
+
+
+
+saveChange(){
   this.projectForm.reset({type : ['']})
   this.editMode = false;
   this.formModalProject.hide();
@@ -293,11 +388,22 @@ cancelEditing(){
 
 
 
+close(){
+  this.iniForm()
+}
+
 
 
 OnImageClicked(imgUrel: string,index : number) {
   this.selectedImageIndex=index;
+  this.selectedImageToUpdateUrl = imgUrel;
 
+}
+
+resetInputs() {
+  this.imageInputRef.nativeElement.value = '';
+  this.imageAddInput.nativeElement.value = '';
+  this.videoInputRef.nativeElement.value = '';
 }
 
 
@@ -326,10 +432,17 @@ truncateText(text: string): string {
 
 
  splitAndTrim(text : String) {
+  console.log(text)
   const words = text.split(',');
   // Trim leading and trailing whitespace from each word
   return words.map(word => word.trim());
 }
+
+
+arrayToString(array : string []) {
+  return array.join(',');
+}
+
 
 
 }

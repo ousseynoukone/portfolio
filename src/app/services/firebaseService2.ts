@@ -11,7 +11,7 @@ import { AngularFireStorage} from '@angular/fire/compat/storage';
 import { AbilityUpdateDto } from '../models/dtos/abilitieUpdateDto';
 import { Project } from '../models/project';
 import { UploadResultForManyFiles, UploadResultForOneFile } from '../models/dtos/uploadResultDto';
-import { ProjectDto } from '../models/dtos/projectDto';
+import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from '../models/dtos/projectDto';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +26,9 @@ export class FireBaseStorageService2 {
   private _percentageSubjectImg: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private _percentageSubjectVideo: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private _projectSibject: Subject<Project[]> = new Subject<Project[]>();
+
+  public isUpdatingVideo :  boolean = false;
+  public isUpdatingimg: boolean = false;
 
 
   //for pagination
@@ -299,105 +302,263 @@ getNextAbilities() {
 
 
 
-//   async updateAbility(ability: Ability, file: File, withFile: boolean): Promise<ResponseDto> {
-  // this._percentageSubjectImg.next(0);
-  // this._percentageSubjectVideo.next(0);
-//     var abilityWithoutImage: AbilityUpdateDto;
-//     this._percentageSubject.next(0);
-//     try {
-//         const snapshot = await this.abilitiyDB.ref.where('id', '==', ability.id).get();
+  async updateProjectOnly(project: ProjectDto): Promise<ResponseDto> {
+    try {
+        const snapshot = await this.projectsDb.ref.where('id', '==', project.id).get();
 
-//         if (withFile) {
-//             let fileRef = await this.getFileRef(ability.image!);
-//             const updateTask = fileRef.put(file);
 
-//             updateTask.percentageChanges().subscribe((percentage) => {
-//                 this._percentageSubject.next(percentage!);
-//             });
+        const  projectWithoutImageAndVideo = {
+              id : project.id,
+              minDescription : project.minDescription,
+              fullDescription : project.fullDescription,
+              usedTools : project.usedTools,
+              title : project.title 
+            };
 
-//             const uploadSnapshot = await updateTask;
-//             const url = await uploadSnapshot.ref.getDownloadURL();
+        if (!snapshot.empty) {
+            snapshot.forEach(doc => {
+                doc.ref.update(projectWithoutImageAndVideo);
+            });
+        } else {
+            return { status: false, message: 'Docs not found!' };
+        }
 
-//             ability.image = url;
-//         } else {
-//             abilityWithoutImage = {
-//                 name: ability.name,
-//                 type: ability.type!,
-//                 id: ability.id,
-//                 rating: ability.rating
-//             };
-//         }
-
-//         if (!snapshot.empty) {
-//             snapshot.forEach(doc => {
-//                 doc.ref.update(withFile ? ability : abilityWithoutImage);
-//             });
-//         } else {
-//             return { status: false, message: 'Docs not found!' };
-//         }
-
-//         return { status: true, message: 'Ability updated successfully!' };
-//     } catch (error) {
-//         console.error('Error updating ability:', error);
-//         return { status: false, message: 'Error updating ability.' };
-//     }
-// }
+        return { status: true, message: 'Project updated successfully!' };
+    } catch (error) {
+        console.error('Error updating ability:', error);
+        return { status: false, message: 'Error updating ability.' };
+    }
+  }
 
 
 
 
+
+
+
+
+async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImgVideoDto: WithImgVideoDto): Promise<ResponseDto> {
+  this._percentageSubjectImg.next(0);
+  this._percentageSubjectVideo.next(0);
+  console.log(projectFileUpdate)
+  console.log(projectFileUpdate)
+
+  try {
+      const snapshot = await this.projectsDb.ref.where('id', '==', projectFileUpdate.projectID).get();
+
+      let updatedProject: any = {};
+
+      if (withImgVideoDto.withImage) {
+          let imgFileRef = await this.getFileRef(withImgVideoDto.imgTpUpdateLink);
+          const updateImgTask = imgFileRef.put(projectFileUpdate.imgFile);
+
+          updateImgTask.percentageChanges().subscribe((percentage) => {
+              this._percentageSubjectImg.next(percentage!);
+          });
+          this.isUpdatingimg = true;
+
+          const uploadImgSnapshot = await updateImgTask;
+          const imgUrl = await uploadImgSnapshot.ref.getDownloadURL();
+
+          let imgsLink = this.removeStringFromArray(projectFileUpdate.projectImgsLinks, withImgVideoDto.imgTpUpdateLink);
+          imgsLink.push(imgUrl);
+
+          updatedProject.imgsLink = imgsLink;
+      }
+
+      if (withImgVideoDto.withVideo) {
+          let videoFileRef = await this.getFileRef(withImgVideoDto.demoLink);
+          const updateVideoTask = videoFileRef.put(projectFileUpdate.videoFile);
+
+          updateVideoTask.percentageChanges().subscribe((percentage) => {
+              this._percentageSubjectVideo.next(percentage!);
+          });
+          this.isUpdatingVideo = true;
+
+          const uploadVideoSnapshot = await updateVideoTask;
+          const videoUrl = await uploadVideoSnapshot.ref.getDownloadURL();
+
+          updatedProject.demoLink = videoUrl;
+      }
+
+      if (!snapshot.empty) {
+          if (withImgVideoDto.withImage || withImgVideoDto.withVideo) {
+              snapshot.forEach(doc => {
+                  doc.ref.update(updatedProject);
+              });
+          } else {
+              return { status: false, message: 'Both video and image have not been provided.' };
+          }
+      } else {
+          return { status: false, message: 'Docs not found!' };
+      }
+      this.isUpdatingVideo=false
+      this.isUpdatingimg=false
+      return { status: true, message: 'Video END/OR Image have been updated successfully!' };
+  } catch (error) {
+      console.error('Error updating project:', error);
+      return { status: false, message: 'Error updating project.' };
+  }
+
+}
+
+
+
+
+  async deleteOneImage(imgLinks : string  [],imgToDeleteLink : string , projectId : string  ){
+
+    const userConfirmed = confirm(`Are you sure you want to delete that image ?`);
+  
+    if (!userConfirmed) {
+      return { status: false, message: 'Deletion canceled by user.' };
+    }
+    try {
+
+      let imgsLinks = this.removeStringFromArray(imgLinks, imgToDeleteLink);
+
+     let updatedProject = {
+      imgsLink : imgsLinks
+     }
+
+      const snapshot = await this.projectsDb.ref.where('id', '==', projectId).get();
+  
+      if (!snapshot.empty) {
+        snapshot.forEach(doc => {
+          doc.ref.update(updatedProject);
+      });
+
+      await this.deleteItemFromStorage(imgToDeleteLink)
+
+      }else{
+        return { status: false, message: 'Docs not found!' };
+      }
+      return { status: true, message: 'Image deleted successfully!' };
+    } catch (error) {
+      console.error('Error deleting ability:', error);
+      // If there's an error during deletion
+      // Handle errors appropriately (e.g., display error message to the user)
+      return { status: false, message: 'Error deleting ability.' };
+    }
+
+  
+
+}
+
+
+
+
+async addOneImageToProject(imgFile : File ,imgLinks : string [], projectId : string  ): Promise<ResponseDto> {
+  try {
+    this._percentageSubjectImg.next(0);
+
+      const uploadFile$ = this.uploadFile(imgFile);
+
+     let downloadlink =  await lastValueFrom(uploadFile$.pipe(map(response=>{
+       this._percentageSubjectImg.next(response.progress)
+       return response.downloadLink;
+      })))
+
+      const snapshot = await this.projectsDb.ref.where('id', '==', projectId).get();
+      imgLinks.push(downloadlink)
+
+      let updatedProject = {
+        imgsLink : imgLinks
+       }
+
+       if (!snapshot.empty) {
+        snapshot.forEach(doc => {
+          doc.ref.update(updatedProject);
+      });
+    }
+
+      return { status: true, message: 'Image added successfully.' };
+  } catch (error) {
+      return { status: false, message: String(error) };
+  }
+}
+
+
+
+
+
+
+  async deleteAbility(project: Project): Promise<ResponseDto> {
+    // Confirm the deletion with the user
+    const userConfirmed = confirm(`Are you sure you want to delete the project  "${project.title}"?`);
+  
+    // If the user cancels, return early
+    if (!userConfirmed) {
+      return { status: false, message: 'Deletion canceled by user.' };
+    }
+    try {
+  
+      // Create query with condition
+      const snapshot = await this.projectsDb.ref.where('id', '==', project.id).get();
+  
+      // Check if the document matching the condition exists
+      if (!snapshot.empty) {
+        // Delete the document
+        snapshot.forEach(doc => {
+          doc.ref.delete();
+        });
+
+        
+        await this.deleteItemFromStorage(project.demoLink)
+
+        project.imgsLink.forEach(async imgLink=>{
+          await this.deleteItemFromStorage(imgLink)
+        })
+
+      }else{
+        return { status: false, message: 'Docs not found!' };
+      }
+
+  
+      return { status: true, message: 'Project deleted successfully!' };
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      // If there's an error during deletion
+      // Handle errors appropriately (e.g., display error message to the user)
+      return { status: false, message: 'Error deleting project.' };
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+async getFileRef(fileUrl:string) {
+  return  this.storage.refFromURL(fileUrl); // Get reference to file  
+}
 
   
   
-  // async deleteAbility(ability: Project): Promise<ResponseDto> {
-  //   // Confirm the deletion with the user
-  //   const userConfirmed = confirm(`Are you sure you want to delete the ability "${ability.name}"?`);
-  
-  //   // If the user cancels, return early
-  //   if (!userConfirmed) {
-  //     return { status: false, message: 'Deletion canceled by user.' };
-  //   }
-  //   try {
-  
-  //     // Create query with condition
-  //     const snapshot = await this.abilitiyDB.ref.where('id', '==', ability.id).get();
-  
-  //     // Check if the document matching the condition exists
-  //     if (!snapshot.empty) {
-  //       // Delete the document
-  //       snapshot.forEach(doc => {
-  //         doc.ref.delete();
-  //       });
-
-  //       await this.deleteItemFromStorage(ability.image!)
-  //     }else{
-  //       return { status: false, message: 'Docs not found!' };
-  //     }
 
   
-  //     return { status: true, message: 'Project deleted successfully!' };
-  //   } catch (error) {
-  //     console.error('Error deleting ability:', error);
-  //     // If there's an error during deletion
-  //     // Handle errors appropriately (e.g., display error message to the user)
-  //     return { status: false, message: 'Error deleting ability.' };
-  //   }
-  // }
-  
 
-  // getProjectClient(){
-  //   this.abilitiyDB.valueChanges().subscribe(querySnapshot => {
-  //     let abilities: Project[] = [];
-  //     querySnapshot.forEach(doc => {
-  //       const ability = doc as Project;
-  //       abilities.push(ability);
-  //       //For saving the last displated ability
-  //       this.lastVisibleByDoc = ability.id
-  //     });
-  //     this._projectSibject.next(abilities); 
-  //   });
-  // }
+  getProjectClient(){
+    this.projectsDb.valueChanges().subscribe(querySnapshot => {
+      let projects: Project[] = [];
+      querySnapshot.forEach(doc => {
+        const ability = doc as Project;
+        projects.push(ability);
+      });
+      this._projectSibject.next(projects); 
+    });
+  }
 
 
+
+   removeStringFromArray(stringArray : string [], stringToRemove : string) {
+    // Filter the array to keep only elements that are not equal to the string to remove
+    return stringArray.filter((string) => string !== stringToRemove);
+  }
 
 }
