@@ -100,16 +100,36 @@
               </div>
 
 
-
+              <div class="form-group ">
+                <label for="libelle">Type : </label>
+                <select formControlName="type" class="form-select form-group" aria-label="Default select example">
+                  <option *ngFor="let option of options" [value]="option.value"  [disabled]="option.value === '' " [selected]="option.value === ''">
+                    {{ option.label }}
+                  </option>
+          
+                </select>
+                
+            
+              <!-- Display validation message if the control is touched and not valid -->
+              <div *ngIf="projectForm.get('type')?.errors && projectForm.get('type')?.touched">
+                
+                <p class="badge bg-danger mt-1" > Type is required.</p>
+          
+              </div>
+          
+              
+          
+              
+            </div>
 
                         
               <div class="form-group ">
                 <label for="minDescription">Min Description : </label>
-                <textarea type="text" id="minDescription" maxlength="90" class="form-control" formControlName="minDescription" required> </textarea>
+                <textarea type="text" id="minDescription" maxlength="50" class="form-control" formControlName="minDescription" required> </textarea>
           
                 <div *ngIf="projectForm.get('minDescription')?.errors && projectForm.get('minDescription')?.touched">
                   <p class="badge bg-danger mt-1" *ngIf="projectForm.get('minDescription')!.hasError('required')">minDescription is required.</p>
-                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('minDescription')!.hasError('maxlength')">90 char max.</p>
+                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('minDescription')!.hasError('maxlength')">50 char max.</p>
                     
                 </div>
               </div>
@@ -144,10 +164,10 @@
 
               
 
-      <div >
+      <div *ngIf="!editMode" >
               <div class="form-group ">
-                      <label for="imgsFile"> {{editMode ? "Image" : "Images"}} :</label>
-                      <input type="file" #imageInput id="imgsFile" class="form-control" [attr.multiple]="!editMode ? 'multiple' : null"  [attr.formControlName]="!editMode ? 'imgsFile' : null"   accept="image/*" (change)="onImageChange($event,editMode,false)">
+                      <label for="imgsFile">Images :</label>
+                      <input type="file" #imageInput id="imgsFile" class="form-control" multiple='multiple'  formControlName="imgsFile"    accept="image/*" (change)="onImageChange($event,editMode,false)">
                       <div *ngIf="projectForm.get('imgsFile')?.errors && projectForm.get('imgsFile')?.touched">
                           <p class="badge bg-danger mt-1" *ngIf="projectForm.get('imgsFile')!.hasError('required')" >  Img File  is required.
                         </p>
@@ -162,7 +182,7 @@
 
               <div class="form-group ">
                 <label for="videoFile">Video :</label>
-                <input type="file" #videoInput id="videoFile" class="form-control"  [attr.multiple]="!editMode ? 'multiple' : null"  [attr.formControlName]="!editMode ? 'videoFile' : null"    accept="video/*" (change)="onVideoChange($event,editMode)">
+                <input type="file" #videoInput id="videoFile" class="form-control" formControlName="videoFile"       accept="video/*" (change)="onVideoChange($event,editMode)">
                 <div *ngIf="projectForm.get('videoFile')?.errors && projectForm.get('videoFile')?.touched" >
                     <p class="badge bg-danger mt-1" *ngIf="projectForm.get('videoFile')!.hasError('required')"> Video File  is required.
                   </p>
@@ -215,7 +235,7 @@
             <!-- For adding new image to an project -->
 
             <div>
-            <div class="badge bg-secondary-color">Add new Image</div>
+            <div *ngIf="editMode" class="badge bg-secondary-color">Add new Image</div>
 
             <div  *ngIf="editMode" class="m-1">
               <label for="imgsFile">Image :</label>
@@ -279,6 +299,27 @@
                     <video [src]="toUpdateVideoUrl" height="200" class="img-fluid" controls muted ></video>
   
                   </div>
+
+                  <div *ngIf="editMode" >
+                    <div class="form-group ">
+                            <label for="imgsFile">Image :</label>
+                            <input type="file" #imageInput id="imgsFile" class="form-control"  accept="image/*" (change)="onImageChange($event,editMode,false)">
+                            <div *ngIf="(isLoading && !editMode) || (editMode && this.fireBaseStorage.isUpdatingimg)">
+                              <p class="badge bg-success mt-1" >     {{percentageImg}}%
+                            </p>
+                          </div>
+                    </div>
+      
+      
+                    <div class="form-group ">
+                      <label for="videoFile">Video :</label>
+                      <input type="file" #videoInput id="videoFile" class="form-control"        accept="video/*" (change)="onVideoChange($event,editMode)">       
+                      <div *ngIf="(isLoading && !editMode) || (editMode && this.fireBaseStorage.isUpdatingVideo)">
+                        <p class="badge bg-success mt-1" >     {{percentageVideo}}%
+                      </p>
+                    </div>
+              </div>
+        </div>
 
                   <button type="button" (click)="updateVideoImage()" [disabled]="isUpdatingMultimedia" class="btn bg-accent-color p-2 m-3 text-white" >
           

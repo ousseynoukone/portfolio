@@ -16,7 +16,26 @@
 }
 
 .carousel-caption {
-    background-color: rgba(36, 35, 35, 0.5); 
+    background-color: rgba(36, 35, 35, 0.581); 
 }
 
 
+.custom-image {
+    width: 100%; /* Ensure the image takes 100% of the container width */
+    height: 100%; /* Ensure the image takes 100% of the container height */
+    object-fit : contain; /* Maintain aspect ratio while covering the container */
+
+}
+
+
+.image-container {
+    height: 400px; /* Set a fixed height for the container */
+}
+
+.custom-container {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    background-color: rgb(88, 88, 88); 
+
+}

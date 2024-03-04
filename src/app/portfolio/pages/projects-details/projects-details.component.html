@@ -1,29 +1,85 @@
 <div class="container-fluid pt-3 bg-secondary-color">
     <div class="row">
-      <div class="text-center m-3">
-        <div class="badge bg-accent-color text fs-5 p-2">Application SenYone</div>
+      <div class="text-center mb-3">
+        <div class="badge bg-accent-color  fs-5 p-2">{{project.title}}</div>
       </div>
       <div class="col-md-6 col-12">
 
   
         <div class="container pt-2 pb-3">
           <div class="text-center">
-            <div class="bg-primary-color text-accent  rounded onhoverSecondary mt-2">Captures d'écrans</div>
+            <div class="bg-primary-color text-accent h5 rounded onhoverAccent mt-2">Captures d'écrans</div>
           </div>
-  
 
 
 
+
+
+
+
+
+
+
+
+
+
+          <div class="container mt-2 mb-2">
+            <div  id="carousselDetailProjet" class="carousel slide" data-bs-ride="carousel" >
+              <div class="carousel-indicators" >
+                
+                <button *ngFor="let image of project.imgsLink;index as i"  type="button" [attr.data-bs-target]="'#carousselDetailProjet'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
+              </div>
+                <div class="carousel-inner">
+
+
+
+                  <div *ngFor="let image of project.imgsLink;index as i" class="carousel-item " [class.active]="i==0" >
+                    <div class="container rounded image-container  custom-container">
+
+                    <img class="img-fluid mx-auto d-block rounded custom-image" [src]="image" alt="Card image cap" >
+
+                   </div>
+
+                  </div>
+
+
+
+
+
+
+
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousselDetailProjet" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousselDetailProjet" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+            </div>  
+          </div>
         </div>
       </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
       <div class="col-md-6 col-12">
 
   
         <div class="container pt-2 pb-3">
           <div class="text-center">
-            <div class="bg-primary-color text-black  rounded onhoverSecondary mt-2">Démo</div>
+            <div class="bg-primary-color text-black h5 rounded onhoverAccent mt-2">Démo</div>
           </div>
   
           <!-- Carousel for screenshots -->
@@ -31,7 +87,7 @@
             <div class="embed-responsive embed-responsive-16by9 mt-3">
               <video controls>
                 <!-- Replace the empty string with the actual URL of your video -->
-                <source src="your-video-url.mp4" type="video/mp4">
+                <source [src]="project.demoLink" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
             </div>
@@ -44,37 +100,36 @@
     </div>
 
     <div class="row pb-3">
-      <div class="col-md-6 col-12 mt-3 rounded">
+
+      <div class="col-md-6 col-12 mt-3 rounded ">
         <div class="card">
-          <div class="card-header">
-              <h5 class="d-flex justify-content-center text-white rounded bg-secondary-color">Description</h5>
-          
+          <div class="card-header bg-accent-color">
+              <h5 class="text-white bg-accent-color">Description</h5>
+            </div>
+
           <div class="card-body rounded bg-secondary-color mt-1">
             <p class="text-white">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quae accusantium nemo nihil maxime. Aspernatur quos quam laboriosam doloribus cupiditate, dolores autem commodi odit illo. Impedit eveniet in accusantium ipsa!
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quae accusantium nemo nihil maxime. Aspernatur quos quam laboriosam doloribus cupiditate, dolores autem commodi odit illo. Impedit eveniet in accusantium ipsa!
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos quae accusantium nemo nihil maxime. Aspernatur quos quam laboriosam doloribus cupiditate, dolores autem commodi odit illo. Impedit eveniet in accusantium ipsa!
+              {{project.fullDescription}}
             </p>
-
           </div>
-        </div>
-
       </div>
-
     </div>
+
+
+
     <div class="col-md-6 col-12 mt-3 rounded">
       <div class="card">
-        <div class="card-header">
-            <h5 class="d-flex justify-content-center text-white rounded bg-secondary-color">Outils/Technologies utilisés</h5>
-        
+        <div class="card-header bg-accent-color">
+            <h5 class="text-white">Outils/Technologies utilisés</h5>
+          </div>
+
         <div class="card-body rounded bg-secondary-color mt-1 text-white">
           <ul>
-            <li>hi</li>
+            <li *ngFor="let tool of project.usedTools ">{{tool}}</li>
           </ul>
       
 
         </div>
-      </div>
 
     </div>
 

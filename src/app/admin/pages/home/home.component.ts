@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { FireBaseAuthService } from 'src/app/services/firebaseService';
+import { LoadingHandler } from '../../loadingHandler';
 
 @Component({
   selector: 'app-home',
@@ -9,9 +11,10 @@ import { FireBaseAuthService } from 'src/app/services/firebaseService';
 })
 export class HomeComponent {
 
-  constructor(private fService : FireBaseAuthService) {}
+  constructor(private authService: FireBaseAuthService, private router: Router) {}
 
   showComponentName: string = "projects"
+  isLoading = true;
 
 
   
@@ -21,6 +24,20 @@ export class HomeComponent {
 
   logout() {
     // Implement logic to handle user logout (e.g., call an authentication service)
-    this.fService.logout()
+    this.authService.logout()
   }
+
+
+
+
+  ngOnInit() {
+    this.authService.isAuthenticated.subscribe(isAuthenticated => {
+      if (!isAuthenticated) {
+        this.router.navigate(['/admin/login']);
+      }
+      // Authentication check is complete, hide the loader
+      this.isLoading = false;
+    });
+  }
+
 }

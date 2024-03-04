@@ -1,13 +1,12 @@
 .loading-container {
   position: fixed;
-  width: 100%;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   background-color: rgba(255, 255, 255, 0.7);
   z-index: 9999;
-  animation: changeColor 1000ms infinite ;
+  animation: changeColor 5s infinite; /* Changed animation duration */
 }
 
 .loading-spinner {
@@ -17,23 +16,22 @@
   border-radius: 50%;
   border-left-color: transparent;
   border-right-color: transparent;
-  animation: spin 500ms infinite ease-in-out;
+  animation: spin 1s infinite linear; /* Changed animation duration and timing function */
 }
 
 @keyframes spin {
-  100% {
+  to {
     transform: rotate(360deg);
   }
 }
 
-@keyframes changeColor{
-  0%{
+@keyframes changeColor {
+  0% {
     background-color: #990012;
-    color: white;
+    color: white; /* Added color property */
   }
-  100%{
+  100% {
     background-color: #242323;
-    color: white;
+    color: white; /* Added color property */
   }
-
 }

@@ -8,7 +8,8 @@ export class Project {
         public demoLink :  string,
         public title : string ,
         public imgsFile : FileList,
-        public videoFile : File
+        public videoFile : File,
+        public type : string
         ) {
     }
 }

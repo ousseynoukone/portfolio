@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Project } from '../../../models/project';
+import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
+import { LocalStorageService } from '../../shared/sharedService';
 
 @Component({
   selector: 'app-projects',
@@ -8,23 +10,55 @@ import { Project } from '../../../models/project';
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit {
-  projects ! : Project []
+  mobileProjects: Project[] = [];
+  webProjects: Project[] = [];
+  loading: boolean = true;
+  noDataMessage: string = '';
+  noData: boolean = false;
+
   constructor(private router: Router) { }
 
-  navigateToDetailsPage() {
+  fireBaseStorage = inject(FireBaseStorageService2);
+  localStorage = inject(LocalStorageService); 
+
+  navigateToDetailsPage(project : Project) {
+    this.localStorage.setData("project",project)
+
     this.router.navigate(['/project-details']).then(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
   ngOnInit() {
+    this.initProject();
   }
 
-  initProject(){
-    
+  initProjectsArray(){
+    this.webProjects = [];
+    this.mobileProjects = [];
   }
 
-  createProject(projet : Project){
-    this.projects.push(projet)
+  initProject() {
+    this.loading = true;
+    this.fireBaseStorage.getProjectClient();
+    this.fireBaseStorage.abilitiesSubject.subscribe(data => {
+      this.initProjectsArray();
+      if(data.length === 0) {
+        this.noData = true;
+        this.noDataMessage = 'No projects found.';
+      } else {
+        this.noData=true
+        data.forEach(element => {
+          if (element.type === "mobile") {
+            this.mobileProjects.push(element);
+          } else {
+            this.webProjects.push(element);
+          }
+        });
+
+        
+      }
+      this.loading = false;
+    });
   }
 }

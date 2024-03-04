@@ -170,7 +170,8 @@ async addProject(project: Project): Promise<ResponseDto> {
                       minDescription: project.minDescription,
                       fullDescription: project.fullDescription,
                       imgsLink: project.imgsLink,
-                      usedTools: project.usedTools
+                      usedTools: project.usedTools,
+                      type : project.type
                   };
 
                   const newId = this.firestore.createId();
@@ -312,7 +313,8 @@ getNextAbilities() {
               minDescription : project.minDescription,
               fullDescription : project.fullDescription,
               usedTools : project.usedTools,
-              title : project.title 
+              title : project.title ,
+              type : project.type
             };
 
         if (!snapshot.empty) {
@@ -482,7 +484,7 @@ async addOneImageToProject(imgFile : File ,imgLinks : string [], projectId : str
 
 
 
-  async deleteAbility(project: Project): Promise<ResponseDto> {
+  async deleteProject(project: Project): Promise<ResponseDto> {
     // Confirm the deletion with the user
     const userConfirmed = confirm(`Are you sure you want to delete the project  "${project.title}"?`);
   

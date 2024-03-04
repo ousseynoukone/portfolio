@@ -5,7 +5,8 @@ export interface ProjectDto {
      imgsLink : string [],
      usedTools : string[],
      demoLink :  string,
-     title : string 
+     title : string ,
+     type : string
 }
 
 export interface WithImgVideoDto{
@@ -20,5 +21,5 @@ export interface ProjectFileUpdateDto {
      projectID : string,
      videoFile : File
      imgFile : File
-     projectImgsLinks : string [   ]
+     projectImgsLinks : string [],
 }

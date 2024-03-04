@@ -4,72 +4,62 @@
     </div>
 
     <div class="row">
+      <div *ngIf="loading" class="text-center m-3">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      
+      <div *ngIf="noDataMessage !== ''" class="text-center m-3">
+        <p>{{ noDataMessage }}</p>
+      </div>
         <div class="col col-md-6 mt-4">
             <div class="text-center ">
                 <img src="../../../../assets/imgs/phone.png" class="img-fluid " alt="smartPhone">
-                <div class="bg-primary-color text-black rounded onhoverSecondary mt-2" id="mobile">Mobile</div>
+                <div class="bg-primary-color text-black rounded onhoverAccent mt-2" id="mobile">Mobile</div>
 
             </div>
             <div class="container mt-2 mb-2">
-            <div id="carousselMobile" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                  <button type="button" data-bs-target="#carousselMobile" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                  <button type="button" data-bs-target="#carousselMobile" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                </div>
+            <div *ngIf="noData"  id="carousselMobile" class="carousel slide" data-bs-ride="carousel" >
+              <div class="carousel-indicators" >
+                
+                <button *ngFor="let project of mobileProjects; let i = index"  type="button" [attr.data-bs-target]="'#carousselMobile'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
+              </div>
                 <div class="carousel-inner">
 
 
 
-                  <div class="carousel-item active">
-                    <img class="img-fluid mx-auto d-block m-3 rounded"  src="../../../../assets/imgs/me.png" alt="Card image cap">
-                    <div class="carousel-caption rounded d-none d-md-block m-3">
-                        <h5 class="card-title">Application SenYone</h5>
-                        <p>Some representative placeholder content for the first slide.</p>
+                  <div *ngFor="let project of mobileProjects;index as i" class="carousel-item " [class.active]="i==0" >
+                    <div class="container rounded image-container  custom-container">
+
+                    <img class="img-fluid mx-auto d-block rounded custom-image" [src]="project.imgsLink.at(0)" alt="Card image cap" >
+
+                   </div>
+
+
+                    <div class="carousel-caption rounded d-none d-md-block ">
+                        <h5 class="card-title">{{project.title}}</h5>
+                        <p>{{project.minDescription}}.</p>
 
                         <div class="card-body text-center">
-                            <button class=" m-3 bg-secondary-color text-white onhoverAccent rounded" (click)="navigateToDetailsPage()">Détails</button>
+                            <button class="btn btn-sm bg-primary-color text-dark onhoverAccent" (click)="navigateToDetailsPage(project)">Détails</button>
                         </div>
                     </div>
 
 
 
                     <div class="card d-block bg-accent-color d-md-none p-2 ">
-                        <h5 class="card-title text-white">Application SenYone</h5>
-                        <p class="text-white">Some representative placeholder content for the first slide.</p>
+                        <h5 class="card-title text-white">{{project.title}}</h5>
+                        <p class="text-white">{{project.minDescription}}.</p>
                     
                         <div class="card-body text-center mb-5">
-                            <a class="m-3 bg-secondary-color text-white onhoverPrimary p-2 rounded" href="#">Détails</a>
+                          <button class="btn btn-sm bg-primary-color text-dark onhoverAccent" (click)="navigateToDetailsPage(project)">Détails</button>
                         </div>
                     </div>
-            
                   </div>
 
 
 
-
-                  <div class="carousel-item ">
-                    <img class="img-fluid mx-auto d-block m-3 rounded"  src="../../../../assets/imgs/me.png" alt="Card image cap">
-                    <div class="carousel-caption rounded d-none d-md-block m-3">
-                        <h5 class="card-title">Application SenYone</h5>
-                        <p>Some representative placeholder content for the first slide.</p>
-
-                        <div class="card-body text-center">
-                            <button class=" m-3 bg-secondary-color text-white onhoverAccent rounded" (click)="navigateToDetailsPage()">Détails</button>
-                        </div>
-                    </div>
-
-
-
-                    <div class="card d-block bg-accent-color d-md-none p-2 ">
-                        <h5 class="card-title text-white">Application SenYone</h5>
-                        <p class="text-white">Some representative placeholder content for the first slide.</p>
-                    
-                        <div class="card-body text-center mb-5">
-                            <a class="m-3 bg-secondary-color text-white onhoverPrimary p-2 rounded" href="#">Détails</a>
-                        </div>
-                    </div>
-            
-                  </div>
 
 
 
@@ -95,70 +85,51 @@
             <div class="text-center">
                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAADfElEQVR4nO2dv2sUQRiGJwpaGKPEIEY8xNpLY0DTCWplZSOCjT+xsLNKsEvsrCyMTRIbSaESTGyC/4KVEQPW0SYoYpMoGH1kdAPLZm5ze+wm32beB6bameze+2T2213udpxrA6APaAKDanSSgc+ur52s8yQMAE+Az4iy+JRkOlBERDfwFPhd2mGILD7bKZ/1ZjIawPsNw0VV+KwbeTNjobJdi1YsAj0hIf40FWIFmAFGgWE1OslgNMnQZxliMlTAQzXjFXCk7QIkcgH6gblAzmv+Sizd0Vf+LLPArvxdiKL4TFtIGV/v0BW4tPVTSzOj2pmymsl8KX3Tl2WmqoMR/0nKQZbe9fqRZSwZJyoCeBDIvek3DAU2jGzyx/yjgAupdgbYk9P/AHA21f88cMxFDDASyH2osJCcy+N3wP5A/1PA10D/X8ANFymUIQQ4ST53A2Ne5vRfdpFCSUL8f3se9wJjXuf0/+6v8lyEUJIQfw39JudJ5uHAGF8vfrYYc99FCiXWkN3AReBOql0BDuaMOQFcS/W/DZx2EUNZQkQ5SIgxJMQYEmIMCam5kGngshpVZjBdRIjYHiTEGBJiDAkxhoo6NSnqenRSMboPMYaEGENCjCEhxpAQY0iIMSTEGBJiDAkxhlkhwL7kBy0vgFuxfE/LspBnmX3fdBFgWci3GH8KgWEhPzL7nncRICHGkBBjSIgxJMQYEmIMCTGGhBhDQowhIcaQEGNIiDEkxBgSYgwJMYaEGENCjFEnIR8yb4moQ7saeq3IThFSV74Axwt8bgnZAkYlxBZtv91IM6R6PhZZAaFOQt5m3udYh+Yz3Fvwc9dGyLyLAAkxhoQYQ0KMISHGkBBjSIgxJMQYEmIMCTGGhBhDQowhIcaQEGNIiDEkxBgSYgzLQpYz+37uIsCykEep/f4BLrkIsCzEr2t1HXgInHORYFZIrCAhtpAQY0iIMSSkRkK0fLex5bsPBTZE8VY3qwvcdyXr2KZZAfq39Yh3MMBRYDWT+VK6w3jA1py/advWI9+BJDfCoRW0H6c7+Tqy1kKKZkq5MyMkw2ffzHaeIsxqcr4bA4bV6CQDn91s4DS1zkTIXjew0GKAqI5FoKfVlGpIypbiJ0Bjs/OcnymTLWqKKAef7YTPukgBaiZXX0slHYTgX5bjGwp4UfwNSyJoUI1OMvDZ9bYT9l9Nu5Mawg+KpgAAAABJRU5ErkJggg==">
 
-                <div class="bg-primary-color text-black rounded onhoverSecondary mt-2" id="web">Web</div>
+                <div class="bg-primary-color text-black rounded onhoverAccent mt-2" id="web">Web</div>
 
             </div>
 
           <div class="container mt-2 mb-2">
-            <div id="carousselWeb" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                  <button type="button" data-bs-target="#carousselWeb" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                  <button type="button" data-bs-target="#carousselWeb" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                </div>
+            <div *ngIf="noData" id="carousselWeb" class="carousel slide" data-bs-ride="carousel" >
+              <div class="carousel-indicators" >
+                
+                <button *ngFor="let project of webProjects; let i = index"  type="button" [attr.data-bs-target]="'#carousselWeb'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
+              </div>
                 <div class="carousel-inner">
 
 
-                  <div class="carousel-item active">
-                    <img class="img-fluid mx-auto d-block m-3 rounded"  src="../../../../assets/imgs/me.png" alt="Card image cap">
-                    <div class="carousel-caption rounded d-none d-md-block m-3">
-                        <h5 class="card-title">Application SenYone</h5>
-                        <p>Some representative placeholder content for the first slide.</p>
+
+                  <div *ngFor="let project of webProjects;index as i" class="carousel-item " [class.active]="i==0" >
+                    <div class="container rounded image-container  custom-container">
+
+                    <img class="img-fluid mx-auto  d-block rounded custom-image" [src]="project.imgsLink.at(0)" alt="Card image cap" >
+
+                   </div>
+
+
+                    <div class="carousel-caption rounded d-none d-md-block ">
+                        <h5 class="card-title">{{project.title}}</h5>
+                        <p>{{project.minDescription}}.</p>
 
                         <div class="card-body text-center">
-                            <button class=" m-3 bg-secondary-color text-white onhoverAccent rounded" (click)="navigateToDetailsPage()">Détails</button>
+                            <button class="btn btn-sm bg-primary-color text-dark onhoverAccent" (click)="navigateToDetailsPage(project)">Détails</button>
                         </div>
                     </div>
 
 
 
                     <div class="card d-block bg-accent-color d-md-none p-2 ">
-                        <h5 class="card-title text-white">Application SenYone</h5>
-                        <p class="text-white">Some representative placeholder content for the first slide.</p>
+                        <h5 class="card-title text-white">{{project.title}}</h5>
+                        <p class="text-white">{{project.minDescription}}.</p>
                     
                         <div class="card-body text-center mb-5">
-                            <a class="m-3 bg-secondary-color text-white onhoverPrimary p-2 rounded" href="#">Détails</a>
+                          <button class="btn btn-sm bg-primary-color text-dark onhoverAccent" (click)="navigateToDetailsPage(project)">Détails</button>
                         </div>
                     </div>
-            
                   </div>
 
 
 
-
-
-                  <div class="carousel-item ">
-                    <img class="img-fluid mx-auto d-block m-3 rounded"  src="../../../../assets/imgs/me.png" alt="Card image cap">
-                    <div class="carousel-caption rounded d-none d-md-block m-3">
-                        <h5 class="card-title">Application SenYone</h5>
-                        <p>Some representative placeholder content for the first slide.</p>
-
-                        <div class="card-body text-center">
-                            <button class=" m-3 bg-secondary-color text-white onhoverAccent rounded" (click)="navigateToDetailsPage()">Détails</button>
-                        </div>
-                    </div>
-
-
-
-                    <div class="card d-block bg-accent-color d-md-none p-2 ">
-                        <h5 class="card-title text-white">Application SenYone</h5>
-                        <p class="text-white">Some representative placeholder content for the first slide.</p>
-                    
-                        <div class="card-body text-center mb-5">
-                            <a class="m-3 bg-secondary-color text-white onhoverPrimary p-2 rounded" href="#">Détails</a>
-                        </div>
-                    </div>
-            
-                  </div>
 
 
 
@@ -179,3 +150,6 @@
         </div>
     </div>
 </div>
+
+
+

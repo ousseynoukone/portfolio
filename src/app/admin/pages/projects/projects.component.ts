@@ -24,6 +24,12 @@ export class ProjectsComponent {
   projectForm !: FormGroup;
   fireBaseStorage = inject(FireBaseStorageService2);
 
+  options = [
+    { value: '', label: 'Select an option' }, // Default option
+    { value: 'mobile', label: 'Mobile' },
+    { value: 'web', label: 'Web' },
+  ];
+
   percentageImg: Number = 0;
   percentageVideo: Number = 0;
   isLoading: boolean = false;
@@ -91,12 +97,14 @@ export class ProjectsComponent {
   iniForm(){
     this.projectForm = this.fb.group({
       id: [null],
-      title: ['', [Validators.required, Validators.maxLength(40)]],
-      minDescription: ['', [Validators.required, Validators.maxLength(90)]],
+      title: ['', [Validators.required, Validators.maxLength(30)]],
+      minDescription: ['', [Validators.required, Validators.maxLength(50)]],
       fullDescription: ['', [Validators.required, Validators.maxLength(500)]],
-      usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern('^(?:[a-zA-Z0-9]+,)*[a-zA-Z0-9]+$')]],
+      usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern('^(?:[a-zA-Z0-9 ]+,)*(?:[a-zA-Z0-9 ]+)$')]],
       videoFile: [null, [Validators.required]],
       imgsFile: [null, Validators.required],
+      type: ['',Validators.required],
+
     });
   }
 
@@ -206,7 +214,8 @@ export class ProjectsComponent {
             this.formModalProject.hide();
             this.toastr.success(value.message??"");
 
-            this.projectForm.reset()
+            this.projectForm.reset({type : ['']})
+
           }
           if(!value.status){
             this.toastr.error(value.message??"");
@@ -231,8 +240,8 @@ export class ProjectsComponent {
 
 
 async deleteproject(Project:Project){
-//  let response = await this.fireBaseStorage.deleteProject(Project);
-//  response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
+ let response = await this.fireBaseStorage.deleteProject(Project);
+ response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
 }
 
 
@@ -249,6 +258,7 @@ switchToEditMode(project : Project){
 
 
   this.editMode = true
+  this.previousSelectedValue=project.type!;
 
   //pour cutumize validation
   this.projectForm = this.fb.group({
@@ -257,6 +267,10 @@ switchToEditMode(project : Project){
     minDescription: ['', [Validators.required, Validators.maxLength(90)]],
     fullDescription: ['', [Validators.required, Validators.maxLength(500)]],
     usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern('^(?:[a-zA-Z0-9]+,)*[a-zA-Z0-9]+$')]],
+    type: [project.type,Validators.required],
+    videoFile: [null],
+    imgsFile: [null],
+
   });
 
 
@@ -283,7 +297,8 @@ async updateProjectOnly(project : Project){
     imgsLink : project.imgsLink,
     usedTools : project.usedTools,
     demoLink : project.demoLink,
-    title : project.title 
+    title : project.title ,
+    type : project.type
   }
 
   let response = await this.fireBaseStorage.updateProjectOnly(projectDto);
@@ -318,6 +333,7 @@ async updateProjectOnly(project : Project){
       videoFile: this.videoToBeUpdatedWith,
       imgFile: this.imgToBeUpdatedWith,
       projectImgsLinks: this.updateProjectDetailForUpdateImgAndVideoOnly.imgsLink
+    
     }
   
 
