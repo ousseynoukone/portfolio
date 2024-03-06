@@ -4,13 +4,13 @@
     </div>
 
     <div class="row">
-      <div *ngIf="loading" class="text-center m-3">
+      <div *ngIf="loading" class="text-center">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
       
-      <div *ngIf="noDataMessage !== ''" class="text-center m-3">
+      <div *ngIf="noDataMessage !== ''" class=" badge ">
         <p>{{ noDataMessage }}</p>
       </div>
         <div class="col col-md-6 mt-4">
@@ -20,7 +20,7 @@
 
             </div>
             <div class="container mt-2 mb-2">
-            <div *ngIf="noData"  id="carousselMobile" class="carousel slide" data-bs-ride="carousel" >
+            <div *ngIf="!noData"  id="carousselMobile" class="carousel slide" data-bs-ride="carousel" >
               <div class="carousel-indicators" >
                 
                 <button *ngFor="let project of mobileProjects; let i = index"  type="button" [attr.data-bs-target]="'#carousselMobile'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
@@ -90,7 +90,7 @@
             </div>
 
           <div class="container mt-2 mb-2">
-            <div *ngIf="noData" id="carousselWeb" class="carousel slide" data-bs-ride="carousel" >
+            <div *ngIf="!noData" id="carousselWeb" class="carousel slide" data-bs-ride="carousel" >
               <div class="carousel-indicators" >
                 
                 <button *ngFor="let project of webProjects; let i = index"  type="button" [attr.data-bs-target]="'#carousselWeb'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>

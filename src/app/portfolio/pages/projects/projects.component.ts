@@ -47,7 +47,7 @@ export class ProjectsComponent implements OnInit {
         this.noData = true;
         this.noDataMessage = 'No projects found.';
       } else {
-        this.noData=true
+        this.noData=false
         data.forEach(element => {
           if (element.type === "mobile") {
             this.mobileProjects.push(element);
