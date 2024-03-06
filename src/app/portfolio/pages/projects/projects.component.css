@@ -36,6 +36,6 @@
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
-    background-color: rgb(88, 88, 88); 
+    background-color: #585858	; 
 
 }

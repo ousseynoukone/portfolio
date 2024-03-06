@@ -14,7 +14,9 @@ export class ProjectsComponent implements OnInit {
   webProjects: Project[] = [];
   loading: boolean = true;
   noDataMessage: string = '';
+  noDataMobile: boolean = false;
   noData: boolean = false;
+  noDataWeb: boolean = false;
 
   constructor(private router: Router) { }
 
@@ -56,7 +58,17 @@ export class ProjectsComponent implements OnInit {
           }
         });
 
-        
+       
+        if(this.mobileProjects.length === 0){
+          this.noDataMobile = true ;
+          this.noDataMessage = 'No mobile projects found.';
+
+        }
+        if(this.webProjects.length === 0){
+          this.noDataWeb = true ;
+          this.noDataMessage = 'No web projects found.';
+
+        }
       }
       this.loading = false;
     });
