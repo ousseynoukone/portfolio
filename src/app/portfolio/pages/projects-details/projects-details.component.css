@@ -1,6 +1,8 @@
 video {
     width: 100%;
     height: auto;
+    max-height: 80vh;
+    border-radius: 10px;
   }
 
 
@@ -12,8 +14,9 @@ video {
 
 
 .image-container {
-    height: 500px; /* Set a fixed height for the container */
+    height: 80vh; /* Set a fixed height for the container */
 }
+
 
 .custom-container {
     position: relative;

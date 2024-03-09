@@ -4,7 +4,7 @@ import { LoginDto } from '../models/dtos/loginDto';
 import { Injectable, inject } from '@angular/core';
 import {ResponseDto} from '../models/dtos/responseDto';
 import { Observable } from 'rxjs/internal/Observable';
-import { BehaviorSubject, Subject, forkJoin, lastValueFrom, map } from 'rxjs';
+import { BehaviorSubject, Subject, forkJoin, lastValueFrom, map, subscribeOn } from 'rxjs';
 
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument ,  } from '@angular/fire/compat/firestore';
 import { AngularFireStorage} from '@angular/fire/compat/storage';
@@ -29,6 +29,8 @@ export class FireBaseStorageService2 {
 
   public isUpdatingVideo :  boolean = false;
   public isUpdatingimg: boolean = false;
+  public isUpdatingPP: boolean = false;
+  public ppPercentage : number = 0 ;
 
 
   //for pagination
@@ -53,11 +55,11 @@ export class FireBaseStorageService2 {
   }
 
   get percentageImg(): Observable<Number> {
-    return this._percentageSubjectVideo.asObservable();
+    return this._percentageSubjectImg.asObservable();
   }
 
   get percentageVideo(): Observable<Number> {
-    return this._percentageSubjectImg.asObservable();
+    return this._percentageSubjectVideo.asObservable();
   }
 
   get abilitiesSubject():Observable<Project[]> {
@@ -80,18 +82,17 @@ export class FireBaseStorageService2 {
     const progressSubject = new Subject<UploadResultForManyFiles>();
     const downloadLinks: string[] = [];
 
-    console.log(fileList)
 
     for (let i = 0; i < totalFiles; i++) {
         const file = fileList[i];
         const filePath = `${this.basePathImgs}/${file.name}`;
         const storageRef = this.storage.ref(filePath);
         const uploadTask = storageRef.put(file);
+     let subscribing=   uploadTask.percentageChanges().subscribe((percentage) => {
+            totalProgress += (percentage ?? 0.1) / totalFiles; // Update total progress
 
-        uploadTask.percentageChanges().subscribe((percentage) => {
-            totalProgress += percentage??0.1 / totalFiles; // Update total progress
             progressSubject.next({
-              progress: totalProgress, downloadLinks: downloadLinks,
+              progress:  parseFloat(totalProgress.toFixed(2)) , downloadLinks: downloadLinks,
               
             }); // Emit overall progress and download links
         });
@@ -99,6 +100,7 @@ export class FireBaseStorageService2 {
 
         uploadTask.then(async (snapshot) => {
             downloadLinks.push(await snapshot.ref.getDownloadURL()); // Get download link and add to the list
+            subscribing.unsubscribe()
             if (downloadLinks.length === totalFiles) {
                 progressSubject.next({
                   progress: 100, downloadLinks: downloadLinks,
@@ -122,10 +124,12 @@ uploadFile(file: File): Observable<UploadResultForOneFile> {
       const filePath = `${this.basePathVideo}/${file.name}`;
       const storageRef = this.storage.ref(filePath);
       const uploadTask = storageRef.put(file);
-
+     
       uploadTask.percentageChanges().subscribe((percentage) => {
-          progressSubject.next({progress:percentage??0,downloadLink:downloadLink}); 
+        if(percentage!=undefined){
+          progressSubject.next({progress: parseFloat(percentage!.toFixed(2)),downloadLink:downloadLink}); 
           currentPercentage = percentage??0
+        }
       });
 
       uploadTask.then(async snapshot => {
@@ -147,21 +151,29 @@ async addProject(project: Project): Promise<ResponseDto> {
 
       const uploadFileList$ = this.uploadFileList(project.imgsFile);
       const uploadFile$ = this.uploadFile(project.videoFile);
+      const uploadPPFile$ = this.uploadFile(project.profilePicture);
+
+    let subscribeImgPercentage =   uploadFileList$.subscribe(uploadResultImg=>{
+        this._percentageSubjectImg.next(uploadResultImg.progress)
+      })
+
+      let subscribeVideoPercentage =  uploadFile$.subscribe(uploadResultVideo=>{
+        this._percentageSubjectVideo.next(uploadResultVideo.progress)
+      })
+
+
+      let subscribeProfilePicturePercentage =  uploadPPFile$.subscribe(upLoadResultProfilePicture=>{
+        this.ppPercentage = upLoadResultProfilePicture.progress
+      })
+    
     
 
-      await lastValueFrom( forkJoin([uploadFileList$, uploadFile$])
+      await lastValueFrom( forkJoin([uploadFileList$, uploadFile$,uploadPPFile$])
           .pipe(
-              map(([uploadResultList, uploadResultFile]) => {
-                  console.log(uploadResultList.progress);
-                  console.log(uploadResultFile.progress);
-
-                  this._percentageSubjectImg.next(uploadResultList.progress);
-                  this._percentageSubjectVideo.next(uploadResultFile.progress);
-
+              map(([uploadResultList, uploadResultFile,upLoadResultProfilePicture]) => {
                       project.imgsLink = uploadResultList.downloadLinks;
-
                       project.demoLink = uploadResultFile.downloadLink;
-                  
+                      project.ppLink = upLoadResultProfilePicture.downloadLink
 
                   const projectDto: ProjectDto = {
                       id: project.id,
@@ -171,7 +183,9 @@ async addProject(project: Project): Promise<ResponseDto> {
                       fullDescription: project.fullDescription,
                       imgsLink: project.imgsLink,
                       usedTools: project.usedTools,
-                      type : project.type
+                      type : project.type,
+                      ppLink :  project.ppLink
+                      
                   };
 
                   const newId = this.firestore.createId();
@@ -180,7 +194,8 @@ async addProject(project: Project): Promise<ResponseDto> {
               })
           )
          )
-         
+        //  subscribeImgPercentage.unsubscribe()
+        //  subscribeVideoPercentage.unsubscribe()
 
       return { status: true, message: 'Project added successfully.' };
   } catch (error) {
@@ -245,12 +260,10 @@ getNextAbilities() {
       this._projectSibject.next(projects);
       this.firstVisibleByDoc = projects.at(0)?.id;
 
-      console.log("firstVisibleByDoc " + this.firstVisibleByDoc)
 
       this.lastVisibleByDoc = projects.at(projects.length-1)?.id;
     ///////////This is only to ensure that we are  on the last elements soo the suivant button is disabled
     this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
-      console.log("laba "+querySnapshot.length)
       if(querySnapshot.length!=0){
         this.weAreOntLastElement=false;
       }});
@@ -271,7 +284,6 @@ getNextAbilities() {
         const project = doc as Project;
         projects.push(project);
       });
-      console.log(projects)
 
       this.firstVisibleByDoc = projects.length > 0 ? projects[0].id : null; // Update firstVisibleByDoc
       this.lastVisibleByDoc = projects.at(projects.length-1)?.id;
@@ -336,14 +348,58 @@ getNextAbilities() {
 
 
 
+  async updatePP( projectImgsLinks : string [],projectID : string , img :File,imgLink : string):Promise<ResponseDto>{
+  this.isUpdatingPP = true
+  try {
+    const snapshot = await this.projectsDb.ref.where('id', '==', projectID).get();
 
+    let imgFileRef = await this.getFileRef(imgLink);
+    const updateImgTask = imgFileRef.put(img);
+
+    updateImgTask.percentageChanges().subscribe((percentage) => {
+      this.ppPercentage = percentage??0
+  });
+
+
+  const uploadImgSnapshot = await updateImgTask;
+  const imgUrl = await uploadImgSnapshot.ref.getDownloadURL();
+  let updatedProject: any = {};
+
+  updatedProject.ppLink = imgUrl;
+
+
+  if (!snapshot.empty) {
+        snapshot.forEach(doc => {
+            doc.ref.update(updatedProject);
+        });
+    
+  } else {
+    this.isUpdatingPP = false
+
+      return { status: false, message: 'Docs not found!' };
+  }
+
+  this.isUpdatingPP = false
+
+  return { status: true, message: 'Profile picture updated succesfully !' };
+
+
+
+  } catch (error) {
+    console.error('Error updating pp project:', error);
+    this.isUpdatingPP = false
+
+    return { status: false, message: 'Error while updating profile picture .' };
+
+  }
+
+}
 
 
 async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImgVideoDto: WithImgVideoDto): Promise<ResponseDto> {
   this._percentageSubjectImg.next(0);
   this._percentageSubjectVideo.next(0);
-  console.log(projectFileUpdate)
-  console.log(projectFileUpdate)
+
 
   try {
       const snapshot = await this.projectsDb.ref.where('id', '==', projectFileUpdate.projectID).get();

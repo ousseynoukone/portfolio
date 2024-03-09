@@ -9,7 +9,9 @@ export class Project {
         public title : string ,
         public imgsFile : FileList,
         public videoFile : File,
-        public type : string
+        public type : string,
+        public profilePicture : File,
+        public ppLink : string
         ) {
     }
 }

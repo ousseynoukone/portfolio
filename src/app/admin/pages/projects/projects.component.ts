@@ -16,8 +16,9 @@ declare var window: any; // Declare $ as a variable to access jQuery
 })
 export class ProjectsComponent {
   @ViewChild('imageInput') imageInputRef !: ElementRef<HTMLInputElement>;
-  @ViewChild('imageAddInput') imageAddInput !: ElementRef<HTMLInputElement>;
+  @ViewChild('imageAddInput') imageAddInput !: ElementRef<HTMLInputElement>; 
   @ViewChild('videoInput') videoInputRef ! : ElementRef<HTMLInputElement>;
+  @ViewChild('imageProfileInput') imageProfileInputRef ! : ElementRef<HTMLInputElement>;
 
 
 
@@ -44,11 +45,14 @@ export class ProjectsComponent {
   formModalProject: any;
 
   toUpdateVideoUrl : String  = ""
-
+  
   FileImg ! : FileList
   FileVideo! : File ;
+  profileImg! : File ;
 
   newImgToAdd! : File;
+
+  projectPPlink : string = ""
   
   //pagination limit
   limit : number = 10
@@ -103,7 +107,9 @@ export class ProjectsComponent {
       usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern('^(?:[a-zA-Z0-9 ]+,)*(?:[a-zA-Z0-9 ]+)$')]],
       videoFile: [null, [Validators.required]],
       imgsFile: [null, Validators.required],
+      imageProfileInput: [null, Validators.required],
       type: ['',Validators.required],
+      
 
     });
   }
@@ -137,12 +143,19 @@ export class ProjectsComponent {
     if(isForAddingOneImage){
       this.newImgToAdd =  event.target.files[0];
     }
-
-
-
-
   }
 
+
+  
+  onImageProfileChange(event: any) {
+    const pp  =  event.target.files[0];
+    if (!pp.type.startsWith('image/') && !pp.type.startsWith('image/')) {
+      alert('Please select an image file.');
+      return;
+    }
+    this.profileImg = pp;
+  }
+  
 
 
 
@@ -194,11 +207,12 @@ export class ProjectsComponent {
       project.usedTools = usedTools;
       project.imgsFile=this.FileImg;
       project.videoFile=this.FileVideo;
-      this.fireBaseStorage.percentageImg.subscribe((percentage) => {
+      project.profilePicture = this.profileImg
+    let  percentageImgSubscribe =  this.fireBaseStorage.percentageImg.subscribe((percentage) => {
         this.percentageImg = percentage;
       });
 
-      this.fireBaseStorage.percentageVideo.subscribe((percentage) => {
+      let  percentageVideoSubscribe = this.fireBaseStorage.percentageVideo.subscribe((percentage) => {
         this.percentageVideo = percentage;
       });
 
@@ -210,6 +224,8 @@ export class ProjectsComponent {
           console.log(value.status)
           this.isLoading = false;
           if (value.status) {
+            percentageImgSubscribe.unsubscribe()
+            percentageVideoSubscribe.unsubscribe()
 
             this.formModalProject.hide();
             this.toastr.success(value.message??"");
@@ -219,10 +235,13 @@ export class ProjectsComponent {
           }
           if(!value.status){
             this.toastr.error(value.message??"");
+            percentageImgSubscribe.unsubscribe()
+            percentageVideoSubscribe.unsubscribe()
           }
 
         });
       }
+
     }
   }
 
@@ -251,6 +270,7 @@ async deleteproject(Project:Project){
 switchToEditMode(project : Project){
   this.toUpdateImageUrls=project.imgsLink!;
   this.toUpdateVideoUrl = project.demoLink;
+  this.projectPPlink = project.ppLink
 
   this.updateProjectDetailForUpdateImgAndVideoOnly.projectID = project.id
   this.updateProjectDetailForUpdateImgAndVideoOnly.imgsLink = project.imgsLink
@@ -298,7 +318,8 @@ async updateProjectOnly(project : Project){
     usedTools : project.usedTools,
     demoLink : project.demoLink,
     title : project.title ,
-    type : project.type
+    type : project.type,
+    ppLink : project.ppLink
   }
 
   let response = await this.fireBaseStorage.updateProjectOnly(projectDto);
@@ -359,7 +380,19 @@ async updateProjectOnly(project : Project){
 
 
 
-
+  async updatePP(){
+    if(this.profileImg ==undefined){
+    
+      this.toastr.error("Please upload the img. ")
+    }else{
+  let projectImgsLinks = this.updateProjectDetailForUpdateImgAndVideoOnly.imgsLink
+  let  projectID = this.updateProjectDetailForUpdateImgAndVideoOnly.projectID
+  let  img = this.profileImg
+  let imgLink = this.projectPPlink
+  let response  = await this.fireBaseStorage.updatePP(projectImgsLinks,projectID,img,imgLink)
+  response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!)
+    }
+}
 
 
 async deleteOnImage(imgLink:string){
@@ -420,6 +453,7 @@ resetInputs() {
   this.imageInputRef.nativeElement.value = '';
   this.imageAddInput.nativeElement.value = '';
   this.videoInputRef.nativeElement.value = '';
+  this.imageProfileInputRef.nativeElement.value = '';
 }
 
 

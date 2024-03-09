@@ -166,7 +166,7 @@
 
       <div *ngIf="!editMode" >
               <div class="form-group ">
-                      <label for="imgsFile">Images :</label>
+                      <label for="imgsFile">ScreenShots :</label>
                       <input type="file" #imageInput id="imgsFile" class="form-control" multiple='multiple'  formControlName="imgsFile"    accept="image/*" (change)="onImageChange($event,editMode,false)">
                       <div *ngIf="projectForm.get('imgsFile')?.errors && projectForm.get('imgsFile')?.touched">
                           <p class="badge bg-danger mt-1" *ngIf="projectForm.get('imgsFile')!.hasError('required')" >  Img File  is required.
@@ -178,6 +178,24 @@
                       </p>
                     </div>
               </div>
+
+
+
+
+
+              <div class="form-group ">
+                <label for="imageProfileInput">Profile picture :</label>
+                <input type="file" #imageProfileInput id="imageProfileInput" class="form-control" multiple='multiple'  formControlName="imageProfileInput"    accept="image/*" (change)="onImageProfileChange($event)">
+                <div *ngIf="projectForm.get('imageProfileInput')?.errors && projectForm.get('imageProfileInput')?.touched">
+                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('imageProfileInput')!.hasError('required')" >  Img File  is required.
+                  </p>
+                </div>
+    
+                <div *ngIf="(isLoading && !editMode) ">
+                  <p class="badge bg-success mt-1" >     {{this.fireBaseStorage.ppPercentage}}%
+                </p>
+              </div>
+            </div>
 
 
               <div class="form-group ">
@@ -215,7 +233,7 @@
  
 
 
-          <button type="button" (click)="close()" data-bs-dismiss="modal"  *ngIf="!this.editMode" class="btn bg-secondary-color p-2 mt-3  text-white mx-1" >
+          <button type="button" (click)="close()" data-bs-dismiss="modal"  *ngIf="!this.editMode && !isLoading" class="btn bg-secondary-color p-2 mt-3  text-white mx-1" >
             Close
           </button> 
 
@@ -235,7 +253,7 @@
             <!-- For adding new image to an project -->
 
             <div>
-            <div *ngIf="editMode" class="badge bg-secondary-color">Add new Image</div>
+            <div *ngIf="editMode" class="text-white bg-accent-color p-2 rounded text-center fs-6 text">Add new Image</div>
 
             <div  *ngIf="editMode" class="m-1">
               <label for="imgsFile">Image :</label>
@@ -250,6 +268,33 @@
               <div *ngIf="this.isAddinggNewImage ">
                 <p class="badge bg-success mt-1" >     {{percentageImg}}%
               </p>
+            </div>
+           </div>
+          </div>
+          <!-- END  -->
+          <hr>  
+
+
+            <!-- For updating profile image of an  project -->
+
+          <div>
+            <div *ngIf="editMode" class="text-white bg-accent-color p-2 rounded text-center fs-6 text">Update profile picture</div>
+            <div class="d-flex justify-content-center align-items-center">
+              <img [src]="projectPPlink" class="img-fluid p-1 m-2 highlight " style="max-height: 400px;">
+            </div>
+
+            <div  *ngIf="editMode" class="m-1">
+              <label for="imgsFile">Image :</label>
+              <input type="file" #imageProfileInput id="imgsFile" class="form-control" accept="image/*" (change)="onImageProfileChange($event)">
+    
+              <button type="button" (click)="updatePP()" [disabled]="this.fireBaseStorage.isUpdatingPP" class="btn bg-secondary-color p-2 mt-3  text-white mx-1" > 
+
+                <span *ngIf="this.fireBaseStorage.isUpdatingPP" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
+                <span *ngIf="!this.fireBaseStorage.isUpdatingPP" role="status" aria-hidden="true">Update the image</span>
+              </button>
+    
+              <div *ngIf="this.fireBaseStorage.isUpdatingPP ">
+                <p class="badge bg-success mt-1" >{{this.fireBaseStorage.ppPercentage}}%</p>
             </div>
            </div>
           </div>
@@ -295,10 +340,10 @@
                     </div>
                   </div>
 
-                  <div class="container bg-accent-color p-2 rounded mt-3 mb-1 d-flex justify-content-center align-items-center">
-                    <video [src]="toUpdateVideoUrl" height="200" class="img-fluid" controls muted ></video>
-  
-                  </div>
+                  <!-- <div class="bg-accent-color p-2 rounded mt-3 mb-1 d-flex justify-content-center align-items-center"> -->
+                    <video [src]="toUpdateVideoUrl"  class="embed-responsive embed-responsive-4by3 mt-3" height="400vh" controls muted ></video>
+                  <!-- </div> -->
+
 
                   <div *ngIf="editMode" >
                     <div class="form-group ">

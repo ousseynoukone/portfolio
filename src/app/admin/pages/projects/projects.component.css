@@ -27,4 +27,6 @@
     border-radius: 10%;
     transition: transform 0.3s ease-in-out;
   }
-  
+  .video{
+    max-height: 50%  !important;
+  }

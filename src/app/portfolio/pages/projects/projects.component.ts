@@ -14,9 +14,9 @@ export class ProjectsComponent implements OnInit {
   webProjects: Project[] = [];
   loading: boolean = true;
   noDataMessage: string = '';
-  noDataMobile: boolean = false;
-  noData: boolean = false;
-  noDataWeb: boolean = false;
+  noDataMobile: boolean = true;
+  noData: boolean = true;
+  noDataWeb: boolean = true;
 
   constructor(private router: Router) { }
 
@@ -45,8 +45,7 @@ export class ProjectsComponent implements OnInit {
     this.fireBaseStorage.getProjectClient();
     this.fireBaseStorage.abilitiesSubject.subscribe(data => {
       this.initProjectsArray();
-      if(data.length === 0) {
-        this.noData = true;
+      if(data.length == 0) {
         this.noDataMessage = 'No projects found.';
       } else {
         this.noData=false
@@ -63,11 +62,15 @@ export class ProjectsComponent implements OnInit {
           this.noDataMobile = true ;
           this.noDataMessage = 'No mobile projects found.';
 
+        }else{
+          this.noDataMobile = false
         }
         if(this.webProjects.length === 0){
           this.noDataWeb = true ;
           this.noDataMessage = 'No web projects found.';
 
+        }else{
+          this.noDataWeb = false
         }
       }
       this.loading = false;
