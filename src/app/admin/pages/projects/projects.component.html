@@ -222,7 +222,7 @@
     
  
           <div class="d-flex justify-content-center">
-            <hr>  
+            <hr *ngIf="this.editMode">  
             <button type="submit"  [disabled]="isLoading" class="btn bg-accent-color p-2 mt-3 text-white" >
           
               <span *ngIf="isLoading" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
@@ -249,7 +249,7 @@
             </form>
 
 
-            <hr>  
+            <hr *ngIf="this.editMode">  
             <!-- For adding new image to an project -->
 
             <div>
@@ -277,13 +277,13 @@
 
             <!-- For updating profile image of an  project -->
 
-          <div>
-            <div *ngIf="editMode" class="text-white bg-accent-color p-2 rounded text-center fs-6 text">Update profile picture</div>
+          <div  *ngIf="editMode">
+            <div class="text-white bg-accent-color p-2 rounded text-center fs-6 text">Update profile picture</div>
             <div class="d-flex justify-content-center align-items-center">
               <img [src]="projectPPlink" class="img-fluid p-1 m-2 highlight " style="max-height: 400px;">
             </div>
 
-            <div  *ngIf="editMode" class="m-1">
+            <div  class="m-1">
               <label for="imgsFile">Image :</label>
               <input type="file" #imageProfileInput id="imgsFile" class="form-control" accept="image/*" (change)="onImageProfileChange($event)">
     

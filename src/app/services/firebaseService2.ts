@@ -134,6 +134,8 @@ uploadFile(file: File): Observable<UploadResultForOneFile> {
 
       uploadTask.then(async snapshot => {
         downloadLink = await snapshot.ref.getDownloadURL()
+       
+        console.log(snapshot.ref.getMetadata())
         progressSubject.next({progress:currentPercentage??0,downloadLink:downloadLink}); 
         progressSubject.complete();  
       }).catch((error) => {
@@ -194,8 +196,9 @@ async addProject(project: Project): Promise<ResponseDto> {
               })
           )
          )
-        //  subscribeImgPercentage.unsubscribe()
-        //  subscribeVideoPercentage.unsubscribe()
+         subscribeImgPercentage.unsubscribe()
+         subscribeVideoPercentage.unsubscribe()
+         subscribeProfilePicturePercentage.unsubscribe()
 
       return { status: true, message: 'Project added successfully.' };
   } catch (error) {
