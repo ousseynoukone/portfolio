@@ -24,9 +24,63 @@
     border: 5px solid #990012; /* Add your desired highlight styles here */
     border-left: none;
     border-right: none;
-    border-radius: 10%;
-    transition: transform 0.3s ease-in-out;
+    border-radius: 10px;
   }
   .video{
     max-height: 50%  !important;
   }
+
+
+
+
+.img-default-highlight{
+  border-radius: 10px;
+  width: 100%; /* Ensure the image takes 100% of the container width */
+  height: 100%; /* Ensure the image takes 100% of the container height */
+  object-fit : contain; /* Maintain aspect ratio while covering the container */
+}
+
+
+
+
+
+.image-order-container {
+  height: 55vh; /* Set a fixed height for the container */
+}
+
+
+
+.image-update-container {
+  height: 50vh; /* Set a fixed height for the container */
+}
+
+
+
+/* Add styles for the draggable item */
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+
+
+/* Add styles for the drag preview when it's being dragged */
+.cdk-drag-animating {
+  transition: transform 250ms ;
+}
+
+/* Add styles for the drag preview when it's being dragged */
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms ;
+}
+
+
+
+/* while draging element */
+
+.cdk-drag-placeholder {
+  opacity: 0.5; 
+}

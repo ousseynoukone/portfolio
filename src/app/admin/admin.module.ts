@@ -10,6 +10,7 @@ import { AbilitiesComponent } from './pages/abilities/abilities.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { DataTablesModule } from 'angular-datatables';
 import { LoadingComponent } from './loading/loading.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { LoadingComponent } from './loading/loading.component';
     CommonModule,
     AdminRoutingModule,
     ReactiveFormsModule,
-    DataTablesModule
+    DataTablesModule,
+    DragDropModule
   ]
 })
 export class AdminModule { }

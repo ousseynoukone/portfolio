@@ -35,7 +35,8 @@
           </td>
           
           <td >
-            {{ project!.minDescription}}
+            {{ truncateText(project!.minDescription)}}
+
           </td>
           
       
@@ -317,7 +318,7 @@
 
 
 
-
+<!-- For updating an image  or Oder image-->
           
         <div *ngIf="this.editMode" class="col-12 col-md-6 mt-3 card">
           <div class="badge bg-secondary-color m-2 text-white ">Choose an image to update/delete</div>
@@ -327,7 +328,10 @@
                     <div *ngFor="let image of toUpdateImageUrls; let i = index;">
                       <div class="card-body d-flex justify-content-center align-items-center">
                         <div class="row">
-                          <img [src]="image" class="img-fluid pb-1" style="max-height: 200px;"  [class.highlight]="i === selectedImageIndex" (click)="OnImageClicked(image,i)" >
+                          <div class="image-update-container">
+                            <img [src]="image" class="img-fluid img-default-highlight p-1"  [class.highlight]="i === selectedImageIndex" (click)="OnImageClicked(image,i)" >
+
+                          </div>
                           <button *ngIf="i === selectedImageIndex" (click)="deleteOnImage(image)" class="btn btn-sm bg-accent-color mt-1 text-white" > 
                             <span *ngIf="isDeletingOneImage" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
                             <span *ngIf="!isDeletingOneImage" role="status" aria-hidden="true">Delete</span>
@@ -363,8 +367,8 @@
                         <p class="badge bg-success mt-1" >     {{percentageVideo}}%
                       </p>
                     </div>
-              </div>
-        </div>
+                    </div>
+                  </div>
 
                   <button type="button" (click)="updateVideoImage()" [disabled]="isUpdatingMultimedia" class="btn bg-accent-color p-2 m-3 text-white" >
           
@@ -372,8 +376,15 @@
                     <span *ngIf="!isUpdatingMultimedia && this.editMode" >Update multimedia</span>
                   
                   </button>
+
+
+                  <button type="button" (click)="openImagesPositionModal()"  class="btn bg-accent-color onHoverAccent p-2 m-3 text-white" >
+                    <span  >Order images</span>
+                  </button>
+
                 </div>
  
+<!-- For updating an image  or Oder image-->
 
 
         
@@ -392,6 +403,43 @@
 
 
 
+
+
+
+<!-- Modal  ORDER IMAGE POSITION-->
+<div class="modal fade" id="imagePositionOrderModal" tabindex="-1" aria-labelledby="imagePositionOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imagePositionOrderModalLabel">Order images by draging them</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="scrollable">
+            <div cdkDropList cdkDropListOrientation="horizontal"
+            (cdkDropListDropped)="dropListDropped($event)" class="row m-0 d-flex align-items-center justify-content-center" >
+
+              <div class="col-12 col-md-3 cdk-drag-preview m-1 p-1" cdkDragBoundary=".scrollable" *ngFor="let image of toUpdateImageUrls; let i = index;" cdkDrag>
+                <div class="image-order-container " >
+                  <img [src]="image" class="img-fluid img-default-highlight  custom-image ">
+                </div>
+              </div>
+
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="saveImageOrder()" [disabled]="isUpdatingMultimedia"  class="btn bg-secondary-color p-2 m-3  text-white mx-1" >
+          
+
+
+          <span *ngIf="isUpdatingMultimedia" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
+          <span *ngIf="!isUpdatingMultimedia && this.editMode" >Save changes</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

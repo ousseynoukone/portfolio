@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from 'src/app/models/dtos/projectDto';
 import { Project } from 'src/app/models/project';
 import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 declare var $: any; // Declare $ as a variable to access jQuery
 declare var window: any; // Declare $ as a variable to access jQuery
@@ -15,6 +16,7 @@ declare var window: any; // Declare $ as a variable to access jQuery
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent {
+
   @ViewChild('imageInput') imageInputRef !: ElementRef<HTMLInputElement>;
   @ViewChild('imageAddInput') imageAddInput !: ElementRef<HTMLInputElement>; 
   @ViewChild('videoInput') videoInputRef ! : ElementRef<HTMLInputElement>;
@@ -43,6 +45,7 @@ export class ProjectsComponent {
   toastr: ToastrService = inject(ToastrService);
 
   formModalProject: any;
+  imagesPositionOrderModal: any;
 
   toUpdateVideoUrl : String  = ""
   
@@ -75,9 +78,10 @@ export class ProjectsComponent {
   selectedImageIndex: number = -1;
   selectedImageToUpdateUrl !: string;
 
-
+  
   updateProjectDetailForUpdateImgAndVideoOnly : any = {}
   isDeletingOneImage: boolean = false;
+
 
 
   constructor(private fb: FormBuilder,private el: ElementRef) {}
@@ -89,6 +93,7 @@ export class ProjectsComponent {
 
     this.fetchProject();
     this.initformModalProject();
+    this.initImagePositionOrderModal()
   }
 
   initformModalProject(){
@@ -97,6 +102,12 @@ export class ProjectsComponent {
     )
   }
 
+
+  initImagePositionOrderModal(){
+    this.imagesPositionOrderModal = new window.bootstrap.Modal(
+     $('#imagePositionOrderModal')
+    )
+  }
 
   iniForm(){
     this.projectForm = this.fb.group({
@@ -130,11 +141,7 @@ export class ProjectsComponent {
     this.FileImg = fileList;
     console.log(this.FileImg)
 
-    // //Si on charge une image alors qu'on a edit mode , l'image dois etre mise a jour dans le db
-    // if(this.editMode){
-    //   this.withFile = true
-
-    // }
+    //Si on charge une image alors qu'on a edit mode , l'image dois etre mise a jour dans le db
 
     if(isEditMode){
       this.imgToBeUpdatedWith = event.target.files[0]
@@ -437,16 +444,34 @@ saveChange(){
 
 
 
+
+
+//To save ordered images
+  async saveImageOrder() {
+  this.isUpdatingMultimedia=true
+  let orderedImgLinks = this.toUpdateImageUrls 
+  let projectID =  this.updateProjectDetailForUpdateImgAndVideoOnly.projectID
+  let response = await this.fireBaseStorage.saveOrderedImage(orderedImgLinks,projectID)
+  if(response.status){
+     this.toastr.success(response.message!) 
+     this.imagesPositionOrderModal.hide()
+  }else{
+    this.toastr.error(response.message!)
+
+  }
+  this.isUpdatingMultimedia=false
+  }
+
+
 close(){
   this.iniForm()
 }
 
 
 
-OnImageClicked(imgUrel: string,index : number) {
+OnImageClicked(imgUrl: string,index : number) {
   this.selectedImageIndex=index;
-  this.selectedImageToUpdateUrl = imgUrel;
-
+  this.selectedImageToUpdateUrl = imgUrl;
 }
 
 resetInputs() {
@@ -455,6 +480,24 @@ resetInputs() {
   this.videoInputRef.nativeElement.value = '';
   this.imageProfileInputRef.nativeElement.value = '';
 }
+
+
+openImagesPositionModal(){
+  this.imagesPositionOrderModal.show()
+}
+
+dropListDropped(event: CdkDragDrop<string[]>) {
+  moveItemInArray(this.toUpdateImageUrls, event.previousIndex, event.currentIndex);
+}
+
+
+
+
+
+
+
+
+
 
 
 //Helper Function that can be externalize

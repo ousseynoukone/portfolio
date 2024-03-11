@@ -135,7 +135,6 @@ uploadFile(file: File): Observable<UploadResultForOneFile> {
       uploadTask.then(async snapshot => {
         downloadLink = await snapshot.ref.getDownloadURL()
        
-        console.log(snapshot.ref.getMetadata())
         progressSubject.next({progress:currentPercentage??0,downloadLink:downloadLink}); 
         progressSubject.complete();  
       }).catch((error) => {
@@ -144,6 +143,29 @@ uploadFile(file: File): Observable<UploadResultForOneFile> {
   return  progressSubject.asObservable();
 }
 
+
+  async saveOrderedImage(arrayOfImgsLinks : string [],projectID :string) : Promise<ResponseDto> {
+
+    try {
+      let updatedProject = {
+        imgsLink : arrayOfImgsLinks
+       }
+       const snapshot = await this.projectsDb.ref.where('id', '==', projectID).get();
+    
+       if (!snapshot.empty) {
+         snapshot.forEach(doc => {
+           doc.ref.update(updatedProject);
+       });}
+       return { status: true, message: 'Images order updated successfuly ! ' };
+
+    } catch (error) {
+      return { status: false, message: `Something bad happened while save images new order : ${error}` };
+
+    }
+
+  
+
+}
 
 
 async addProject(project: Project): Promise<ResponseDto> {
