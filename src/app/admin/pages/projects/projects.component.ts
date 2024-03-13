@@ -41,8 +41,7 @@ export class ProjectsComponent {
     { value: 'web', label: 'Web' },
   ];
 
-  percentageImg: Number = 0;
-  percentageVideo: Number = 0;
+
   isLoading: boolean = false;
   isUpdatingMultimedia: boolean = false;
   isDataComing: boolean = false;
@@ -222,14 +221,6 @@ export class ProjectsComponent {
       project.imgsFile=this.FileImg;
       project.videoFile=this.FileVideo;
       project.profilePicture = this.profileImg
-    let  percentageImgSubscribe =  this.fireBaseStorage.percentageImg.subscribe((percentage) => {
-        this.percentageImg = percentage;
-      });
-
-      let  percentageVideoSubscribe = this.fireBaseStorage.percentageVideo.subscribe((percentage) => {
-        this.percentageVideo = percentage;
-      });
-
       if(this.editMode){
        this.updateProjectOnly(project)
 
@@ -237,9 +228,6 @@ export class ProjectsComponent {
         this.fireBaseStorage.addProject(project).then((value) => {
           this.isLoading = false;
           if (value.status) {
-            percentageImgSubscribe.unsubscribe()
-            percentageVideoSubscribe.unsubscribe()
-
             this.formModalProject.hide();
             this.toastr.success(value.message??"");
 
@@ -248,8 +236,6 @@ export class ProjectsComponent {
           }
           if(!value.status){
             this.toastr.error(value.message??"");
-            percentageImgSubscribe.unsubscribe()
-            percentageVideoSubscribe.unsubscribe()
           }
 
         });

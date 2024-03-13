@@ -22,10 +22,13 @@ export class FireBaseStorageService2 {
   private basePathVideo = '/project/videos';
   private basePathImgs = '/project/imgs';
 
-  // Streams for percentage and abilities
-  private _percentageSubjectImg: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  private _percentageSubjectVideo: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  // Streams  for project data
   private _projectSibject: Subject<Project[]> = new Subject<Project[]>();
+
+  //percentage
+  public percentageImg: number = 0;
+  public percentageVideo:number = 0;
+
 
   public isUpdatingVideo :  boolean = false;
   public isUpdatingimg: boolean = false;
@@ -54,13 +57,7 @@ export class FireBaseStorageService2 {
     this.getAbilitiesNumber()
   }
 
-  get percentageImg(): Observable<Number> {
-    return this._percentageSubjectImg.asObservable();
-  }
 
-  get percentageVideo(): Observable<Number> {
-    return this._percentageSubjectVideo.asObservable();
-  }
 
   get abilitiesSubject():Observable<Project[]> {
     return this._projectSibject.asObservable();
@@ -170,19 +167,19 @@ uploadFile(file: File): Observable<UploadResultForOneFile> {
 
 async addProject(project: Project): Promise<ResponseDto> {
   try {
-    this._percentageSubjectImg.next(0);
-    this._percentageSubjectVideo.next(0);
+    this.percentageImg = 0;
+    this.percentageVideo=0;
 
       const uploadFileList$ = this.uploadFileList(project.imgsFile);
       const uploadFile$ = this.uploadFile(project.videoFile);
       const uploadPPFile$ = this.uploadFile(project.profilePicture);
 
     let subscribeImgPercentage =   uploadFileList$.subscribe(uploadResultImg=>{
-        this._percentageSubjectImg.next(uploadResultImg.progress)
+        this.percentageImg=uploadResultImg.progress
       })
 
       let subscribeVideoPercentage =  uploadFile$.subscribe(uploadResultVideo=>{
-        this._percentageSubjectVideo.next(uploadResultVideo.progress)
+        this.percentageVideo = uploadResultVideo.progress
       })
 
 
@@ -382,7 +379,7 @@ getNextAbilities() {
     const updateImgTask = imgFileRef.put(img);
 
     updateImgTask.percentageChanges().subscribe((percentage) => {
-      this.ppPercentage = percentage??0
+      this.ppPercentage =  parseFloat(percentage!.toFixed(2))
   });
 
 
@@ -422,8 +419,8 @@ getNextAbilities() {
 
 
 async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImgVideoDto: WithImgVideoDto): Promise<ResponseDto> {
-  this._percentageSubjectImg.next(0);
-  this._percentageSubjectVideo.next(0);
+  this.percentageImg = 0;
+  this.percentageVideo=0;
 
 
   try {
@@ -436,7 +433,7 @@ async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImg
           const updateImgTask = imgFileRef.put(projectFileUpdate.imgFile);
 
           updateImgTask.percentageChanges().subscribe((percentage) => {
-              this._percentageSubjectImg.next(percentage!);
+              this.percentageImg = parseFloat(percentage!.toFixed(2));
           });
           this.isUpdatingimg = true;
 
@@ -454,7 +451,8 @@ async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImg
           const updateVideoTask = videoFileRef.put(projectFileUpdate.videoFile);
 
           updateVideoTask.percentageChanges().subscribe((percentage) => {
-              this._percentageSubjectVideo.next(percentage!);
+           
+              this.percentageVideo =  parseFloat(percentage!.toFixed(2));
           });
           this.isUpdatingVideo = true;
 
@@ -532,12 +530,12 @@ async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImg
 
 async addOneImageToProject(imgFile : File ,imgLinks : string [], projectId : string  ): Promise<ResponseDto> {
   try {
-    this._percentageSubjectImg.next(0);
+    this.percentageImg = 0;
 
       const uploadFile$ = this.uploadFile(imgFile);
 
      let downloadlink =  await lastValueFrom(uploadFile$.pipe(map(response=>{
-       this._percentageSubjectImg.next(response.progress)
+       this.percentageImg = response.progress
        return response.downloadLink;
       })))
 

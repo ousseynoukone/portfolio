@@ -175,7 +175,7 @@
                       </div>
           
                       <div *ngIf="(isLoading && !editMode) || (editMode && this.fireBaseStorage.isUpdatingimg)">
-                        <p class="badge bg-success mt-1" >     {{percentageImg}}%
+                        <p class="badge bg-success mt-1" >     {{fireBaseStorage.percentageImg}}%
                       </p>
                     </div>
               </div>
@@ -208,7 +208,7 @@
                 </div>
     
                 <div *ngIf="(isLoading && !editMode) || (editMode && this.fireBaseStorage.isUpdatingVideo)">
-                  <p class="badge bg-success mt-1" >     {{percentageVideo}}%
+                  <p class="badge bg-success mt-1" >     {{fireBaseStorage.percentageVideo}}%
                 </p>
               </div>
         </div>
@@ -267,7 +267,7 @@
               </button>
     
               <div *ngIf="this.isAddinggNewImage ">
-                <p class="badge bg-success mt-1" >     {{percentageImg}}%
+                <p class="badge bg-success mt-1" >     {{fireBaseStorage.percentageImg}}%
               </p>
             </div>
            </div>
@@ -354,7 +354,7 @@
                             <label for="imgsFile">Image :</label>
                             <input type="file" #imageInput id="imgsFile" class="form-control"  accept="image/*" (change)="onImageChange($event,editMode,false)">
                             <div *ngIf="(isLoading && !editMode) || (editMode && this.fireBaseStorage.isUpdatingimg)">
-                              <p class="badge bg-success mt-1" >     {{percentageImg}}%
+                              <p class="badge bg-success mt-1" >     {{fireBaseStorage.percentageImg}}%
                             </p>
                           </div>
                     </div>
@@ -364,7 +364,7 @@
                       <label for="videoFile">Video :</label>
                       <input type="file" #videoInput id="videoFile" class="form-control"        accept="video/*" (change)="onVideoChange($event,editMode)">       
                       <div *ngIf="(isLoading && !editMode) || (editMode && this.fireBaseStorage.isUpdatingVideo)">
-                        <p class="badge bg-success mt-1" >     {{percentageVideo}}%
+                        <p class="badge bg-success mt-1" >     {{fireBaseStorage.percentageVideo}}%
                       </p>
                     </div>
                     </div>
