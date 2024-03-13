@@ -108,8 +108,9 @@
         </div>
 
         <button class="sendButton onhoverAccent rounded p-2 mt-3 mb-3" type="submit" [disabled]="isSending">
-            Envoyer
-          </button>
+            <span *ngIf="isSending" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>        
+            <span *ngIf="!isSending" >Envoyer</span>        
+        </button>
         </form>
 
         </div>

@@ -167,7 +167,7 @@ export class FireBaseStorageService {
       if(abilities.length!=0){
             //This is only to ensure that we are  on the last elements soo the suivant button is disabled
             this.firestore.collection('abilities',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
-              console.log("ici " +querySnapshot.length)
+              
               if(querySnapshot.length!=0){
                 this.weAreOntLastElement=false;
               }
@@ -203,12 +203,12 @@ getNextAbilities() {
       this._abilitiesSubject.next(abilities);
       this.firstVisibleByDoc = abilities.at(0)?.id;
 
-      console.log("firstVisibleByDoc " + this.firstVisibleByDoc)
+     
 
       this.lastVisibleByDoc = abilities.at(abilities.length-1)?.id;
     ///////////This is only to ensure that we are  on the last elements soo the suivant button is disabled
     this.firestore.collection('abilities',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
-      console.log("laba "+querySnapshot.length)
+      
       if(querySnapshot.length!=0){
         this.weAreOntLastElement=false;
       }});

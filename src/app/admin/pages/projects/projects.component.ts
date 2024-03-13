@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from 'src/app/models/dtos/projectDto';
 import { Project } from 'src/app/models/project';
 import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray,transferArrayItem } from '@angular/cdk/drag-drop';
 
 declare var $: any; // Declare $ as a variable to access jQuery
 declare var window: any; // Declare $ as a variable to access jQuery
@@ -21,8 +21,16 @@ export class ProjectsComponent {
   @ViewChild('imageAddInput') imageAddInput !: ElementRef<HTMLInputElement>; 
   @ViewChild('videoInput') videoInputRef ! : ElementRef<HTMLInputElement>;
   @ViewChild('imageProfileInput') imageProfileInputRef ! : ElementRef<HTMLInputElement>;
+  @ViewChild('rowLayout', { static: true }) rowLayout!: ElementRef<HTMLElement>;
 
+  // Largeur fixe des éléments (vous pouvez ajuster cette valeur selon vos besoins)
+  boxWidth = 200;
 
+  // Tableau 2D représentant la disposition des éléments
+  itemsTable: Array<string[]> = [];
+
+  // Nombre de colonnes par ligne
+  columnSize: number = 0;
 
   projectForm !: FormGroup;
   fireBaseStorage = inject(FireBaseStorageService2);
@@ -139,7 +147,6 @@ export class ProjectsComponent {
       return;
     }
     this.FileImg = fileList;
-    console.log(this.FileImg)
 
     //Si on charge une image alors qu'on a edit mode , l'image dois etre mise a jour dans le db
 
@@ -228,7 +235,6 @@ export class ProjectsComponent {
 
       }else{
         this.fireBaseStorage.addProject(project).then((value) => {
-          console.log(value.status)
           this.isLoading = false;
           if (value.status) {
             percentageImgSubscribe.unsubscribe()
@@ -293,7 +299,7 @@ switchToEditMode(project : Project){
     title: ['', [Validators.required, Validators.maxLength(40)]],
     minDescription: ['', [Validators.required, Validators.maxLength(90)]],
     fullDescription: ['', [Validators.required, Validators.maxLength(500)]],
-    usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern('^(?:[a-zA-Z0-9]+,)*[a-zA-Z0-9]+$')]],
+    usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern('^(?:[a-zA-Z0-9 ]+,)*(?:[a-zA-Z0-9 ]+)$')]],
     type: [project.type,Validators.required],
     videoFile: [null],
     imgsFile: [null],
@@ -486,9 +492,66 @@ openImagesPositionModal(){
   this.imagesPositionOrderModal.show()
 }
 
-dropListDropped(event: CdkDragDrop<string[]>) {
-  moveItemInArray(this.toUpdateImageUrls, event.previousIndex, event.currentIndex);
+
+
+
+
+
+getItemsTable(): string[][] {
+  const rowLayoutElement = this.rowLayout.nativeElement;
+  // Calculer le nombre de colonnes par ligne en fonction de la largeur du conteneur
+  const { width } = rowLayoutElement.getBoundingClientRect();
+  const newColumnSize = Math.floor(width / this.boxWidth);
+
+  // Mettre à jour le tableau si la taille des colonnes a changé
+  if (newColumnSize !== this.columnSize) {
+    this.columnSize = newColumnSize;
+    this.initTable();
+  }
+
+  return this.itemsTable;
 }
+
+initTable() {
+  // Créer un tableau  à partir de toUpdateImageUrls
+  this.itemsTable = this.toUpdateImageUrls.reduce((rows, key, index) => {
+    if (index % this.columnSize === 0) {
+      rows.push(this.toUpdateImageUrls.slice(index, index + this.columnSize));
+    }
+    return rows;
+  }, [] as string[][]);
+}
+
+reorderDroppedItem(event: CdkDragDrop<string[]>) {
+  if (event.previousContainer === event.container) {
+    moveItemInArray(
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+  } else {
+    transferArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+  }
+
+  // Mettre à jour toUpdateImageUrls après le déplacement
+  this.toUpdateImageUrls = this.itemsTable.reduce(
+    (flatArray, row) => flatArray.concat(row),
+    []
+  );
+
+  // Réinitialiser le tableau 2D
+  this.initTable();
+}
+
+
+
+
+
 
 
 
@@ -525,7 +588,7 @@ truncateText(text: string): string {
 
 
  splitAndTrim(text : String) {
-  console.log(text)
+  
   const words = text.split(',');
   // Trim leading and trailing whitespace from each word
   return words.map(word => word.trim());

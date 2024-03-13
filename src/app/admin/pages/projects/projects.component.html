@@ -415,17 +415,18 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="scrollable">
-            <div cdkDropList cdkDropListOrientation="horizontal"
-            (cdkDropListDropped)="dropListDropped($event)" class="row m-0 d-flex align-items-center justify-content-center" >
 
-              <div class="col-12 col-md-3 cdk-drag-preview m-1 p-1" cdkDragBoundary=".scrollable" *ngFor="let image of toUpdateImageUrls; let i = index;" cdkDrag>
-                <div class="image-order-container " >
-                  <img [src]="image" class="img-fluid img-default-highlight  custom-image ">
+
+        <div #rowLayout class="scrollable">
+          <div cdkDropListGroup>
+            <div *ngFor="let itemsRow of getItemsTable()" cdkDropList [cdkDropListData]="itemsRow" (cdkDropListDropped)="reorderDroppedItem($event)" class="d-flex justify-content-evenly m-1" cdkDropListOrientation="horizontal" >
+              <div *ngFor="let image of itemsRow" class="cdk-drag-preview bg-secondary-color"  cdkDragBoundary=".scrollable"  cdkDrag>
+                <div class="image-order-container m-1  ">
+                  <img [src]="image" class="img-fluid img-position custom-image p-1">
                 </div>
               </div>
-
             </div>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
