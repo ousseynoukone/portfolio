@@ -21,6 +21,6 @@ video {
 .custom-container {
     position: relative;
     overflow: hidden;
-    background-color: #585858; 
+    background-color: #FCF6F6; 
     transition: transform 0.3s ease-in-out;
 }
