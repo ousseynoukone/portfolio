@@ -7,7 +7,8 @@ export interface ProjectDto {
      demoLink :  string,
      title : string ,
      type : string,
-     ppLink : string
+     ppLink : string,
+     isVisible : boolean
 }
 
 export interface WithImgVideoDto{

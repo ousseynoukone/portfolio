@@ -205,7 +205,8 @@ async addProject(project: Project): Promise<ResponseDto> {
                       imgsLink: project.imgsLink,
                       usedTools: project.usedTools,
                       type : project.type,
-                      ppLink :  project.ppLink
+                      ppLink :  project.ppLink,
+                      isVisible : false
                       
                   };
 
@@ -363,6 +364,39 @@ getNextAbilities() {
     } catch (error) {
         console.error('Error updating ability:', error);
         return { status: false, message: 'Error updating ability.' };
+    }
+  }
+
+
+
+
+
+
+
+
+
+  
+  async updateProjectVisibility(project: any): Promise<ResponseDto> {
+    try {
+        const snapshot = await this.projectsDb.ref.where('id', '==', project.id).get();
+
+
+        const  projectDto = {
+          isVisible : project.isVisible
+            };
+
+        if (!snapshot.empty) {
+            snapshot.forEach(doc => {
+                doc.ref.update(projectDto);
+            });
+        } else {
+            return { status: false, message: 'Docs not found!' };
+        }
+
+        return { status: true, message: 'Project  visbility updated successfully!' };
+    } catch (error) {
+        console.error('Error while updating project visbility :', error);
+        return { status: false, message: 'Error updating project visbility.' };
     }
   }
 
@@ -628,12 +662,16 @@ async getFileRef(fileUrl:string) {
     this.projectsDb.valueChanges().subscribe(querySnapshot => {
       let projects: Project[] = [];
       querySnapshot.forEach(doc => {
-        const ability = doc as Project;
-        projects.push(ability);
+        const project = doc as Project;
+        if(project.isVisible){
+          projects.push(project);
+        }
       });
       this._projectSibject.next(projects); 
     });
   }
+
+
 
 
 

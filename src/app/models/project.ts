@@ -11,7 +11,8 @@ export class Project {
         public videoFile : File,
         public type : string,
         public profilePicture : File,
-        public ppLink : string
+        public ppLink : string,
+        public isVisible  : boolean =  false
         ) {
     }
 }

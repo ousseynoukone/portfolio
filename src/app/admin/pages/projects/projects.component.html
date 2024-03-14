@@ -44,6 +44,14 @@
           <td>
             <button class="btn btn-success btn-sm m-1" (click)="switchToEditMode(project)" >Details</button>
             <button class="btn btn-danger btn-sm m-1" (click)="deleteproject(project)">Delete</button>
+            <button class="btn btn-warning btn-sm m-1" (click)="updateProjectVisibility(project)">
+
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
+              <span *ngIf="!isLoading && project.isVisible" >Cacher</span>
+              <span *ngIf="!isLoading && !project.isVisible" >Montrer</span>
+              
+            </button>
+
           </td>
         </tr>
       </tbody>

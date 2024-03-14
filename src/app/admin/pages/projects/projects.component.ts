@@ -318,7 +318,9 @@ async updateProjectOnly(project : Project){
     demoLink : project.demoLink,
     title : project.title ,
     type : project.type,
-    ppLink : project.ppLink
+    ppLink : project.ppLink,
+    isVisible : true
+    
   }
 
   let response = await this.fireBaseStorage.updateProjectOnly(projectDto);
@@ -331,6 +333,28 @@ async updateProjectOnly(project : Project){
 
   response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
 }
+
+
+
+
+
+
+
+
+
+
+
+async updateProjectVisibility(project : Project){
+  this.isLoading = true;
+  const projectDto = {
+    id  : project.id,
+    isVisible : project.isVisible ? false : true
+  }
+  let response = await this.fireBaseStorage.updateProjectVisibility(projectDto);
+  this.isLoading = false;
+  response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
+}
+
 
 
 
