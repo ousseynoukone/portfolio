@@ -24,7 +24,7 @@ export class ProjectsComponent {
   @ViewChild('rowLayout', { static: true }) rowLayout!: ElementRef<HTMLElement>;
 
   // Largeur fixe des éléments (vous pouvez ajuster cette valeur selon vos besoins)
-  boxWidth = 500;
+  boxWidth = 300;
 
   // Tableau 2D représentant la disposition des éléments
   itemsTable: Array<string[]> = [];

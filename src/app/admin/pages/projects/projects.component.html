@@ -430,7 +430,8 @@
             <div *ngFor="let itemsRow of getItemsTable()" cdkDropList [cdkDropListData]="itemsRow" (cdkDropListDropped)="reorderDroppedItem($event)" class="d-flex justify-content-evenly m-1" cdkDropListOrientation="horizontal" >
               <div *ngFor="let image of itemsRow" class="cdk-drag-preview"  cdkDragBoundary=".scrollable"  cdkDrag>
                 <div class="image-order-container m-1  ">
-                  <img [src]="image" class="img-fluid img-position">
+                  <img [src]="image" class="img-fluid img-position custom-image p-1">
+                  
                 </div>
               </div>
             </div>
