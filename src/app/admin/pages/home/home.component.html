@@ -1,8 +1,4 @@
 <!-- home.component.html -->
-<header class="bg-dark text-light p-3">
-  <h1>Portfolio Dashboard</h1>
-  <button class="btn bg-accent-color text-white" (click)="logout()">Logout</button>
-</header>
 
 <main class="p-3">
   <button class="btn bg-accent-color text-white m-3" (click)="showComponent('projects')">Show  Projects</button>
@@ -13,4 +9,3 @@
   <app-abilities *ngIf="showComponentName === 'abilities'"></app-abilities>
   
 </main>
-<app-loading *ngIf="isLoading"></app-loading>

@@ -11,33 +11,12 @@ import { LoadingHandler } from '../../loadingHandler';
 })
 export class HomeComponent {
 
-  constructor(private authService: FireBaseAuthService, private router: Router) {}
-
   showComponentName: string = "projects"
-  isLoading = true;
-
-
   
   showComponent(componentName: string) {
     this.showComponentName = componentName;
   }
 
-  logout() {
-    // Implement logic to handle user logout (e.g., call an authentication service)
-    this.authService.logout()
-  }
 
-
-
-
-  ngOnInit() {
-    this.authService.isAuthenticated.subscribe(isAuthenticated => {
-      if (!isAuthenticated) {
-        this.router.navigate(['/admin/login']);
-      }
-      // Authentication check is complete, hide the loader
-      this.isLoading = false;
-    });
-  }
 
 }

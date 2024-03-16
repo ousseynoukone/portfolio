@@ -12,6 +12,10 @@ import { DataTablesModule } from 'angular-datatables';
 import { LoadingComponent } from './loading/loading.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { OrderImagesComponent } from './pages/order-images/order-images.component';
+import { HeaderComponent } from './static/header/header.component';
+
 @NgModule({
   declarations: [
     LoginComponent,
@@ -20,6 +24,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     AbilitiesComponent,
     ProjectsComponent,
     LoadingComponent,
+    OrderImagesComponent,
+    HeaderComponent,
     
   ],
   imports: [
@@ -27,7 +33,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     AdminRoutingModule,
     ReactiveFormsModule,
     DataTablesModule,
-    DragDropModule
+    DragDropModule,
+    ScrollingModule
   ]
 })
 export class AdminModule { }

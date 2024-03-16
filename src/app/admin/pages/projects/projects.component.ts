@@ -5,7 +5,9 @@ import { ToastrService } from 'ngx-toastr';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from 'src/app/models/dtos/projectDto';
 import { Project } from 'src/app/models/project';
 import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
-import { CdkDragDrop, moveItemInArray,transferArrayItem } from '@angular/cdk/drag-drop';
+import { LocalStorageService } from 'src/app/portfolio/shared/sharedService';
+import { ActivatedRoute, Router } from '@angular/router';
+
 
 declare var $: any; // Declare $ as a variable to access jQuery
 declare var window: any; // Declare $ as a variable to access jQuery
@@ -21,16 +23,8 @@ export class ProjectsComponent {
   @ViewChild('imageAddInput') imageAddInput !: ElementRef<HTMLInputElement>; 
   @ViewChild('videoInput') videoInputRef ! : ElementRef<HTMLInputElement>;
   @ViewChild('imageProfileInput') imageProfileInputRef ! : ElementRef<HTMLInputElement>;
-  @ViewChild('rowLayout', { static: true }) rowLayout!: ElementRef<HTMLElement>;
 
-  // Largeur fixe des éléments (vous pouvez ajuster cette valeur selon vos besoins)
-  boxWidth = 300;
-
-  // Tableau 2D représentant la disposition des éléments
-  itemsTable: Array<string[]> = [];
-
-  // Nombre de colonnes par ligne
-  columnSize: number = 0;
+  localStorageService = inject(LocalStorageService)
 
   projectForm !: FormGroup;
   fireBaseStorage = inject(FireBaseStorageService2);
@@ -52,7 +46,6 @@ export class ProjectsComponent {
   toastr: ToastrService = inject(ToastrService);
 
   formModalProject: any;
-  imagesPositionOrderModal: any;
 
   toUpdateVideoUrl : String  = ""
   
@@ -91,7 +84,7 @@ export class ProjectsComponent {
 
 
 
-  constructor(private fb: FormBuilder,private el: ElementRef) {}
+  constructor(private fb: FormBuilder,private el: ElementRef, private router: Router,private route: ActivatedRoute) {}
 
 
 
@@ -100,7 +93,6 @@ export class ProjectsComponent {
 
     this.fetchProject();
     this.initformModalProject();
-    this.initImagePositionOrderModal()
   }
 
   initformModalProject(){
@@ -110,11 +102,7 @@ export class ProjectsComponent {
   }
 
 
-  initImagePositionOrderModal(){
-    this.imagesPositionOrderModal = new window.bootstrap.Modal(
-     $('#imagePositionOrderModal')
-    )
-  }
+
 
   iniForm(){
     this.projectForm = this.fb.group({
@@ -462,21 +450,7 @@ saveChange(){
 
 
 
-//To save ordered images
-  async saveImageOrder() {
-  this.isUpdatingMultimedia=true
-  let orderedImgLinks = this.toUpdateImageUrls 
-  let projectID =  this.updateProjectDetailForUpdateImgAndVideoOnly.projectID
-  let response = await this.fireBaseStorage.saveOrderedImage(orderedImgLinks,projectID)
-  if(response.status){
-     this.toastr.success(response.message!) 
-     this.imagesPositionOrderModal.hide()
-  }else{
-    this.toastr.error(response.message!)
 
-  }
-  this.isUpdatingMultimedia=false
-  }
 
 
 close(){
@@ -498,64 +472,9 @@ resetInputs() {
 }
 
 
-openImagesPositionModal(){
-  this.imagesPositionOrderModal.show()
-}
-
-
-
-
-
-
-getItemsTable(): string[][] {
-  const rowLayoutElement = this.rowLayout.nativeElement;
-  // Calculer le nombre de colonnes par ligne en fonction de la largeur du conteneur
-  const { width } = rowLayoutElement.getBoundingClientRect();
-  const newColumnSize = Math.floor(width / this.boxWidth);
-
-  // Mettre à jour le tableau si la taille des colonnes a changé
-  if (newColumnSize !== this.columnSize) {
-    this.columnSize = newColumnSize;
-    this.initTable();
-  }
-
-  return this.itemsTable;
-}
-
-initTable() {
-  // Créer un tableau  à partir de toUpdateImageUrls
-  this.itemsTable = this.toUpdateImageUrls.reduce((rows, key, index) => {
-    if (index % this.columnSize === 0) {
-      rows.push(this.toUpdateImageUrls.slice(index, index + this.columnSize));
-    }
-    return rows;
-  }, [] as string[][]);
-}
-
-reorderDroppedItem(event: CdkDragDrop<string[]>) {
-  if (event.previousContainer === event.container) {
-    moveItemInArray(
-      event.container.data,
-      event.previousIndex,
-      event.currentIndex
-    );
-  } else {
-    transferArrayItem(
-      event.previousContainer.data,
-      event.container.data,
-      event.previousIndex,
-      event.currentIndex
-    );
-  }
-
-  // Mettre à jour toUpdateImageUrls après le déplacement
-  this.toUpdateImageUrls = this.itemsTable.reduce(
-    (flatArray, row) => flatArray.concat(row),
-    []
-  );
-
-  // Réinitialiser le tableau 2D
-  this.initTable();
+gotoProjectOrderingPage(project : Project){
+  this.localStorageService.setData("imgLinks",project)
+  this.router.navigate(['order-images'], {relativeTo:this.route});
 }
 
 

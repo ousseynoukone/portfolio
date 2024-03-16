@@ -47,9 +47,13 @@
             <button class="btn btn-warning btn-sm m-1" (click)="updateProjectVisibility(project)">
 
               <span *ngIf="isLoading" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
-              <span *ngIf="!isLoading && project.isVisible" >Cacher</span>
-              <span *ngIf="!isLoading && !project.isVisible" >Montrer</span>
+              <span *ngIf="!isLoading && project.isVisible" >Hide</span>
+              <span *ngIf="!isLoading && !project.isVisible" >Show</span>
 
+            </button>
+            
+            <button type="button" (click)="gotoProjectOrderingPage(project)"  class="btn btn-dark btn-sm m-1">
+              <span  >Order IMG</span>
             </button>
 
           </td>
@@ -386,9 +390,6 @@
                   </button>
 
 
-                  <button type="button" (click)="openImagesPositionModal()"  class="btn bg-accent-color onHoverAccent p-2 m-3 text-white" >
-                    <span  >Order images</span>
-                  </button>
 
                 </div>
  
@@ -408,50 +409,6 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-<!-- Modal  ORDER IMAGE POSITION-->
-<div class="modal fade" id="imagePositionOrderModal" tabindex="-1" aria-labelledby="imagePositionOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="imagePositionOrderModalLabel">Order images by draging them</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-
-
-        <div #rowLayout class="scrollable">
-          <div cdkDropListGroup>
-            <div *ngFor="let itemsRow of getItemsTable()" cdkDropList [cdkDropListData]="itemsRow" (cdkDropListDropped)="reorderDroppedItem($event)" class="d-flex justify-content-evenly m-1" cdkDropListOrientation="horizontal" >
-              <div *ngFor="let image of itemsRow" class="cdk-drag-preview"  cdkDragBoundary=".scrollable"  cdkDrag>
-                <div class="image-order-container m-1  ">
-                  <img [src]="image" class="img-fluid img-position custom-image p-1">
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" (click)="saveImageOrder()" [disabled]="isUpdatingMultimedia"  class="btn bg-secondary-color p-2 m-3  text-white mx-1" >
-          
-
-
-          <span *ngIf="isUpdatingMultimedia" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
-          <span *ngIf="!isUpdatingMultimedia && this.editMode" >Save changes</span>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 
 
 
