@@ -27,7 +27,7 @@ export interface ProjectFileUpdateDto {
 }
 
 
-export interface imgsLinksWithLibelle{
+export interface ImgsLinksWithLibelle{
      link : string,
      libelle : string
 }

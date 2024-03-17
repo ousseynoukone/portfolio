@@ -1,6 +1,4 @@
 
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { LoginDto } from '../models/dtos/loginDto';
 import { Injectable, inject } from '@angular/core';
 import {ResponseDto} from '../models/dtos/responseDto';
 import { Observable } from 'rxjs/internal/Observable';
@@ -51,15 +49,15 @@ export class FireBaseStorageService2 {
   constructor(private firestore : AngularFirestore, private storage: AngularFireStorage){
     this.projectsDb = firestore.collection('projects');
 
-    this.abilitiesSubject.subscribe(abilities => {
+    this.projectSubject.subscribe(abilities => {
       this.weAreOntFirstElement = abilities.some(ability => ability.id === this.firstDocId);
     });
-    this.getAbilitiesNumber()
+    this.getProjectNumber()
   }
 
 
 
-  get abilitiesSubject():Observable<Project[]> {
+  get projectSubject():Observable<Project[]> {
     return this._projectSibject.asObservable();
   }
 
@@ -261,7 +259,7 @@ async addProject(project: Project): Promise<ResponseDto> {
 
   
 
-  getAbilitiesNumber() {
+  getProjectNumber() {
     this.projectsDb.valueChanges().subscribe(querySnapshot => {
       this.totalOfItems=querySnapshot.length
     });

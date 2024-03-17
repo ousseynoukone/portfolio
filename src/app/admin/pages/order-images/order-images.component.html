@@ -3,10 +3,10 @@
     <div class="container-fluid col-12">
       <div cdkDropList class="example-list" (cdkDropListDropped)="dropListDropped($event)">
         <div *ngFor="let image of imgLinks" class="example-box"  cdkDrag>
-          <span  class="text-dark fw-bold">Title</span>
+          <span  class="text-dark fw-bold">{{image.libelle}}</span>
 
           <div  *cdkDragPreview class="rounded image-container ">
-            <img  [src]="image" class="img-fluid custom-image ">
+            <img  [src]="image.link" class="img-fluid custom-image ">
           </div>
         </div>
       </div>

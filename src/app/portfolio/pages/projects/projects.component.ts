@@ -43,7 +43,7 @@ export class ProjectsComponent implements OnInit {
   initProject() {
     this.loading = true;
     this.fireBaseStorage.getProjectClient();
-    this.fireBaseStorage.abilitiesSubject.subscribe(data => {
+    this.fireBaseStorage.projectSubject.subscribe(data => {
       this.initProjectsArray();
       if(data.length == 0) {
         this.noDataMessage = 'No projects found.';

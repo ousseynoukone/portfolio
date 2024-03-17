@@ -5,6 +5,7 @@ import { LocalStorageService } from 'src/app/portfolio/shared/sharedService';
 import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
 import { CdkDragDrop, moveItemInArray,transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
+import { ImgsLinksWithLibelle } from 'src/app/models/dtos/projectDto';
 
 @Component({
   selector: 'app-order-images',
@@ -20,17 +21,24 @@ export class OrderImagesComponent implements OnInit{
 
   isLoading : boolean = false
   project  = this.localStorageService.getData("imgLinks") as Project
-  imgLinks !: string []
+  imgLinks : ImgsLinksWithLibelle [] = []
 
   ngOnInit(): void {
-    this.imgLinks = this.project.imgsLink
+
+    this.project.imgsLink.forEach(link=>{
+      let libelle = this.getFileNameFromUrl(link)
+      this.imgLinks.push({link, libelle})
+    })
+  
   }
 
 
   //To save ordered images
   async saveImageOrder() {
     this.isLoading=true
-    let orderedImgLinks = this.imgLinks
+    let orderedImgLinks = this.imgLinks.map((link)=>{
+      return link.link
+    })
     let projectID =  this.project.id
     let response = await this.fireBaseStorage.saveOrderedImage(orderedImgLinks,projectID)
     if(response.status){
@@ -49,6 +57,22 @@ export class OrderImagesComponent implements OnInit{
     moveItemInArray(this.imgLinks, event.previousIndex, event.currentIndex);
   }
 
+   getFileNameFromUrl(url: string): string {
+    // Decode the URL to handle encoded characters
+    const decodedUrl = decodeURIComponent(url);
+  
+    // Split the decoded URL by '/' to get the individual path segments
+    const pathSegments = decodedUrl.split('/');
+  
+    // The file name is the last segment of the path
+    let fileName = pathSegments[pathSegments.length - 1];
+  
+    // Some URLs may include query parameters after the file name
+    // Use the split() method to remove the query parameters, if present
+    fileName = fileName.split('?')[0];
+  
+    return fileName;
+  }
     
     
 

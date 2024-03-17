@@ -186,7 +186,7 @@ export class ProjectsComponent {
   fetchProject() {
     this.isDataComing = true;
     this.fireBaseStorage.getProjects(this.limit);
-    this.fireBaseStorage.abilitiesSubject.subscribe((projects) => {
+    this.fireBaseStorage.projectSubject.subscribe((projects) => {
       this.isDataComing = false;
       this.projects = projects;
 
