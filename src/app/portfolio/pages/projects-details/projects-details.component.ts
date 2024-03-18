@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Project } from 'src/app/models/project';
-import { LocalStorageService } from '../../shared/sharedService';
+import { PassDataThrough } from '../../shared/sharedService';
 
 @Component({
   selector: 'app-projects-details',
@@ -9,10 +9,10 @@ import { LocalStorageService } from '../../shared/sharedService';
 })
 export class ProjectsDetailsComponent implements OnInit {
   project !: Project
-  localStorage = inject(LocalStorageService)
+  shareData = inject(PassDataThrough)
 
   ngOnInit(): void {
-    this.project = this.localStorage.getData("project") as Project
+    this.project = this.shareData.getData as Project
   }
 
 }

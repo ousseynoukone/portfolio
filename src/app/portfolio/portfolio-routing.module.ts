@@ -4,6 +4,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { MainLayoutComponent } from './static/home-layout/home-layout.component';
 import { ProjectsDetailsComponent } from './pages/projects-details/projects-details.component';
 import { LayoutComponent } from './static/layout/layout.component';
+import { RouteGuard } from '../services/guards/routeGuard';
 
 const routes: Routes = [
   {
@@ -17,7 +18,7 @@ const routes: Routes = [
         component: MainLayoutComponent
       },
       {
-        path: "project-details", 
+        path: "project-details", canActivate: [RouteGuard] ,
         component: ProjectsDetailsComponent
       }
     ]
@@ -26,6 +27,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers : [RouteGuard]
 })
 export class PortfolioRoutingModule { }

@@ -23,3 +23,23 @@ export class LocalStorageService {
     localStorage.clear();
   }
 }
+
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PassDataThrough {
+  private data : any
+  constructor() {}
+
+
+  get getData(){
+    return this.data
+  }
+  
+  set setData(data: any){
+    this.data = data
+  }
+
+}

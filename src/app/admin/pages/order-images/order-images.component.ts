@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Project } from 'src/app/models/project';
-import { LocalStorageService } from 'src/app/portfolio/shared/sharedService';
+import { PassDataThrough } from 'src/app/portfolio/shared/sharedService';
 import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
 import { CdkDragDrop, moveItemInArray,transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
@@ -14,13 +14,13 @@ import { ImgsLinksWithLibelle } from 'src/app/models/dtos/projectDto';
 })
 export class OrderImagesComponent implements OnInit{
 
-  localStorageService = inject(LocalStorageService)
+  shareData = inject(PassDataThrough)
   fireBaseStorage = inject(FireBaseStorageService2)
   toastr: ToastrService = inject(ToastrService);
   router = inject(Router);
 
   isLoading : boolean = false
-  project  = this.localStorageService.getData("imgLinks") as Project
+  project  = this.shareData.getData as Project
   imgLinks : ImgsLinksWithLibelle [] = []
 
   ngOnInit(): void {
@@ -30,6 +30,11 @@ export class OrderImagesComponent implements OnInit{
       this.imgLinks.push({link, libelle})
     })
   
+  }
+
+
+  preventingNavigation(){
+    
   }
 
 

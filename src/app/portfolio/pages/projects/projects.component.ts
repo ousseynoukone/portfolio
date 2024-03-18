@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Project } from '../../../models/project';
 import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
-import { LocalStorageService } from '../../shared/sharedService';
+import { PassDataThrough } from '../../shared/sharedService';
 
 @Component({
   selector: 'app-projects',
@@ -21,10 +21,10 @@ export class ProjectsComponent implements OnInit {
   constructor(private router: Router) { }
 
   fireBaseStorage = inject(FireBaseStorageService2);
-  localStorage = inject(LocalStorageService); 
+  shareData = inject(PassDataThrough); 
 
   navigateToDetailsPage(project : Project) {
-    this.localStorage.setData("project",project)
+    this.shareData.setData = project
 
     this.router.navigate(['/project-details']).then(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });

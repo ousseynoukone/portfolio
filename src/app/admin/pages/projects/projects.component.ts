@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from 'src/app/models/dtos/projectDto';
 import { Project } from 'src/app/models/project';
 import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
-import { LocalStorageService } from 'src/app/portfolio/shared/sharedService';
+import {  PassDataThrough } from 'src/app/portfolio/shared/sharedService';
 import { ActivatedRoute, Router } from '@angular/router';
 
 
@@ -24,7 +24,7 @@ export class ProjectsComponent {
   @ViewChild('videoInput') videoInputRef ! : ElementRef<HTMLInputElement>;
   @ViewChild('imageProfileInput') imageProfileInputRef ! : ElementRef<HTMLInputElement>;
 
-  localStorageService = inject(LocalStorageService)
+  shareData = inject(PassDataThrough)
 
   projectForm !: FormGroup;
   fireBaseStorage = inject(FireBaseStorageService2);
@@ -473,7 +473,7 @@ resetInputs() {
 
 
 gotoProjectOrderingPage(project : Project){
-  this.localStorageService.setData("imgLinks",project)
+  this.shareData.setData=project
   this.router.navigate(['order-images'], {relativeTo:this.route});
 }
 
