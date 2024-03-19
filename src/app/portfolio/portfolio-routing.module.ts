@@ -4,7 +4,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { MainLayoutComponent } from './static/home-layout/home-layout.component';
 import { ProjectsDetailsComponent } from './pages/projects-details/projects-details.component';
 import { LayoutComponent } from './static/layout/layout.component';
-import { RouteGuard } from '../services/guards/routeGuard';
+import { isRouteGuard } from '../services/guards/routeGuard';
 
 const routes: Routes = [
   {
@@ -18,7 +18,7 @@ const routes: Routes = [
         component: MainLayoutComponent
       },
       {
-        path: "project-details", canActivate: [RouteGuard] ,
+        path: "project-details", canActivate: [isRouteGuard] ,
         component: ProjectsDetailsComponent
       }
     ]
@@ -26,8 +26,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers : [RouteGuard]
 })
 export class PortfolioRoutingModule { }
