@@ -30,7 +30,7 @@
 
 
                   <div *ngFor="let project of mobileProjects;index as i" class="carousel-item " [class.active]="i==0" >
-                    <div class="container rounded image-container  custom-container">
+                    <div class="container  image-container  custom-container">
 
                     <img class="img-fluid mx-auto d-block rounded custom-image" [src]="project.ppLink" alt="Card image cap" >
 
@@ -48,12 +48,12 @@
 
 
 
-                    <div class="card d-block bg-accent-color d-md-none p-2 ">
+                    <div class=" d-block bg-accent-color d-md-none p-2 ">
                         <h5 class="card-title text-white">{{project.title}}</h5>
                         <p class="text-white">{{project.minDescription}}.</p>
                     
                         <div class="card-body text-center mb-5">
-                          <button class="btn btn-sm bg-primary-color text-dark onhoverAccent" (click)="navigateToDetailsPage(project)">Détails</button>
+                          <button class="btn btn-sm bg-primary-color text-dark onhoverPrimary" (click)="navigateToDetailsPage(project)">Détails</button>
                         </div>
                     </div>
                   </div>
@@ -100,7 +100,7 @@
 
 
                   <div *ngFor="let project of webProjects;index as i" class="carousel-item " [class.active]="i==0" >
-                    <div class="container rounded image-container  custom-container">
+                    <div class="container  image-container  custom-container">
 
                     <img class="img-fluid mx-auto  d-block rounded custom-image" [src]="project.imgsLink.at(0)" alt="Card image cap" >
 
@@ -118,12 +118,12 @@
 
 
 
-                    <div class="card d-block bg-accent-color d-md-none p-2 ">
+                    <div class="  d-block bg-accent-color d-md-none p-2 ">
                         <h5 class="card-title text-white">{{project.title}}</h5>
                         <p class="text-white">{{project.minDescription}}.</p>
                     
                         <div class="card-body text-center mb-5">
-                          <button class="btn btn-sm bg-primary-color text-dark onhoverAccent" (click)="navigateToDetailsPage(project)">Détails</button>
+                          <button class="btn btn-sm bg-primary-color text-dark onhoverPrimary" (click)="navigateToDetailsPage(project)">Détails</button>
                         </div>
                     </div>
                   </div>

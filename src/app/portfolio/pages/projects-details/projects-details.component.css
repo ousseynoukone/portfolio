@@ -24,3 +24,9 @@ video {
     background-color: #FCF6F6; 
     transition: transform 0.3s ease-in-out;
 }
+
+.carousel-indicators{
+    background-color:#990012a6;
+    border-radius: 10px;
+    margin-top: 10vh;
+}
