@@ -26,9 +26,7 @@ export class ProjectsComponent implements OnInit {
   navigateToDetailsPage(project : Project) {
     this.shareData.setData = project
 
-    this.router.navigate(['/project-details']).then(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    this.router.navigate(['/project-details'])
   }
 
   ngOnInit() {
