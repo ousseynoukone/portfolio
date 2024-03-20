@@ -32,7 +32,7 @@
 
 @media screen and (max-width: 576px) {
     .carousel-indicators {
-        bottom: 2vh; /* Adjust the value for mobile devices */
+        bottom: -9vh; /* Adjust the value for mobile devices */
     }
 }
 
