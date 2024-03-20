@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 
 declare var $: any; // Declare $ as a variable to access jQuery
-declare var window: any; // Declare $ as a variable to access jQuery
+declare var window: any; 
 
 @Component({
   selector: 'app-projects',

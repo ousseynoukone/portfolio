@@ -13,6 +13,7 @@ import { ProjectsDetailsComponent } from './pages/projects-details/projects-deta
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { LayoutComponent } from './static/layout/layout.component';
+import { CustumCarousselComponent } from './pages/Components/custum-caroussel/custum-caroussel.component';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -24,12 +25,14 @@ import { LayoutComponent } from './static/layout/layout.component';
     ProjectsComponent,
     ProjectsDetailsComponent,
     LayoutComponent,
+    CustumCarousselComponent,
     
   ],
   imports: [
     CommonModule,
     PortfolioRoutingModule,
     ReactiveFormsModule,
+    
 
     
     

@@ -4,50 +4,26 @@
         <div class="badge bg-accent-color  fs-5 p-2">{{project.title}}</div>
       </div>
       <div class="col-md-6 col-12">
-
   
         <div class="container pt-2 pb-3">
           <div class="text-center">
             <div class="bg-primary-color text-accent h5 rounded onhoverAccent mt-2">Captures d'écrans</div>
           </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-          <div class="container mt-2 mb-2">
+          <div class="carrouselContainer mt-2 mb-2">
             <div  id="carousselDetailProjet" class="carousel slide" data-bs-ride="carousel" >
               <div class="carousel-indicators" >
                 
                 <button *ngFor="let image of project.imgsLink;index as i"  type="button" [attr.data-bs-target]="'#carousselDetailProjet'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
               </div>
-                <div class="carousel-inner">
-
-
+                <div class="carousel-inner" (click)="openImageModal()">
 
                   <div *ngFor="let image of project.imgsLink;index as i" class="carousel-item " [class.active]="i==0" >
                     <div class="container rounded image-container ">
-
                     <img class="img-fluid mx-auto d-block rounded custom-image" [src]="image" alt="Card image cap" >
-
                    </div>
 
                   </div>
-
-
-
-
-
-
-
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carousselDetailProjet" data-bs-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -65,6 +41,25 @@
 
 
 
+
+      <!-- Modal Image  -->
+<div class="modal fade" id="modalImages" tabindex="-1" aria-labelledby="modalImagesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+
+        <div class="col-12">
+          <app-custum-caroussel [imgLinks]="project.imgsLink"></app-custum-caroussel>
+        </div>
+
+        
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

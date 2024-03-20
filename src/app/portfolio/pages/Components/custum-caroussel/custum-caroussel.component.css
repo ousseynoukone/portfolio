@@ -1,12 +1,5 @@
-video {
-    width: 100%;
-    height: auto;
-    height: 80vh;
-    border-radius: 10px;
-  }
 
-
-  .custom-image {
+.custom-image {
     width: 100%; /* Ensure the image takes 100% of the container width */
     height: 100%; /* Ensure the image takes 100% of the container height */
     object-fit : contain; /* Maintain aspect ratio while covering the container */
@@ -14,32 +7,22 @@ video {
 
 
 .image-container {
-    height: 75vh; /* Set a fixed height for the container */
-    cursor: pointer;
-    background-color: #FCF6F6; 
-
-
-}
-
-.carrouselContainer{
-    height: 80vh; /* Set a fixed height for the container */
-
+    height: 70vh; /* Set a fixed height for the container */
 }
 
 
 .custom-container {
     position: relative;
     overflow: hidden;
-    background-color: #FCF6F6; 
     transition: transform 0.3s ease-in-out;
 }
-
 .carousel-indicators{
-    background-color:#990012a6;
+    background-color:#242323;
     border-radius: 10px;
-    bottom: -8vh;
-
+    bottom: -4rem;
 }
+
+
 
 @media screen and (max-width: 768px) {
     .carousel-indicators {
@@ -53,3 +36,16 @@ video {
     }
 }
 
+/* .carousel-inner .carousel-item > img {
+    -webkit-animation: thing 20s;
+    -o-animation: thing 20s;
+    animation: thing 20s; 
+  }
+  @keyframes thing {
+    from {
+       transform: scale(1, 1);
+    }
+    to {
+      transform: scale(1.5, 1.5);
+    }
+  } */
