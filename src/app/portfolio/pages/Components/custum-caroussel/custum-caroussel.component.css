@@ -36,6 +36,13 @@
     }
 }
 
+
+
+.carousel-item { 
+    
+    /* Other Properties */
+    transition: transform 0.3s ease-out !important; 
+  }
 /* .carousel-inner .carousel-item > img {
     -webkit-animation: thing 20s;
     -o-animation: thing 20s;

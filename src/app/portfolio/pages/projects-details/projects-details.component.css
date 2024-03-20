@@ -53,3 +53,8 @@ video {
         bottom: -8.5vh; /* Adjust the value for mobile devices */
     }
 }
+.carousel-item { 
+    
+    /* Other Properties */
+    transition: transform 0.3s ease-out !important; 
+  }
