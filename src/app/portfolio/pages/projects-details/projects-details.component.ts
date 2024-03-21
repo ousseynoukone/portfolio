@@ -14,7 +14,7 @@ export class ProjectsDetailsComponent implements OnInit {
   modalImages: any;
 
   ngOnInit(): void {
-
+    document.body.scrollTop = 0;
     this.project = this.shareData.getData as Project
     this.initImageModal()
   }
