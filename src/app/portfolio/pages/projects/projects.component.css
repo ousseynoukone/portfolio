@@ -16,7 +16,7 @@
 }
 
 .carousel-caption {
-    background-color:  #242323 
+    background-color:  #242323f9 
 }
 
 
@@ -35,6 +35,16 @@
     transition: transform 0.3s ease-in-out;
     background-color: #FCF6F6	; 
     height: 400px
-
 }
+
+
+
+
+
+@media screen and (max-width: 576px) {
+    .custom-container {
+        height: 250px
+    }
+}
+
 
