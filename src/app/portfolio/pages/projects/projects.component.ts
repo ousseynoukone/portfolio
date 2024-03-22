@@ -46,6 +46,7 @@ export class ProjectsComponent implements OnInit {
       if(data.length == 0) {
         this.noDataMessage = 'No projects found.';
       } else {
+        this.noDataMessage=""
         this.noData=false
         data.forEach(element => {
           if (element.type === "mobile") {
@@ -61,6 +62,8 @@ export class ProjectsComponent implements OnInit {
           this.noDataMessage = 'No mobile projects found.';
 
         }else{
+          this.noDataMessage=""
+
           this.noDataMobile = false
         }
         if(this.webProjects.length === 0){
@@ -69,6 +72,8 @@ export class ProjectsComponent implements OnInit {
 
         }else{
           this.noDataWeb = false
+          this.noDataMessage=""
+
         }
       }
       this.loading = false;
