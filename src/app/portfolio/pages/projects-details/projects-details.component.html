@@ -3,9 +3,10 @@
       <div class="text-center mb-3">
         <div class="badge bg-accent-color  fs-5 p-2">{{project.title}}</div>
       </div>
-      <div class="col-md-6 col-12">
+      
+      <div class="col-md-6 col-12" *ngIf="displayImage()">
   
-        <div class="container pt-2 pb-3">
+        <div class="container-fluid pt-2 pb-3">
           <div class="text-center">
             <div class="bg-primary-color text-accent h5 rounded onhoverAccent mt-2">Captures d'écrans</div>
           </div>
@@ -19,7 +20,7 @@
                 <div class="carousel-inner" (click)="openImageModal()">
 
                   <div *ngFor="let image of project.imgsLink;index as i" class="carousel-item " [class.active]="i==0" >
-                    <div class="container rounded image-container bg-sobre-color col-8 offset-2">
+                    <div class="container-fluid rounded image-container bg-sobre-color col-8 offset-2">
                     <img class="img-fluid mx-auto d-block rounded custom-image " [src]="image" alt="Card image cap" >
                    </div>
 
@@ -43,7 +44,7 @@
 
 
       <!-- Modal Image  -->
-<div class="modal fade" id="modalImages" tabindex="-1" aria-labelledby="modalImagesLabel" aria-hidden="true">
+<div class="modal fade"  id="modalImages" tabindex="-1" aria-labelledby="modalImagesLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl ">
     <div class="modal-content modal-color">
 
@@ -72,7 +73,7 @@
       <div class="col-md-6 col-12">
 
   
-        <div class="container pt-2 pb-3">
+        <div class="container-fluid pt-2 pb-3">
           <div class="text-center">
             <div class="bg-primary-color text-black h5 rounded onhoverAccent mt-2">Démo</div>
           </div>

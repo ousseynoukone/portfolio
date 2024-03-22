@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Project } from 'src/app/models/project';
 import { PassDataThrough } from '../../shared/sharedService';
+import { ToastrService } from 'ngx-toastr';
 declare var window: any; 
 
 @Component({
@@ -12,6 +13,8 @@ export class ProjectsDetailsComponent implements OnInit {
   project !: Project
   shareData = inject(PassDataThrough)
   modalImages: any;
+  toastrService = inject(ToastrService)
+  isMessageDisplayed : boolean = false;
 
   ngOnInit(): void {
     document.body.scrollTop = 0;
@@ -27,6 +30,18 @@ export class ProjectsDetailsComponent implements OnInit {
 
   openImageModal(){
     this.modalImages.show()
+  }
+
+  displayImage(): boolean {
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 600 && this.project.type!="mobile") {
+      if(!this.isMessageDisplayed)
+      this.toastrService.info("Les captures d'écran de bureau ne sont visible que sur ordinateur 🥺.")
+      this.isMessageDisplayed = true
+      return false;
+    } else {
+      return true;
+    }
   }
 
 }

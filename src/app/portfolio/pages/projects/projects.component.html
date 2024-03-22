@@ -18,19 +18,19 @@
                 <img src="../../../../assets/imgs/phone.png" class="img-fluid " alt="smartPhone">
                 <div class="bg-primary-color text-black rounded onhoverAccent mt-2" id="mobile">Mobile</div>
 
-            </div>
-            <div class="container mt-2 mb-2">
+            </div> 
+            <div class="container mt-2 mb-2 ">
             <div *ngIf="!(noData || noDataMobile)"  id="carousselMobile" class="carousel slide" data-bs-ride="carousel" >
               <div class="carousel-indicators" >
                 
                 <button *ngFor="let project of mobileProjects; let i = index"  type="button" [attr.data-bs-target]="'#carousselMobile'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
               </div>
-                <div class="carousel-inner bg-sobre-color">
+                <div class="carousel-inner bg-sobre-color rounded">
 
 
 
                   <div *ngFor="let project of mobileProjects;index as i" class="carousel-item " [class.active]="i==0" >
-                    <div class="container  image-container  custom-container col-8 offset-2">
+                    <div class="container  image-container  custom-container rounded col-8 offset-2">
 
                     <img class="img-fluid mx-auto d-block rounded custom-image " [src]="project.ppLink" alt="Card image cap" >
 
@@ -95,19 +95,19 @@
                 
                 <button *ngFor="let project of webProjects; let i = index"  type="button" [attr.data-bs-target]="'#carousselWeb'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
               </div>
-              <div class="carousel-inner bg-sobre-color">
+              <div class="carousel-inner bg-sobre-color rounded">
 
 
 
                 <div *ngFor="let project of webProjects;index as i" class="carousel-item " [class.active]="i==0" >
-                  <div class="container  image-container  custom-container col-8 offset-2">
+                  <div class="container  image-container  custom-container rounded col-8 offset-2">
 
                   <img class="img-fluid mx-auto d-block rounded custom-image" [src]="project.ppLink" alt="Card image cap" >
 
                  </div>
 
 
-                    <div class="carousel-caption rounded d-none d-md-block ">
+                    <div class="carousel-caption rounded d-none d-md-block">
                         <h5 class="card-title">{{project.title}}</h5>
                         <p>{{project.minDescription}}</p>
 

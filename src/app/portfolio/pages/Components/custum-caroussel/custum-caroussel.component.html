@@ -1,4 +1,4 @@
-<div id="carousselImages" class="carousel slide" data-bs-ride="carousel">
+<div id="carousselImages" class="carousel slide" data-interval="false" data-bs-ride="carousel">
     <div class="carousel-indicators">
       <button *ngFor="let image of imgLinks; index as i" type="button" [attr.data-bs-target]="'#carousselImages'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true"></button>
     </div>
