@@ -28,15 +28,13 @@
 }
 
 
-.image-container {
-    height: 400px; /* Set a fixed height for the container */
-}
 
 .custom-container {
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
     background-color: #FCF6F6	; 
+    height: 400px
 
 }
 

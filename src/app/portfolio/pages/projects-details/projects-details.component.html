@@ -19,8 +19,8 @@
                 <div class="carousel-inner" (click)="openImageModal()">
 
                   <div *ngFor="let image of project.imgsLink;index as i" class="carousel-item " [class.active]="i==0" >
-                    <div class="container rounded image-container ">
-                    <img class="img-fluid mx-auto d-block rounded custom-image" [src]="image" alt="Card image cap" >
+                    <div class="container rounded image-container bg-sobre-color">
+                    <img class="img-fluid mx-auto d-block rounded custom-image " [src]="image" alt="Card image cap" >
                    </div>
 
                   </div>
@@ -78,7 +78,7 @@
           </div>
   
           <!-- Carousel for screenshots -->
-          <div class="container ">
+          <div class="container bg-sobre-color  rounded  d-flex align-items-center justify-content-center video-container">
             <div class="embed-responsive embed-responsive-16by9 ">
               <video controls>
                 <!-- Replace the empty string with the actual URL of your video -->

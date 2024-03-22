@@ -213,7 +213,7 @@
 
               <div class="form-group ">
                 <label for="videoFile">Video :</label>
-                <input type="file" #videoInput id="videoFile" class="form-control" formControlName="videoFile"       accept="video/*" (change)="onVideoChange($event,editMode)">
+                <input type="file" #videoInput id="videoFile" class="form-control" formControlName="videoFile"       accept=".mp4" (change)="onVideoChange($event,editMode)">
                 <div *ngIf="projectForm.get('videoFile')?.errors && projectForm.get('videoFile')?.touched" >
                     <p class="badge bg-danger mt-1" *ngIf="projectForm.get('videoFile')!.hasError('required')"> Video File  is required.
                   </p>
@@ -374,7 +374,7 @@
       
                     <div class="form-group ">
                       <label for="videoFile">Video :</label>
-                      <input type="file" #videoInput id="videoFile" class="form-control"        accept="video/*" (change)="onVideoChange($event,editMode)">       
+                      <input type="file" #videoInput id="videoFile" class="form-control"        accept=".mp4" (change)="onVideoChange($event,editMode)">       
                       <div *ngIf="(isLoading && !editMode) || (editMode && this.fireBaseStorage.isUpdatingVideo)">
                         <p class="badge bg-success mt-1" >     {{fireBaseStorage.percentageVideo}}%
                       </p>
