@@ -9,4 +9,8 @@ import { Component, Input, OnInit } from '@angular/core';
 export class CustumCarousselComponent  {
 
   @Input() imgLinks : string [] = [];
+
+  preventRedirect(event: MouseEvent) {
+    event.preventDefault();
+  }
 }

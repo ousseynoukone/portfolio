@@ -44,4 +44,7 @@ export class ProjectsDetailsComponent implements OnInit {
     }
   }
 
+
+
+
 }

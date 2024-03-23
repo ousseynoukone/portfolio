@@ -21,8 +21,8 @@
 
                   <div *ngFor="let image of project.imgsLink;index as i" class="carousel-item " [class.active]="i==0" >
                     <div class="container-fluid rounded image-container bg-sobre-color col-8 offset-2">
-                    <img class="img-fluid mx-auto d-block rounded custom-image " [src]="image" alt="Card image cap" >
-                   </div>
+                      <img class="img-fluid mx-auto d-block rounded custom-image" [src]="image" alt="Card image cap" >
+                    </div>
 
                   </div>
                 </div>
@@ -45,7 +45,7 @@
 
       <!-- Modal Image  -->
 <div class="modal fade"  id="modalImages" tabindex="-1" aria-labelledby="modalImagesLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl ">
+  <div class="modal-dialog">
     <div class="modal-content modal-color">
 
       <div class="modal-body ">
@@ -82,7 +82,6 @@
           <div class="container bg-sobre-color  rounded  d-flex align-items-center justify-content-center video-container">
             <div class="embed-responsive embed-responsive-16by9 ">
               <video controls >
-                <!-- Replace the empty string with the actual URL of your video -->
                 <source [src]="project.demoLink" type="video/mp4" >
                 Your browser does not support the video tag.
               </video>
