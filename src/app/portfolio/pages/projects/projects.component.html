@@ -25,7 +25,7 @@
                 
                 <button *ngFor="let project of mobileProjects; let i = index"  type="button" [attr.data-bs-target]="'#carousselMobile'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
               </div>
-                <div class="carousel-inner bg-sobre-color rounded">
+                <div class="carousel-inner bg-sobre-color rounded ">
 
 
 
@@ -95,12 +95,12 @@
                 
                 <button *ngFor="let project of webProjects; let i = index"  type="button" [attr.data-bs-target]="'#carousselWeb'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
               </div>
-              <div class="carousel-inner bg-sobre-color rounded p-1">
+              <div class="carousel-inner bg-sobre-color rounded ">
 
 
 
                 <div *ngFor="let project of webProjects;index as i" class="carousel-item " [class.active]="i==0" >
-                  <div class="container  image-container  custom-container rounded col-8 offset-2 pt-3 ">
+                  <div class="container  image-container  custom-container rounded col-8 offset-2 ">
 
                   <img class="img-fluid mx-auto d-block rounded custom-image" [src]="project.ppLink" alt="Card image cap" >
 
@@ -109,7 +109,7 @@
 
                     <div class="carousel-caption rounded d-none d-md-block">
                         <h5 class="card-title">{{project.title}}</h5>
-                        <p>{{project.minDescription}}</p>
+                        <p>{{project.minDescription}}.</p>
 
                         <div class="card-body text-center">
                             <button class="btn btn-sm bg-primary-color text-dark onhoverAccent" (click)="navigateToDetailsPage(project)">Détails</button>
