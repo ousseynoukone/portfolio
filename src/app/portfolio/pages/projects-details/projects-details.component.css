@@ -60,3 +60,6 @@ video {
 .modal-color{
     background-color: rgba(9, 9, 9, 0.972);
 }
+.btn-close{
+    margin-right: 20px !important;
+}

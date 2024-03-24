@@ -17,18 +17,26 @@ export class HeaderComponent {
 
   scrollToSection(elementId: string) {
     if (!this.isRouteActive("home")) {
-      this.router.navigate(['/home'], { fragment: elementId })
+      this.router.navigate(['/home'])
       this.router.events.pipe(
         first(evt => evt instanceof NavigationEnd)
       ).subscribe(() => {
-        this.viewportScroller.scrollToAnchor(elementId);
+        setTimeout(() => {
+          this.scrollTo(elementId)
+        });
+        
       });
     
     } else {
-      const element = document.querySelector(`#${elementId}`);
-      if (element) {
-        this.viewportScroller.scrollToAnchor(elementId);
-      }
+      this.scrollTo(elementId)
+
+    }
+  }
+
+  scrollTo(elementId : string){
+    const element = document.querySelector(`#${elementId}`);
+    if (element) {
+      this.viewportScroller.scrollToAnchor(elementId);
     }
   }
 
