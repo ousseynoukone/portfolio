@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Project } from 'src/app/models/project';
 import { PassDataThrough } from '../../shared/sharedService';
 import { ToastrService } from 'ngx-toastr';
+import { NavigationEnd, Router } from '@angular/router';
+import { first } from 'rxjs';
 declare var window: any; 
 
 @Component({
@@ -12,15 +14,17 @@ declare var window: any;
 export class ProjectsDetailsComponent implements OnInit {
   project !: Project
   shareData = inject(PassDataThrough)
+  router = inject(Router)
   modalImages: any;
   toastrService = inject(ToastrService)
   isMessageDisplayed : boolean = false;
 
   ngOnInit(): void {
-    document.body.scrollTop = 0;
     this.project = this.shareData.getData as Project
     this.initImageModal()
   }
+
+
 
   initImageModal(){
     this.modalImages = new window.bootstrap.Modal(

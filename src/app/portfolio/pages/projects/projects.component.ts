@@ -1,8 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Project } from '../../../models/project';
 import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
 import { PassDataThrough } from '../../shared/sharedService';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-projects',
@@ -27,12 +28,22 @@ export class ProjectsComponent implements OnInit {
     this.shareData.setData = project
 
     this.router.navigate(['/project-details'])
+    this.initialPosition()
   }
 
   ngOnInit() {
     this.initProject();
   }
 
+
+  initialPosition(){
+    this.router.events.pipe(
+      first(evt => evt instanceof NavigationEnd)
+    ).subscribe(() => {
+      window.scrollTo(0, 0); // Scroll to the top of the page
+
+    });
+  }
   initProjectsArray(){
     this.webProjects = [];
     this.mobileProjects = [];

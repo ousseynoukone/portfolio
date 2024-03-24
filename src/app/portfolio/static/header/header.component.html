@@ -1,4 +1,5 @@
-<nav class="navbar navbar-expand-lg bg-primary-color  ">
+
+  <nav class="navbar navbar-expand-lg bg-primary-color">
     <div class="container-fluid">
       <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -7,30 +8,27 @@
         <div class="decoration d-md-block d-none"></div>
         <ul class="navbar-nav mx-auto justify-content-evenly flex-grow-1">
           <li class="nav-item">
-            <a class="nav-link on-hover d-inline-flex p-2 " routerLink="home" routerLinkActive="active">Accueil</a>
-        </li>
-          <li class="nav-item">
-            <a class="nav-link on-hover d-inline-flex p-2 "   href="/home#competences">Compétences</a>
+            <a class="nav-link on-hover d-inline-flex p-2" routerLink="home" routerLinkActive="active" (click)="scrollToSection('home')">Accueil</a>
           </li>
-  
+          <li class="nav-item">
+            <a class="nav-link on-hover d-inline-flex p-2"  (click)="scrollToSection('competences')">Compétences</a>
+          </li>
           <li class="nav-item position-relative">
-            <a class="nav-link on-hover d-inline-flex p-2"  [class.active]="isRouteActive('/project-details')" aria-current="page" href="/home#projets">Projets</a>
-            <ul class="navbar-nav subMenu  bg-accent-color  position-absolute">
+            <a class="nav-link on-hover d-inline-flex p-2" [class.active]="isRouteActive('/project-details')" aria-current="page"  (click)="scrollToSection('projets')">Projets</a>
+            <ul class="navbar-nav subMenu bg-accent-color position-absolute">
               <li class="nav-item">
-                <a class="nav-link on-hover text-white  text-center"  aria-current="page" href="/home#web">Mobile</a>
+                <a class="nav-link on-hover text-white text-center" aria-current="page"  (click)="scrollToSection('web')">Mobile</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link on-hover text-white text-center" aria-current="page" href="/home#mobile">Web</a>
+                <a class="nav-link on-hover text-white text-center" aria-current="page"  (click)="scrollToSection('mobile')">Web</a>
               </li>
             </ul>
           </li>
-  
           <li class="nav-item">
-            <a class="nav-link on-hover d-inline-flex p-2 " [class.active]="isRouteActive('/contact')" href="/home#contact">Contact</a>
+            <a class="nav-link on-hover d-inline-flex p-2" [class.active]="isRouteActive('/contact')"  (click)="scrollToSection('contact')">Contact</a>
           </li>
         </ul>
         <div class="decoration d-md-block d-none"></div>
       </div>
     </div>
   </nav>
-  

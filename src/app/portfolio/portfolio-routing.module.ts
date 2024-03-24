@@ -24,9 +24,9 @@ const routes: Routes = [
     ]
   }
 ];
-
+// ,{scrollPositionRestoration:'enabled'}
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{scrollPositionRestoration:'enabled'})],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class PortfolioRoutingModule { }
