@@ -38,7 +38,7 @@ export class ProjectsDetailsComponent implements OnInit {
 
   displayImage(): boolean {
     const screenWidth = window.innerWidth;
-    if (screenWidth < 600 && this.project.type!="mobile") {
+    if (screenWidth < 700 && this.project.type!="mobile") {
       if(!this.isMessageDisplayed)
       this.toastrService.info("Les captures d'écran de bureau ne sont visible que sur ordinateur 🥺.")
       this.isMessageDisplayed = true

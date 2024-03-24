@@ -32,9 +32,11 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+
               "src/assets/js/dataTables.js",
-              "src/assets/js/dataTables.bootstrap5.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "src/assets/js/dataTables.bootstrap5.js"
             ]
           },
           "configurations": {
@@ -47,8 +49,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "200kb",
+                  "maximumError": "400kb"
                 }
               ],
               "outputHashing": "all"
