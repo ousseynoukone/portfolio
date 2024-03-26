@@ -87,12 +87,14 @@
 <div class="modal fade" id="formModalProject" tabindex="-1" role="dialog" aria-labelledby="formModalProjectLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
-      <div class="modal-header bg-accent-color d-flex justify-content-center ">
-        <div class="h5 rounded  modal-title bg-secondary-color text-white p-2">
+      <div class="modal-header bg-accent-color ">
+        <div class="h5 rounded  modal-title bg-secondary-color text-white p-2 ">
           <span *ngIf="this.editMode" >Update project</span>
           <span *ngIf="!this.editMode" >Add project</span>
           
           </div>
+            <button type="button" class="btn-close bg-white m-2"  *ngIf="!isLoading" data-bs-dismiss="modal" aria-label="Close"></button>
+  
       </div>
       <div class="modal-body ">
         <div class="row">
