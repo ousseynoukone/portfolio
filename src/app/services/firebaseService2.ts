@@ -202,6 +202,7 @@ async addProject(project: Project): Promise<ResponseDto> {
                       fullDescription: project.fullDescription,
                       imgsLink: project.imgsLink,
                       usedTools: project.usedTools,
+                      usefullLinks:project.usefullLinks,
                       type : project.type,
                       ppLink :  project.ppLink,
                       isVisible : false
@@ -346,6 +347,7 @@ getNextAbilities() {
               minDescription : project.minDescription,
               fullDescription : project.fullDescription,
               usedTools : project.usedTools,
+              usefullLinks:project.usefullLinks,
               title : project.title ,
               type : project.type
             };

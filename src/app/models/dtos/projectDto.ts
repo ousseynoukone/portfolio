@@ -4,6 +4,8 @@ export interface ProjectDto {
      fullDescription : string,
      imgsLink : string [],
      usedTools : string[],
+     usefullLinks : string []
+
      demoLink :  string,
      title : string ,
      type : string,

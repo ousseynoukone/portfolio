@@ -93,7 +93,7 @@
           <span *ngIf="!this.editMode" >Add project</span>
           
           </div>
-            <button type="button" class="btn-close bg-white m-2"  *ngIf="!isLoading" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close bg-white m-2" (click)="close()"  *ngIf="!isLoading" data-bs-dismiss="modal" aria-label="Close"></button>
   
       </div>
       <div class="modal-body ">
@@ -177,7 +177,18 @@
               </div>
 
 
-              
+              <div class="form-group ">
+                <label for="usefullLinks">Usefull Links : (Please separed it with coma " , ")</label>
+                <textarea type="text" id="usefullLinks" maxlength="200" class="form-control" formControlName="usefullLinks" required> </textarea>
+          
+                <div *ngIf="projectForm.get('usefullLinks')?.errors && projectForm.get('usefullLinks')?.touched">
+                  <p class="badge bg-danger mt-1" *ngIf="projectForm.get('usefullLinks')!.hasError('required')">Usefull Links is required.</p>
+                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('usefullLinks')!.hasError('maxlength')">200 char max.</p>
+                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('usefullLinks')!.hasError('pattern')">Format non respecté.</p>
+
+                    
+                </div>
+              </div>
 
       <div *ngIf="!editMode" >
               <div class="form-group ">

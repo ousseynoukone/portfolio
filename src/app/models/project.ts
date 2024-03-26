@@ -5,6 +5,7 @@ export class Project {
         public fullDescription : string,
         public imgsLink : string [],
         public usedTools : string[],
+        public usefullLinks : string[],
         public demoLink :  string,
         public title : string ,
         public imgsFile : FileList,

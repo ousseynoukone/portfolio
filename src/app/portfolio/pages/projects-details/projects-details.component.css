@@ -63,3 +63,74 @@ video {
 .btn-close{
     margin-right: 20px !important;
 }
+
+
+.card-color{
+    background-color: #00000063;
+}
+
+
+.link-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+.link-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Adjust the gap between the icon and link text */
+    word-break: break-all;
+    position: relative; /* Add position relative for the underline animation */
+
+  }
+
+  .link-item::after {
+    content: "";
+    position: absolute;
+    bottom: -2px; /* Adjust the vertical position of the underline */
+    left: 50%;
+    width: 0; /* Start with no underline width */
+    height: 2px; /* Adjust the underline thickness */
+    background-color: #990012; /* Set the underline color */
+    transition: width 0.3s ease-in-out; /* Add a transition for the width animation */
+  }
+
+  .link-item::before {
+    content: "";
+    position: absolute;
+    bottom: -2px; /* Adjust the vertical position of the underline */
+    right: 50%;
+    width: 0; /* Start with no underline width */
+    height: 2px; /* Adjust the underline thickness */
+    background-color: #990012; /* Set the underline color */
+    transition: width 0.3s ease-in-out; /* Add a transition for the width animation */
+  }
+  
+  .link-item:hover::after {
+    width: 50%; /* Expand the underline to full width on hover */
+  }
+
+
+    
+  .link-item:hover::before {
+    width: 50%; /* Expand the underline to full width on hover */
+  }
+  
+  
+.link-icon {
+    flex-shrink: 0; /* Prevent the icon from shrinking */
+    width: 1rem; /* Adjust the icon size */
+    height: 1rem;
+  }
+
+.handsome-hr {
+    border: none;
+    height: 2px; /* Adjust the height to make the line thicker or thinner */
+    background-image: linear-gradient(
+      to right,
+      transparent,
+      #ffffff, /* Adjust the color as desired */
+      transparent
+    );
+    margin: 1rem 0; /* Adjust the top and bottom margin as needed */
+  }

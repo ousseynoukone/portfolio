@@ -43,3 +43,32 @@ export class PassDataThrough {
   }
 
 }
+
+
+
+
+@Injectable({ providedIn: 'root' })
+export class ValidatorsRegex {
+
+//   Explanation:
+
+// ^ matches the start of the string.
+// (http:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?|https?:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?) matches a single URL starting with either http:// or https://, followed by one or more word characters (\w), hyphens (-), or periods (.), then a period (.), and two or more lowercase letters ([a-z]{2,}). It also allows an optional forward slash (\/?) and any additional characters (.*?) after the domain part of the URL.
+// (,http:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?|,https?:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?)* matches zero or more occurrences of a comma (,) followed by another URL pattern starting with either http:// or https://, and allowing optional paths and query parameters.
+// $ matches the end of the string.
+
+  private usefullLinksRegex: RegExp = /^(http:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?|https?:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?)(,http:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?|,https?:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?)*$/;
+
+  //Explanation : 
+  //String with space or not , separed by ,
+  private usedToolsRegex: RegExp = /^(?:[a-zA-Z0-9 ]+,)*(?:[a-zA-Z0-9 ]+)$/;
+
+  get validateUrl(): RegExp {
+    return this.usefullLinksRegex;
+  }
+
+  get validateUsedTools(): RegExp {
+    return this.usedToolsRegex;
+  }
+}
+

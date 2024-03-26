@@ -5,8 +5,9 @@ import { ToastrService } from 'ngx-toastr';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from 'src/app/models/dtos/projectDto';
 import { Project } from 'src/app/models/project';
 import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
-import {  PassDataThrough } from 'src/app/portfolio/shared/sharedService';
+import {  PassDataThrough, ValidatorsRegex } from 'src/app/portfolio/shared/sharedService';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Helpers } from 'src/app/portfolio/shared/helper';
 
 
 declare var $: any; // Declare $ as a variable to access jQuery
@@ -82,7 +83,8 @@ export class ProjectsComponent {
   updateProjectDetailForUpdateImgAndVideoOnly : any = {}
   isDeletingOneImage: boolean = false;
 
-
+  validator=inject(ValidatorsRegex)
+  helper = inject(Helpers)
 
   constructor(private fb: FormBuilder,private el: ElementRef, private router: Router,private route: ActivatedRoute) {}
 
@@ -110,7 +112,8 @@ export class ProjectsComponent {
       title: ['', [Validators.required, Validators.maxLength(30)]],
       minDescription: ['', [Validators.required, Validators.maxLength(50)]],
       fullDescription: ['', [Validators.required, Validators.maxLength(500)]],
-      usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern('^(?:[a-zA-Z0-9 ]+,)*(?:[a-zA-Z0-9 ]+)$')]],
+      usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern(this.validator.validateUsedTools)]],
+      usefullLinks: ['', [Validators.required, Validators.maxLength(200), Validators.pattern(this.validator.validateUrl)]],
       videoFile: [null, [Validators.required]],
       imgsFile: [null, Validators.required],
       imageProfileInput: [null, Validators.required],
@@ -203,9 +206,11 @@ export class ProjectsComponent {
 
       let formData = this.projectForm.value;
       let project = formData as Project;
-      let usedTools = this.splitAndTrim(this.projectForm.get("usedTools")?.value) 
+      let usedTools = this.helper.splitAndTrim(this.projectForm.get("usedTools")?.value) 
+      let usefullLinks = this.helper.splitAndTrim(this.projectForm.get("usefullLinks")?.value) 
 
       project.usedTools = usedTools;
+      project.usefullLinks = usefullLinks
       project.imgsFile=this.FileImg;
       project.videoFile=this.FileVideo;
       project.profilePicture = this.profileImg
@@ -273,7 +278,8 @@ switchToEditMode(project : Project){
     title: ['', [Validators.required, Validators.maxLength(40)]],
     minDescription: ['', [Validators.required, Validators.maxLength(90)]],
     fullDescription: ['', [Validators.required, Validators.maxLength(500)]],
-    usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern('^(?:[a-zA-Z0-9 ]+,)*(?:[a-zA-Z0-9 ]+)$')]],
+    usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern(this.validator.validateUsedTools)]],
+    usefullLinks: ['', [Validators.required, Validators.maxLength(200), Validators.pattern(this.validator.validateUrl)]],
     type: [project.type,Validators.required],
     videoFile: [null],
     imgsFile: [null],
@@ -286,7 +292,8 @@ switchToEditMode(project : Project){
     title: project.title,
     minDescription: project.minDescription,
     fullDescription: project.fullDescription,
-    usedTools: this.arrayToString(project.usedTools),
+    usedTools: this.helper.arrayToString(project.usedTools),
+    usefullLinks: this.helper.arrayToString(project.usefullLinks),
 
   })
   this.formModalProject.show();
@@ -307,7 +314,8 @@ async updateProjectOnly(project : Project){
     title : project.title ,
     type : project.type,
     ppLink : project.ppLink,
-    isVisible : true
+    isVisible : true,
+    usefullLinks : project.usefullLinks
     
   }
 
@@ -492,7 +500,7 @@ gotoProjectOrderingPage(project : Project){
 
 
 
-//Helper Function that can be externalize
+//Helper Function 
 
 scrollToElement(elementId: string): void {
   const element = this.el.nativeElement.querySelector(`#${elementId}`);
@@ -516,17 +524,7 @@ truncateText(text: string): string {
 
 
 
- splitAndTrim(text : String) {
-  
-  const words = text.split(',');
-  // Trim leading and trailing whitespace from each word
-  return words.map(word => word.trim());
-}
 
-
-arrayToString(array : string []) {
-  return array.join(',');
-}
 
 
 
