@@ -23,7 +23,7 @@ export class HeaderComponent {
       ).subscribe(() => {
     setTimeout(() => {
       this.scrollTo(elementId);
-    }, 200); // 1000 milliseconds = 1 second
+    }, 150); // 1000 milliseconds = 1 second
 
         
       });
