@@ -21,9 +21,10 @@ export class HeaderComponent {
       this.router.events.pipe(
         first(evt => evt instanceof NavigationEnd)
       ).subscribe(() => {
-        setTimeout(() => {
-          this.scrollTo(elementId)
-        });
+    setTimeout(() => {
+      this.scrollTo(elementId);
+    }, 200); // 1000 milliseconds = 1 second
+
         
       });
     
