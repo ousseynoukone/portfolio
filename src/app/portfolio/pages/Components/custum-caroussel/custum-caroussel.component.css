@@ -18,22 +18,11 @@
 .carousel-indicators{
     background-color:#990012;
     border-radius: 10px;
-    bottom: -4rem;
+    bottom: -3em;
 }
 
 
 
-@media screen and (max-width: 768px) {
-    .carousel-indicators {
-        bottom: -4vh; /* Adjust the value for tablet devices */
-    }
-}
-
-@media screen and (max-width: 576px) {
-    .carousel-indicators {
-        bottom: -9vh; /* Adjust the value for mobile devices */
-    }
-}
 
 
 

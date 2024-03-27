@@ -6,8 +6,6 @@ video {
 
 .video-container{
     height: 75vh;
-    
-
 }
 
 
@@ -15,6 +13,8 @@ video {
     width: 100%; /* Ensure the image takes 100% of the container width */
     height: 100%; /* Ensure the image takes 100% of the container height */
     object-fit : contain; /* Maintain aspect ratio while covering the container */
+    border-radius: 5px;
+    padding: 10px;
 }
 
 
@@ -23,37 +23,72 @@ video {
     cursor: pointer;
 }
 
-.carrouselContainer{
-    height: 80vh; /* Set a fixed height for the container */
 
-}
 
 
 
 .carousel-indicators{
     background-color:#990012a6;
     border-radius: 10px;
-    bottom: -8vh;
+    bottom: -3em;
 
 }
 
-
-@media screen and (max-width: 768px) {
-    .carousel-indicators {
-        bottom: -4vh; /* Adjust the value for tablet devices */
-    }
+.modal-header{
+  border: none;
 }
+
+
+/* @media screen and (max-width: 768px) {
+
+} */
 
 
 @media screen and (max-width: 576px) {
-    .carousel-indicators {
-        bottom: -8.5vh; /* Adjust the value for mobile devices */
-    }
+    .image-container {
+      height: auto !important; 
+  }
+
 }
+
+
+/* @media screen and (max-width: 380px) {
+  .carousel-indicators {
+      bottom: -8vh;
+  }
+
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .carousel-item { 
     
     /* Other Properties */
-    transition: transform 0.3s ease-out !important; 
+    transition: transform 0.5s ease-out !important; 
   }
 
 

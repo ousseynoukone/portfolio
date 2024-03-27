@@ -11,7 +11,7 @@
             <div class="bg-primary-color text-accent h5 rounded onhoverAccent mt-2">Captures d'écrans</div>
           </div>
 
-          <div class="carrouselContainer mt-2 mb-2">
+          <div class="mt-2 mb-5">
             <div  id="carousselDetailProjet" class="carousel slide" data-bs-ride="carousel" >
               <div class="carousel-indicators" >
                 
@@ -20,7 +20,7 @@
                 <div class="carousel-inner" (click)="openImageModal()">
 
                   <div *ngFor="let image of project.imgsLink;index as i" class="carousel-item " [class.active]="i==0" >
-                    <div class="container-fluid rounded image-container bg-sobre-color col-8 offset-2">
+                    <div class="rounded image-container bg-sobre-color col-8 offset-2">
                       <img class="img-fluid mx-auto d-block rounded custom-image" [src]="image" alt="Card image cap" >
                     </div>
 
@@ -49,12 +49,15 @@
 <div class="modal fade"  id="modalImages" tabindex="-1" aria-labelledby="modalImagesLabel" aria-hidden="true">
   <div class="modal-dialog modal-fullscreen">
     <div class="modal-content modal-color">
-
+      <div class="modal-header">
+        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
       <div class="modal-body ">
-        <div class="d-flex justify-content-end">
-          <button type="button" class="btn-close bg-white m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- <div class="d-flex justify-content-end">
+          <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
 
-        </div>
+        </div> -->
 
 
         <div class="col-12">
@@ -101,7 +104,7 @@
 
     <hr class="handsome-hr">
 
-    <div class="row pb-3 mt-5">
+    <div class="row pb-3 mt-3">
 
 
 
