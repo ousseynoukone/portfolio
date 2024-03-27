@@ -4,10 +4,19 @@
       display: none;
     }
   }
+
+
+.img-size{
+  max-height: 20em;
+  }
   
   :root {
     --underline-color: #FCF6F6; /* Define the default underline color */
   }
+
+
+
+
   
   .animation {
     position: relative;

@@ -4,15 +4,22 @@
         <div class="col-lg-5 offset-lg-1 rounded order-lg-1 order-2">
 
             <div class="row p-1">
-                <div class="col-md-5">
-                    <img height="200" class="rounded-circle img-fluid" src="../../../../assets/imgs/me.png" alt="MyPhoto">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                      <img class="rounded-circle img-fluid img-size" src="../../../../assets/imgs/me.png" alt="MyPhoto">
+                    </div>
+                    <div>
+                      <div class="d-flex flex-wrap">
+                        <div class="text-uppercase text-primary-color fs-2 animation animation--accent">Ousseynou</div>
+                        &nbsp;
+                        <div class="text-uppercase text-primary-color fs-2 animation animation--primary">Koné</div>
+                      </div>
+                    </div>
                 </div>
-                <div class="col-md-6 mt-5  ">
-                    <div class="text-uppercase text-primary-color fs-2 d-inline-flex animation animation--accent">Ousseynou </div>
-                    <div class="text-uppercase text-primary-color fs-2 d-inline-flex animation animation--primary">Koné</div>
-                </div>
-                <div class="col-md-12 mt-4 ">
-                    <div class="text-uppercase text-primary-color fs-5 animation animation--primary d-inline-flex">Developpeur Junior FullStack Web/Mobile</div>
+
+                <div class="col-md-12 mt-4 "> 
+                    <div [class.animation--primary]="displayAnimationFlag"  class="text-uppercase text-primary-color fs-5 animation d-inline-flex">Developpeur Junior FullStack Web/Mobile</div>
+
                 </div>
                 <div class="col-md-12 mt-4">
                     <div class="text-primary-color">
