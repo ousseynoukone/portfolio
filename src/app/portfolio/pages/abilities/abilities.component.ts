@@ -22,6 +22,10 @@ export class AbilitiesComponent implements OnInit {
   gestionProjetButton: any;
   modelisationButton: any;
   autreCompetenceButton: any;
+
+
+  //No data found
+  isNoData : boolean = false;
   
   //array of models
   frameworks: Ability[] = [];
@@ -186,27 +190,6 @@ export class AbilitiesComponent implements OnInit {
 
 
 
-  //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -224,6 +207,11 @@ export class AbilitiesComponent implements OnInit {
     this.fireBaseStorage.abilitiesSubject.subscribe((abilities) => {
       this.isDataComing = false;
       this.abilities = abilities;
+      if(abilities.length==0){
+        this.isNoData=true
+      }else{
+        this.isNoData=false;
+      }
     });
   }
 

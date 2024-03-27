@@ -5,7 +5,7 @@
     <div class="carousel-inner">
       <div *ngFor="let image of imgLinks; index as i" class="carousel-item" [class.active]="i == 0">
         <a data-fancybox="gallery" href="{{ image }}">
-          <div class="container rounded image-container col-10 offset-1">
+          <div class="container rounded image-container col-8 offset-2">
             <img class="img-fluid mx-auto d-block rounded custom-image" [src]="image" alt="Card image cap" (click)="preventRedirect($event)">
           </div>
         </a>

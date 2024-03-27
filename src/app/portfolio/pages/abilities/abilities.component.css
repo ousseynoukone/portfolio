@@ -32,7 +32,6 @@
     transition: transform 0.3s ease-in-out;
     height: 5px !important ;
     margin-top: 2px;
-
   }
 
 .custom-container {
@@ -50,9 +49,7 @@
 .custom-container:hover + .transformText {
     transform: scale(1.1);
     transition: transform 0.3s ease-in-out;
-    transition: background-color 0.3s ease;
-    
-
+    transition: background-color 0.3s ease;   
 }
 
 
@@ -60,8 +57,10 @@
 .custom-container:hover {
     transform: scale(1.1);
     transition: transform 0.3s ease-in-out;
-
 }
+
+
+
 
 .overlay {
     position: absolute;

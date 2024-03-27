@@ -1,6 +1,60 @@
 @media (max-width: 991px) {
     /* Styles for screens up to 767px wide (typical mobile screens) */
     .col-lg-6 .col-md-7.offset-md-4 img {
-        display: none;
+      display: none;
     }
-}
+  }
+  
+  :root {
+    --underline-color: #FCF6F6; /* Define the default underline color */
+  }
+  
+  .animation {
+    position: relative;
+    /* Add position relative for the underline animation */
+  }
+  
+  .animation::before {
+    content: "";
+    position: absolute;
+    /* Add position relative for the underline animation */
+    width: 0;
+    right: 50%;
+    height: 4px;
+    /* Adjust the underline thickness */
+    background-color: var(--underline-color); /* Use the CSS variable */
+    animation: dilatation 2s infinite cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  
+  .animation::after {
+    content: "";
+    position: absolute;
+    /* Add position relative for the underline animation */
+    width: 0;
+    left: 50%;
+    height: 4px;
+    /* Adjust the underline thickness */
+    background-color: var(--underline-color); /* Use the CSS variable */
+    animation: dilatation 2s infinite cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  
+  @keyframes dilatation {
+    0% {
+      width: 0;
+    }
+    50% {
+      width: 50%;
+    }
+    100% {
+      width: 0%;
+    }
+  }
+  
+  /* Variant with red color */
+  .animation--accent {
+    --underline-color: #990012; 
+  }
+
+  .animation--primary {
+    --underline-color: #FCF6F6; 
+  }

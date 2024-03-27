@@ -11,6 +11,8 @@
 
 
 <div  class="container-fluid">
+
+
     <div class="container d-flex justify-content-center" >
 
     <div class="row" >
@@ -40,7 +42,13 @@
 
 
     </div>
+
 </div>
+
+<div class="container-fluid text-center">
+  <div *ngIf="isNoData" class="badge bg-accent-color text-white p-2 mt-4" >No data found</div>
+</div>
+
 
 <!-- Framework -->
 <div id="framework" class="container rounded bg-accent-color p-5 mt-5" hidden>
