@@ -109,8 +109,8 @@ export class ProjectsComponent {
   iniForm(){
     this.projectForm = this.fb.group({
       id: [null],
-      title: ['', [Validators.required, Validators.maxLength(30)]],
-      minDescription: ['', [Validators.required, Validators.maxLength(50)]],
+      title: ['', [Validators.required, Validators.maxLength(40)]],
+      minDescription: ['', [Validators.required, Validators.maxLength(70)]],
       fullDescription: ['', [Validators.required, Validators.maxLength(500)]],
       usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern(this.validator.validateUsedTools)]],
       usefullLinks: ['', [Validators.required, Validators.maxLength(200), Validators.pattern(this.validator.validateUrl)]],
@@ -276,7 +276,7 @@ switchToEditMode(project : Project){
   this.projectForm = this.fb.group({
     id: [null],
     title: ['', [Validators.required, Validators.maxLength(40)]],
-    minDescription: ['', [Validators.required, Validators.maxLength(90)]],
+    minDescription: ['', [Validators.required, Validators.maxLength(70)]],
     fullDescription: ['', [Validators.required, Validators.maxLength(500)]],
     usedTools: ['', [Validators.required, Validators.maxLength(100) ,Validators.pattern(this.validator.validateUsedTools)]],
     usefullLinks: ['', [Validators.required, Validators.maxLength(200), Validators.pattern(this.validator.validateUrl)]],
