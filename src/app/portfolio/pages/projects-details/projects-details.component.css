@@ -59,6 +59,7 @@ video {
 @media screen and (max-width: 576px) {
     .image-container {
       height: auto !important; 
+      min-height:15em ;
   }
 
 }
