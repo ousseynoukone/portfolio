@@ -20,6 +20,7 @@ export class ProjectsDetailsComponent implements OnInit {
   toastrService = inject(ToastrService)
   isMessageDisplayed : boolean = false;
   usefullLinks : string []= []
+  
 
   ngOnInit(): void {
     this.project = this.shareData.getData as Project
@@ -40,7 +41,7 @@ export class ProjectsDetailsComponent implements OnInit {
     this.modalImages.show()
   }
 
-  displayImage(): boolean {
+  displayImage(): boolean { 
     const screenWidth = window.innerWidth;
     if (screenWidth < 700 && this.project.type!="mobile") {
       if(!this.isMessageDisplayed)
