@@ -85,6 +85,7 @@ export class ProjectsComponent {
 
   validator=inject(ValidatorsRegex)
   helper = inject(Helpers)
+  isChangingVisibility: boolean = false;
 
   constructor(private fb: FormBuilder,private el: ElementRef, private router: Router,private route: ActivatedRoute) {}
 
@@ -341,13 +342,13 @@ async updateProjectOnly(project : Project){
 
 
 async updateProjectVisibility(project : Project){
-  this.isLoading = true;
+  this.isChangingVisibility = true;
   const projectDto = {
     id  : project.id,
     isVisible : project.isVisible ? false : true
   }
   let response = await this.fireBaseStorage.updateProjectVisibility(projectDto);
-  this.isLoading = false;
+  this.isChangingVisibility = false;
   response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
 }
 

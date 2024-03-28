@@ -46,9 +46,9 @@
             <button class="btn btn-danger btn-sm m-1" (click)="deleteproject(project)">Delete</button>
             <button class="btn btn-warning btn-sm m-1" (click)="updateProjectVisibility(project)">
 
-              <span *ngIf="isLoading" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
-              <span *ngIf="!isLoading && project.isVisible" >Hide</span>
-              <span *ngIf="!isLoading && !project.isVisible" >Show</span>
+              <span *ngIf="isChangingVisibility" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
+              <span *ngIf="!isChangingVisibility && project.isVisible" >Hide</span>
+              <span *ngIf="!isChangingVisibility && !project.isVisible" >Show</span>
 
             </button>
             
