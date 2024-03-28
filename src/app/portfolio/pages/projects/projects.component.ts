@@ -16,7 +16,6 @@ export class ProjectsComponent implements OnInit {
   loading: boolean = true;
   noDataMessage: string = '';
   noDataMobile: boolean = true;
-  noData: boolean = true;
   noDataWeb: boolean = true;
 
   constructor(private router: Router) { }
@@ -58,7 +57,6 @@ export class ProjectsComponent implements OnInit {
         this.noDataMessage = 'No projects found.';
       } else {
         this.noDataMessage=""
-        this.noData=false
         data.forEach(element => {
           if (element.type === "mobile") {
             this.mobileProjects.push(element);
@@ -73,7 +71,7 @@ export class ProjectsComponent implements OnInit {
           this.noDataMessage = 'No mobile projects found.';
 
         }else{
-          this.noDataMessage=""
+          this.noDataMessage= ""
 
           this.noDataMobile = false
         }
