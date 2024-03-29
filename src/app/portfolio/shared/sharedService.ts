@@ -57,7 +57,7 @@ export class ValidatorsRegex {
 // (,http:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?|,https?:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?)* matches zero or more occurrences of a comma (,) followed by another URL pattern starting with either http:// or https://, and allowing optional paths and query parameters.
 // $ matches the end of the string.
 
-  private usefullLinksRegex: RegExp = /^(http:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?|https?:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?)(,http:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?|,https?:\/\/[\w\-.]+\.[a-z]{2,}\/?.*?)*$/;
+private usefullLinksRegex: RegExp = /^(https?:\/\/)?(www\.)?[\w\-.]+\.[a-z]{2,}(\/[\w\-.\/]*)?(,(https?:\/\/)?(www\.)?[\w\-.]+\.[a-z]{2,}(\/[\w\-.\/]*)?)*$/;
 
   //Explanation : 
   //String with space or not , separed by ,

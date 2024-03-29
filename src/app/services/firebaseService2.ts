@@ -407,6 +407,7 @@ getNextAbilities() {
   initImgVideoPercentage(){
     this.percentageVideo=0;
     this.percentageImg = 0;
+    this.ppPercentage= 0 ;
   }
 
 

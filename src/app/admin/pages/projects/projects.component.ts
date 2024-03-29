@@ -87,6 +87,11 @@ export class ProjectsComponent {
   helper = inject(Helpers)
   isChangingVisibility: boolean = false;
 
+
+  //for displaying a loader while image is loading
+  imagesLoaded: boolean[] = [];
+  ppIsLoaded: boolean=false;
+
   constructor(private fb: FormBuilder,private el: ElementRef, private router: Router,private route: ActivatedRoute) {}
 
 
@@ -96,6 +101,7 @@ export class ProjectsComponent {
 
     this.fetchProject();
     this.initformModalProject();
+
   }
 
   initformModalProject(){
@@ -150,7 +156,17 @@ export class ProjectsComponent {
     }
   }
 
+  initImagesLoaded(imglink : string []) {
+    this.imagesLoaded = Array(imglink.length).fill(false);
+  }
 
+  onImageLoad(index: number,isPP:boolean) {
+    if(isPP){
+      this.ppIsLoaded= true;
+    }else{
+      this.imagesLoaded[index] = true;
+    }
+  }
   
   onImageProfileChange(event: any) {
     const pp  =  event.target.files[0];
@@ -262,6 +278,8 @@ async deleteproject(Project:Project){
 
 switchToEditMode(project : Project){
   this.toUpdateImageUrls=project.imgsLink!;
+  //Initier le tableau qui contient l'indice des images déja chargé dans la vue 
+  this.initImagesLoaded(project.imgsLink)
   this.toUpdateVideoUrl = project.demoLink;
   this.projectPPlink = project.ppLink
 
