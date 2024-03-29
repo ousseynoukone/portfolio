@@ -218,10 +218,14 @@ async addProject(project: Project): Promise<ResponseDto> {
          subscribeImgPercentage.unsubscribe()
          subscribeVideoPercentage.unsubscribe()
          subscribeProfilePicturePercentage.unsubscribe()
+         this.initImgVideoPercentage()
 
       return { status: true, message: 'Project added successfully.' };
   } catch (error) {
+    this.initImgVideoPercentage()
+
       return { status: false, message: String(error) };
+      
   }
 }
 
@@ -400,6 +404,10 @@ getNextAbilities() {
     }
   }
 
+  initImgVideoPercentage(){
+    this.percentageVideo=0;
+    this.percentageImg = 0;
+  }
 
 
 
@@ -431,11 +439,12 @@ getNextAbilities() {
     
   } else {
     this.isUpdatingPP = false
-
+    this.initImgVideoPercentage()
       return { status: false, message: 'Docs not found!' };
   }
 
   this.isUpdatingPP = false
+  this.initImgVideoPercentage()
 
   return { status: true, message: 'Profile picture updated succesfully !' };
 
@@ -444,6 +453,7 @@ getNextAbilities() {
   } catch (error) {
     console.error('Error updating pp project:', error);
     this.isUpdatingPP = false
+    this.initImgVideoPercentage()
 
     return { status: false, message: 'Error while updating profile picture .' };
 
@@ -502,16 +512,24 @@ async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImg
                   doc.ref.update(updatedProject);
               });
           } else {
+            this.initImgVideoPercentage()
+
               return { status: false, message: 'Both video and image have not been provided.' };
           }
       } else {
+        this.initImgVideoPercentage()
+
           return { status: false, message: 'Docs not found!' };
       }
       this.isUpdatingVideo=false
       this.isUpdatingimg=false
+      this.initImgVideoPercentage()
+
       return { status: true, message: 'Video END/OR Image have been updated successfully!' };
   } catch (error) {
       console.error('Error updating project:', error);
+      this.initImgVideoPercentage()
+
       return { status: false, message: 'Error updating project.' };
   }
 
@@ -585,9 +603,12 @@ async addOneImageToProject(imgFile : File ,imgLinks : string [], projectId : str
           doc.ref.update(updatedProject);
       });
     }
+    this.initImgVideoPercentage()
 
       return { status: true, message: 'Image added successfully.' };
   } catch (error) {
+    this.initImgVideoPercentage()
+
       return { status: false, message: String(error) };
   }
 }
