@@ -5,7 +5,7 @@ export interface ProjectDto {
      imgsLink : string [],
      usedTools : string[],
      usefullLinks : string []
-
+     placeIndex : number | null,
      demoLink :  string,
      title : string ,
      type : string,

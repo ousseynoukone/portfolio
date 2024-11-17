@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FireBaseAuthService } from 'src/app/services/firebaseService';
+import { FireBaseAuthService } from 'src/app/services/firebaseAuthServices';
 
 @Component({
   selector: 'app-layout',

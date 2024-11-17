@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { FireBaseAuthService } from 'src/app/services/firebaseService';
+import { FireBaseAuthService } from 'src/app/services/firebaseAuthServices';
 import { LoadingHandler } from '../../loadingHandler';
 
 @Component({

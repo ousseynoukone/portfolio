@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Project } from 'src/app/models/project';
 import { PassDataThrough } from 'src/app/portfolio/shared/sharedService';
-import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
+import { FireBaseStorageService2 } from 'src/app/services/firebaseProjectServices';
 import { CdkDragDrop, moveItemInArray,transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
 import { ImgsLinksWithLibelle } from 'src/app/models/dtos/projectDto';

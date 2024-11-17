@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from 'src/app/models/dtos/projectDto';
 import { Project } from 'src/app/models/project';
-import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
+import { FireBaseStorageService2 } from 'src/app/services/firebaseProjectServices';
 import {  PassDataThrough, ValidatorsRegex } from 'src/app/portfolio/shared/sharedService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Helpers } from 'src/app/portfolio/shared/helper';
@@ -59,7 +59,7 @@ export class ProjectsComponent {
   projectPPlink : string = ""
   
   //pagination limit
-  limit : number = 10
+  limit : number = 5
 
   editMode : boolean = false;
 
@@ -334,7 +334,8 @@ async updateProjectOnly(project : Project){
     type : project.type,
     ppLink : project.ppLink,
     isVisible : true,
-    usefullLinks : project.usefullLinks
+    usefullLinks : project.usefullLinks,
+    placeIndex: null
     
   }
 

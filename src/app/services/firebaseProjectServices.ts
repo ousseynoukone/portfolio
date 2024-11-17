@@ -2,14 +2,14 @@
 import { Injectable, inject } from '@angular/core';
 import {ResponseDto} from '../models/dtos/responseDto';
 import { Observable } from 'rxjs/internal/Observable';
-import { BehaviorSubject, Subject, forkJoin, lastValueFrom, map, subscribeOn } from 'rxjs';
+import {Subject, forkJoin, lastValueFrom, map, subscribeOn } from 'rxjs';
 
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument ,  } from '@angular/fire/compat/firestore';
 import { AngularFireStorage} from '@angular/fire/compat/storage';
-import { AbilityUpdateDto } from '../models/dtos/abilitieUpdateDto';
 import { Project } from '../models/project';
-import { UploadResultForManyFiles, UploadResultForOneFile } from '../models/dtos/uploadResultDto';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from '../models/dtos/projectDto';
+import { removeStringFromArray } from './helpers/helper';
+import { uploadFile, uploadFileList } from './helpers/fileUploadHelper';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +47,11 @@ export class FireBaseStorageService2 {
 
 
   constructor(private firestore : AngularFirestore, private storage: AngularFireStorage){
-    this.projectsDb = firestore.collection('projects');
+
+    // Initialize the collection with an orderBy clause
+    this.projectsDb = this.firestore.collection('projects', ref =>
+        ref.orderBy('placeIndex', 'asc') 
+    );
 
     this.projectSubject.subscribe(abilities => {
       this.weAreOntFirstElement = abilities.some(ability => ability.id === this.firstDocId);
@@ -61,7 +65,6 @@ export class FireBaseStorageService2 {
     return this._projectSibject.asObservable();
   }
 
-
   get getLastVisibleByName(): String{
     return this.lastVisibleByDoc
   }
@@ -70,75 +73,7 @@ export class FireBaseStorageService2 {
     return this.firstVisibleByDoc
   }
 
-
-  uploadFileList(fileList: FileList): Observable<UploadResultForManyFiles> {
-    const totalFiles = fileList.length;
-    let totalProgress = 0;
-    const progressSubject = new Subject<UploadResultForManyFiles>();
-    const downloadLinks: string[] = [];
-
-
-    for (let i = 0; i < totalFiles; i++) {
-        const file = fileList[i];
-        const filePath = `${this.basePathImgs}/${file.name}`;
-        const storageRef = this.storage.ref(filePath);
-        const uploadTask = storageRef.put(file);
-     let subscribing=   uploadTask.percentageChanges().subscribe((percentage) => {
-            totalProgress += (percentage ?? 0.1) / totalFiles; // Update total progress
-
-            progressSubject.next({
-              progress:  parseFloat(totalProgress.toFixed(2)) , downloadLinks: downloadLinks,
-              
-            }); // Emit overall progress and download links
-        });
-
-
-        uploadTask.then(async (snapshot) => {
-            downloadLinks.push(await snapshot.ref.getDownloadURL()); // Get download link and add to the list
-            subscribing.unsubscribe()
-            if (downloadLinks.length === totalFiles) {
-                progressSubject.next({
-                  progress: 100, downloadLinks: downloadLinks,
-                 
-                }); // Emit 100% progress and download links
-                progressSubject.complete(); // Complete when all files are uploaded
-            }
-        }).catch((error) => {
-            progressSubject.error(error); // Emit error if any
-        });
-    }
-
-    return progressSubject.asObservable();
-}
-
-uploadFile(file: File): Observable<UploadResultForOneFile> {
-  const progressSubject = new Subject<UploadResultForOneFile>();
-  let downloadLink: string = "";
-  let currentPercentage = 0 ;
-
-      const filePath = `${this.basePathVideo}/${file.name}`;
-      const storageRef = this.storage.ref(filePath);
-      const uploadTask = storageRef.put(file);
-     
-      uploadTask.percentageChanges().subscribe((percentage) => {
-        if(percentage!=undefined){
-          progressSubject.next({progress: parseFloat(percentage!.toFixed(2)),downloadLink:downloadLink}); 
-          currentPercentage = percentage??0
-        }
-      });
-
-      uploadTask.then(async snapshot => {
-        downloadLink = await snapshot.ref.getDownloadURL()
-       
-        progressSubject.next({progress:currentPercentage??0,downloadLink:downloadLink}); 
-        progressSubject.complete();  
-      }).catch((error) => {
-          progressSubject.error(error); // Emit error if any
-      });
-  return  progressSubject.asObservable();
-}
-
-
+// To order project images
   async saveOrderedImage(arrayOfImgsLinks : string [],projectID :string) : Promise<ResponseDto> {
 
     try {
@@ -158,96 +93,96 @@ uploadFile(file: File): Observable<UploadResultForOneFile> {
 
     }
 
-  
 
-}
-
-
-async addProject(project: Project): Promise<ResponseDto> {
-  try {
-    this.percentageImg = 0;
-    this.percentageVideo=0;
-
-      const uploadFileList$ = this.uploadFileList(project.imgsFile);
-      const uploadFile$ = this.uploadFile(project.videoFile);
-      const uploadPPFile$ = this.uploadFile(project.profilePicture);
-
-    let subscribeImgPercentage =   uploadFileList$.subscribe(uploadResultImg=>{
-        this.percentageImg=uploadResultImg.progress
-      })
-
-      let subscribeVideoPercentage =  uploadFile$.subscribe(uploadResultVideo=>{
-        this.percentageVideo = uploadResultVideo.progress
-      })
-
-
-      let subscribeProfilePicturePercentage =  uploadPPFile$.subscribe(upLoadResultProfilePicture=>{
-        this.ppPercentage = upLoadResultProfilePicture.progress
-      })
-    
-    
-
-      await lastValueFrom( forkJoin([uploadFileList$, uploadFile$,uploadPPFile$])
-          .pipe(
-              map(([uploadResultList, uploadResultFile,upLoadResultProfilePicture]) => {
-                      project.imgsLink = uploadResultList.downloadLinks;
-                      project.demoLink = uploadResultFile.downloadLink;
-                      project.ppLink = upLoadResultProfilePicture.downloadLink
-
-                  const projectDto: ProjectDto = {
-                      id: project.id,
-                      title: project.title,
-                      demoLink: project.demoLink,
-                      minDescription: project.minDescription,
-                      fullDescription: project.fullDescription,
-                      imgsLink: project.imgsLink,
-                      usedTools: project.usedTools,
-                      usefullLinks:project.usefullLinks,
-                      type : project.type,
-                      ppLink :  project.ppLink,
-                      isVisible : false
-                      
-                  };
-
-                  const newId = this.firestore.createId();
-                  projectDto.id = newId;
-                  return this.projectsDb.add(projectDto);
-              })
-          )
-         )
-         subscribeImgPercentage.unsubscribe()
-         subscribeVideoPercentage.unsubscribe()
-         subscribeProfilePicturePercentage.unsubscribe()
-         this.initImgVideoPercentage()
-
-      return { status: true, message: 'Project added successfully.' };
-  } catch (error) {
-    this.initImgVideoPercentage()
-
-      return { status: false, message: String(error) };
-      
   }
-}
+
+
+  async addProject(project: Project): Promise<ResponseDto> {
+    try {
+      this.percentageImg = 0;
+      this.percentageVideo=0;
+
+        const uploadFileList$ = uploadFileList(project.imgsFile,this.basePathImgs,this.storage);
+        const uploadFile$ = uploadFile(project.videoFile,this.basePathVideo,this.storage);
+        const uploadPPFile$ = uploadFile(project.profilePicture,this.basePathVideo,this.storage);
+
+      let subscribeImgPercentage =   uploadFileList$.subscribe(uploadResultImg=>{
+          this.percentageImg=uploadResultImg.progress
+        })
+
+        let subscribeVideoPercentage =  uploadFile$.subscribe(uploadResultVideo=>{
+          this.percentageVideo = uploadResultVideo.progress
+        })
+
+
+        let subscribeProfilePicturePercentage =  uploadPPFile$.subscribe(upLoadResultProfilePicture=>{
+          this.ppPercentage = upLoadResultProfilePicture.progress
+        })
+      
+      
+
+        await lastValueFrom( forkJoin([uploadFileList$, uploadFile$,uploadPPFile$])
+            .pipe(
+                map(([uploadResultList, uploadResultFile,upLoadResultProfilePicture]) => {
+                        project.imgsLink = uploadResultList.downloadLinks;
+                        project.demoLink = uploadResultFile.downloadLink;
+                        project.ppLink = upLoadResultProfilePicture.downloadLink
+
+                    const projectDto: ProjectDto = {
+                        id: project.id,
+                        title: project.title,
+                        demoLink: project.demoLink,
+                        minDescription: project.minDescription,
+                        fullDescription: project.fullDescription,
+                        imgsLink: project.imgsLink,
+                        usedTools: project.usedTools,
+                        usefullLinks:project.usefullLinks,
+                        type : project.type,
+                        ppLink :  project.ppLink,
+                        isVisible : false,
+                        placeIndex: null
+                        
+                    };
+
+                    const newId = this.firestore.createId();
+                    projectDto.id = newId;
+                    return this.projectsDb.add(projectDto);
+                })
+            )
+          )
+          subscribeImgPercentage.unsubscribe()
+          subscribeVideoPercentage.unsubscribe()
+          subscribeProfilePicturePercentage.unsubscribe()
+          this.initImgVideoPercentage()
+
+        return { status: true, message: 'Project added successfully.' };
+    } catch (error) {
+      this.initImgVideoPercentage()
+
+        return { status: false, message: String(error) };
+        
+    }
+  }
 
 
   getProjects(limit : any) {
     this.limit=limit
     this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc')).valueChanges().subscribe(querySnapshot => {
-      
-      let projests: Project[] = [];
+      console.log(querySnapshot)
+      let projects: Project[] = [];
       querySnapshot.forEach(doc => {
         const project = doc as Project;
-        projests.push(project);
-        //For saving the last displated ability
+        projects.push(project);
+        //For saving the last displated project
         this.lastVisibleByDoc = project.id
       });
 
-      this.firstDocId = projests.at(0)?.id;
+      this.firstDocId = projects.at(0)?.id;
 
 
-      this._projectSibject.next(projests);
+      this._projectSibject.next(projects);
 
-      if(projests.length!=0){
+      if(projects.length!=0){
             //This is only to ensure that we are  on the last elements soo the suivant button is disabled
             this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
              
@@ -272,32 +207,32 @@ async addProject(project: Project): Promise<ResponseDto> {
 
 
 
-//For the pagination
-getNextAbilities() {
-  this.weAreOntLastElement = true
-    this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
-      
-      let projects: Project[] = [];
-      querySnapshot.forEach(doc => {
-        const project = doc as Project;
-        projects.push(project);
-      });
+  //For the pagination
+  getNextAbilities() {
+    this.weAreOntLastElement = true
+      this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
+        
+        let projects: Project[] = [];
+        querySnapshot.forEach(doc => {
+          const project = doc as Project;
+          projects.push(project);
+        });
 
-      this._projectSibject.next(projects);
-      this.firstVisibleByDoc = projects.at(0)?.id;
+        this._projectSibject.next(projects);
+        this.firstVisibleByDoc = projects.at(0)?.id;
 
 
-      this.lastVisibleByDoc = projects.at(projects.length-1)?.id;
-    ///////////This is only to ensure that we are  on the last elements soo the suivant button is disabled
-    this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
-      if(querySnapshot.length!=0){
-        this.weAreOntLastElement=false;
-      }});
-    //////////////////////////////////////
- 
-    }); 
+        this.lastVisibleByDoc = projects.at(projects.length-1)?.id;
+      ///////////This is only to ensure that we are  on the last elements soo the "suivant" button is disabled
+      this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
+        if(querySnapshot.length!=0){
+          this.weAreOntLastElement=false;
+        }});
+      //////////////////////////////////////
+  
+      }); 
 
-  } 
+    } 
 
 
 
@@ -376,9 +311,6 @@ getNextAbilities() {
 
 
 
-
-
-
   
   async updateProjectVisibility(project: any): Promise<ResponseDto> {
     try {
@@ -407,7 +339,7 @@ getNextAbilities() {
   initImgVideoPercentage(){
     this.percentageVideo=0;
     this.percentageImg = 0;
-    this.ppPercentage= 0 ;
+    this.ppPercentage = 0 ;
   }
 
 
@@ -460,81 +392,81 @@ getNextAbilities() {
 
   }
 
-}
-
-
-async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImgVideoDto: WithImgVideoDto): Promise<ResponseDto> {
-  this.percentageImg = 0;
-  this.percentageVideo=0;
-
-
-  try {
-      const snapshot = await this.projectsDb.ref.where('id', '==', projectFileUpdate.projectID).get();
-
-      let updatedProject: any = {};
-
-      if (withImgVideoDto.withImage) {
-          let imgFileRef = await this.getFileRef(withImgVideoDto.imgTpUpdateLink);
-          const updateImgTask = imgFileRef.put(projectFileUpdate.imgFile);
-
-          updateImgTask.percentageChanges().subscribe((percentage) => {
-              this.percentageImg = parseFloat(percentage!.toFixed(2));
-          });
-          this.isUpdatingimg = true;
-
-          const uploadImgSnapshot = await updateImgTask;
-          const imgUrl = await uploadImgSnapshot.ref.getDownloadURL();
-
-          let imgsLink = this.removeStringFromArray(projectFileUpdate.projectImgsLinks, withImgVideoDto.imgTpUpdateLink);
-          imgsLink.push(imgUrl);
-
-          updatedProject.imgsLink = imgsLink;
-      }
-
-      if (withImgVideoDto.withVideo) {
-          let videoFileRef = await this.getFileRef(withImgVideoDto.demoLink);
-          const updateVideoTask = videoFileRef.put(projectFileUpdate.videoFile);
-
-          updateVideoTask.percentageChanges().subscribe((percentage) => {
-           
-              this.percentageVideo =  parseFloat(percentage!.toFixed(2));
-          });
-          this.isUpdatingVideo = true;
-
-          const uploadVideoSnapshot = await updateVideoTask;
-          const videoUrl = await uploadVideoSnapshot.ref.getDownloadURL();
-
-          updatedProject.demoLink = videoUrl;
-      }
-
-      if (!snapshot.empty) {
-          if (withImgVideoDto.withImage || withImgVideoDto.withVideo) {
-              snapshot.forEach(doc => {
-                  doc.ref.update(updatedProject);
-              });
-          } else {
-            this.initImgVideoPercentage()
-
-              return { status: false, message: 'Both video and image have not been provided.' };
-          }
-      } else {
-        this.initImgVideoPercentage()
-
-          return { status: false, message: 'Docs not found!' };
-      }
-      this.isUpdatingVideo=false
-      this.isUpdatingimg=false
-      this.initImgVideoPercentage()
-
-      return { status: true, message: 'Video END/OR Image have been updated successfully!' };
-  } catch (error) {
-      console.error('Error updating project:', error);
-      this.initImgVideoPercentage()
-
-      return { status: false, message: 'Error updating project.' };
   }
 
-}
+
+  async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImgVideoDto: WithImgVideoDto): Promise<ResponseDto> {
+    this.percentageImg = 0;
+    this.percentageVideo=0;
+
+
+    try {
+        const snapshot = await this.projectsDb.ref.where('id', '==', projectFileUpdate.projectID).get();
+
+        let updatedProject: any = {};
+
+        if (withImgVideoDto.withImage) {
+            let imgFileRef = await this.getFileRef(withImgVideoDto.imgTpUpdateLink);
+            const updateImgTask = imgFileRef.put(projectFileUpdate.imgFile);
+
+            updateImgTask.percentageChanges().subscribe((percentage) => {
+                this.percentageImg = parseFloat(percentage!.toFixed(2));
+            });
+            this.isUpdatingimg = true;
+
+            const uploadImgSnapshot = await updateImgTask;
+            const imgUrl = await uploadImgSnapshot.ref.getDownloadURL();
+
+            let imgsLink = removeStringFromArray(projectFileUpdate.projectImgsLinks, withImgVideoDto.imgTpUpdateLink);
+            imgsLink.push(imgUrl);
+
+            updatedProject.imgsLink = imgsLink;
+        }
+
+        if (withImgVideoDto.withVideo) {
+            let videoFileRef = await this.getFileRef(withImgVideoDto.demoLink);
+            const updateVideoTask = videoFileRef.put(projectFileUpdate.videoFile);
+
+            updateVideoTask.percentageChanges().subscribe((percentage) => {
+            
+                this.percentageVideo =  parseFloat(percentage!.toFixed(2));
+            });
+            this.isUpdatingVideo = true;
+
+            const uploadVideoSnapshot = await updateVideoTask;
+            const videoUrl = await uploadVideoSnapshot.ref.getDownloadURL();
+
+            updatedProject.demoLink = videoUrl;
+        }
+
+        if (!snapshot.empty) {
+            if (withImgVideoDto.withImage || withImgVideoDto.withVideo) {
+                snapshot.forEach(doc => {
+                    doc.ref.update(updatedProject);
+                });
+            } else {
+              this.initImgVideoPercentage()
+
+                return { status: false, message: 'Both video and image have not been provided.' };
+            }
+        } else {
+          this.initImgVideoPercentage()
+
+            return { status: false, message: 'Docs not found!' };
+        }
+        this.isUpdatingVideo=false
+        this.isUpdatingimg=false
+        this.initImgVideoPercentage()
+
+        return { status: true, message: 'Video END/OR Image have been updated successfully!' };
+    } catch (error) {
+        console.error('Error updating project:', error);
+        this.initImgVideoPercentage()
+
+        return { status: false, message: 'Error updating project.' };
+    }
+
+  }
 
 
 
@@ -548,7 +480,7 @@ async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImg
     }
     try {
 
-      let imgsLinks = this.removeStringFromArray(imgLinks, imgToDeleteLink);
+      let imgsLinks = removeStringFromArray(imgLinks, imgToDeleteLink);
 
      let updatedProject = {
       imgsLink : imgsLinks
@@ -581,38 +513,38 @@ async updateProjectVideoImgOnly(projectFileUpdate: ProjectFileUpdateDto, withImg
 
 
 
-async addOneImageToProject(imgFile : File ,imgLinks : string [], projectId : string  ): Promise<ResponseDto> {
-  try {
-    this.percentageImg = 0;
+  async addOneImageToProject(imgFile : File ,imgLinks : string [], projectId : string  ): Promise<ResponseDto> {
+    try {
+      this.percentageImg = 0;
 
-      const uploadFile$ = this.uploadFile(imgFile);
+        const uploadFile$ = uploadFile(imgFile,this.basePathImgs,this.storage);
 
-     let downloadlink =  await lastValueFrom(uploadFile$.pipe(map(response=>{
-       this.percentageImg = response.progress
-       return response.downloadLink;
-      })))
+      let downloadlink =  await lastValueFrom(uploadFile$.pipe(map(response=>{
+        this.percentageImg = response.progress
+        return response.downloadLink;
+        })))
 
-      const snapshot = await this.projectsDb.ref.where('id', '==', projectId).get();
-      imgLinks.push(downloadlink)
+        const snapshot = await this.projectsDb.ref.where('id', '==', projectId).get();
+        imgLinks.push(downloadlink)
 
-      let updatedProject = {
-        imgsLink : imgLinks
-       }
+        let updatedProject = {
+          imgsLink : imgLinks
+        }
 
-       if (!snapshot.empty) {
-        snapshot.forEach(doc => {
-          doc.ref.update(updatedProject);
-      });
+        if (!snapshot.empty) {
+          snapshot.forEach(doc => {
+            doc.ref.update(updatedProject);
+        });
+      }
+      this.initImgVideoPercentage()
+
+        return { status: true, message: 'Image added successfully.' };
+    } catch (error) {
+      this.initImgVideoPercentage()
+
+        return { status: false, message: String(error) };
     }
-    this.initImgVideoPercentage()
-
-      return { status: true, message: 'Image added successfully.' };
-  } catch (error) {
-    this.initImgVideoPercentage()
-
-      return { status: false, message: String(error) };
   }
-}
 
 
 
@@ -671,11 +603,11 @@ async addOneImageToProject(imgFile : File ,imgLinks : string [], projectId : str
 
 
 
-async getFileRef(fileUrl:string) {
-  return  this.storage.refFromURL(fileUrl); // Get reference to file  
-}
+  async getFileRef(fileUrl:string) {
+    return  this.storage.refFromURL(fileUrl); // Get reference to file  
+  }
 
-  
+    
   
 
   
@@ -693,13 +625,5 @@ async getFileRef(fileUrl:string) {
     });
   }
 
-
-
-
-
-   removeStringFromArray(stringArray : string [], stringToRemove : string) {
-    // Filter the array to keep only elements that are not equal to the string to remove
-    return stringArray.filter((string) => string !== stringToRemove);
-  }
 
 }

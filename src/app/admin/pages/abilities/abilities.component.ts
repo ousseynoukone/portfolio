@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Ability } from 'src/app/models/abilitie';
-import { FireBaseStorageService } from 'src/app/services/firebaseService';
+import { FireBaseStorageService } from 'src/app/services/firebaseAbilitiesServices';
 
 declare var $: any; // Declare $ as a variable to access jQuery
 declare var window: any; // Declare $ as a variable to access jQuery

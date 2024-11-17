@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, inject  } from '@angular/core';
 import { Ability } from 'src/app/models/abilitie';
-import { FireBaseStorageService } from 'src/app/services/firebaseService';
+import { FireBaseStorageService } from 'src/app/services/firebaseAbilitiesServices';
 @Component({
   selector: 'app-abilities',
   templateUrl: './abilities.component.html',

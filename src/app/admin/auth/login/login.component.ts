@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FireBaseAuthService } from 'src/app/services/firebaseService';
+import { FireBaseAuthService } from 'src/app/services/firebaseAuthServices';
 import { LoginDto } from 'src/app/models/dtos/loginDto';
 import { ToastrService } from 'ngx-toastr';
 

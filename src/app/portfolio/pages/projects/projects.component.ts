@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Project } from '../../../models/project';
-import { FireBaseStorageService2 } from 'src/app/services/firebaseService2';
+import { FireBaseStorageService2 } from 'src/app/services/firebaseProjectServices';
 import { PassDataThrough } from '../../shared/sharedService';
 import { first } from 'rxjs';
 
