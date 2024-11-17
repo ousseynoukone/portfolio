@@ -49,9 +49,7 @@ export class FireBaseStorageService2 {
   constructor(private firestore : AngularFirestore, private storage: AngularFireStorage){
 
     // Initialize the collection with an orderBy clause
-    this.projectsDb = this.firestore.collection('projects', ref =>
-        ref.orderBy('placeIndex', 'asc') 
-    );
+    this.projectsDb = this.firestore.collection('projects');
 
     this.projectSubject.subscribe(abilities => {
       this.weAreOntFirstElement = abilities.some(ability => ability.id === this.firstDocId);
@@ -508,7 +506,7 @@ export class FireBaseStorageService2 {
 
   
 
-}
+  }
 
 
 
@@ -594,36 +592,8 @@ export class FireBaseStorageService2 {
 
 
 
-
-
-
-
-
-
-
-
-
   async getFileRef(fileUrl:string) {
     return  this.storage.refFromURL(fileUrl); // Get reference to file  
   }
-
-    
-  
-
-  
-
-  getProjectClient(){
-    this.projectsDb.valueChanges().subscribe(querySnapshot => {
-      let projects: Project[] = [];
-      querySnapshot.forEach(doc => {
-        const project = doc as Project;
-        if(project.isVisible){
-          projects.push(project);
-        }
-      });
-      this._projectSibject.next(projects); 
-    });
-  }
-
 
 }

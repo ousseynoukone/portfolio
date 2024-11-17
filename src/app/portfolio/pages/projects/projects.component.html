@@ -1,6 +1,6 @@
 <div class="container-fluid bg-secondary-color mt-4 pt-2 pb-3" id="projets">
     <div class="text-center">
-        <div class="badge bg-accent-color fs-5 p-2 m-4 p-2 ">Mes projets</div>
+        <div class="badge bg-accent-color fs-5 p-2 m-4 p-2 ">Mes projets ({{totalProjectCount()}})</div>
     </div>
 
     <div class="row">
@@ -16,7 +16,7 @@
         <div class="col col-md-6 mt-4">
             <div class="text-center ">
                 <img src="../../../../assets/imgs/phone.png" class="img-fluid " alt="smartPhone">
-                <div class="bg-primary-color text-black rounded onhoverAccent mt-2" id="mobile">Mobile</div>
+                <div class="bg-primary-color text-black rounded onhoverAccent mt-2" id="mobile">Mobile ({{mobileProjectCount()}})</div>
 
             </div> 
             <div *ngIf="!noDataMobile" class="container mt-2 mb-2 ">
@@ -86,7 +86,7 @@
             <div class="text-center">
                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAADfElEQVR4nO2dv2sUQRiGJwpaGKPEIEY8xNpLY0DTCWplZSOCjT+xsLNKsEvsrCyMTRIbSaESTGyC/4KVEQPW0SYoYpMoGH1kdAPLZm5ze+wm32beB6bameze+2T2213udpxrA6APaAKDanSSgc+ur52s8yQMAE+Az4iy+JRkOlBERDfwFPhd2mGILD7bKZ/1ZjIawPsNw0VV+KwbeTNjobJdi1YsAj0hIf40FWIFmAFGgWE1OslgNMnQZxliMlTAQzXjFXCk7QIkcgH6gblAzmv+Sizd0Vf+LLPArvxdiKL4TFtIGV/v0BW4tPVTSzOj2pmymsl8KX3Tl2WmqoMR/0nKQZbe9fqRZSwZJyoCeBDIvek3DAU2jGzyx/yjgAupdgbYk9P/AHA21f88cMxFDDASyH2osJCcy+N3wP5A/1PA10D/X8ANFymUIQQ4ST53A2Ne5vRfdpFCSUL8f3se9wJjXuf0/+6v8lyEUJIQfw39JudJ5uHAGF8vfrYYc99FCiXWkN3AReBOql0BDuaMOQFcS/W/DZx2EUNZQkQ5SIgxJMQYEmIMCam5kGngshpVZjBdRIjYHiTEGBJiDAkxhoo6NSnqenRSMboPMYaEGENCjCEhxpAQY0iIMSTEGBJiDAkxhlkhwL7kBy0vgFuxfE/LspBnmX3fdBFgWci3GH8KgWEhPzL7nncRICHGkBBjSIgxJMQYEmIMCTGGhBhDQowhIcaQEGNIiDEkxBgSYgwJMYaEGENCjFEnIR8yb4moQ7saeq3IThFSV74Axwt8bgnZAkYlxBZtv91IM6R6PhZZAaFOQt5m3udYh+Yz3Fvwc9dGyLyLAAkxhoQYQ0KMISHGkBBjSIgxJMQYEmIMCTGGhBhDQowhIcaQEGNIiDEkxBgSYgzLQpYz+37uIsCykEep/f4BLrkIsCzEr2t1HXgInHORYFZIrCAhtpAQY0iIMSSkRkK0fLex5bsPBTZE8VY3qwvcdyXr2KZZAfq39Yh3MMBRYDWT+VK6w3jA1py/advWI9+BJDfCoRW0H6c7+Tqy1kKKZkq5MyMkw2ffzHaeIsxqcr4bA4bV6CQDn91s4DS1zkTIXjew0GKAqI5FoKfVlGpIypbiJ0Bjs/OcnymTLWqKKAef7YTPukgBaiZXX0slHYTgX5bjGwp4UfwNSyJoUI1OMvDZ9bYT9l9Nu5Mawg+KpgAAAABJRU5ErkJggg==">
 
-                <div class="bg-primary-color text-black rounded onhoverAccent mt-2" id="web">Web</div>
+                <div class="bg-primary-color text-black rounded onhoverAccent mt-2" id="web">Web ({{webProjectCount()}})</div>
 
             </div>
 

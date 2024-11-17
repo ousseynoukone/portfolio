@@ -1,9 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Project } from '../../../models/project';
-import { FireBaseStorageService2 } from 'src/app/services/firebaseProjectServices';
 import { PassDataThrough } from '../../shared/sharedService';
-import { first } from 'rxjs';
+import { first, Subscription } from 'rxjs';
+import { FireBaseProjectService } from 'src/app/services/firebaseProjectClientServices';
 
 @Component({
   selector: 'app-projects',
@@ -18,10 +18,18 @@ export class ProjectsComponent implements OnInit {
   noDataMobile: boolean = true;
   noDataWeb: boolean = true;
 
+  fireBaseStorage = inject(FireBaseProjectService);
+  shareData = inject(PassDataThrough); 
+
+  mobileProjectCount = signal(0);  
+  totalProjectCount = signal(0);  
+  webProjectCount = signal(0);  
+
+  private subscriptions: Subscription[] = []; // To store subscriptions
+
   constructor(private router: Router) { }
 
-  fireBaseStorage = inject(FireBaseStorageService2);
-  shareData = inject(PassDataThrough); 
+
 
   navigateToDetailsPage(project : Project) {
     this.shareData.setData = project
@@ -31,9 +39,34 @@ export class ProjectsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initProject();
+    this.initProject()
+    this.subscribeToTotalprojectCount();
+    this.subscribeToWebprojectCount();
+    this.subscribeToMobileprojectCount()
   }
 
+
+  // Subscribe to project count observables
+  subscribeToMobileprojectCount(){
+    const subscription = this.fireBaseStorage.mobileProjectCount.subscribe(data => {
+      this.mobileProjectCount.set(data);
+    });
+    this.subscriptions.push(subscription);  // Store subscription
+  }
+
+  subscribeToWebprojectCount(){
+    const subscription = this.fireBaseStorage.webProjectCount.subscribe(data => {
+      this.webProjectCount.set(data);
+    });
+    this.subscriptions.push(subscription);  // Store subscription
+  }
+
+  subscribeToTotalprojectCount(){
+    const subscription = this.fireBaseStorage.totalOfItems.subscribe(data => {
+      this.totalProjectCount.set(data);
+    });
+    this.subscriptions.push(subscription);  // Store subscription
+  }
 
   initialPosition(){
     this.router.events.pipe(
@@ -43,6 +76,7 @@ export class ProjectsComponent implements OnInit {
 
     });
   }
+
   initProjectsArray(){
     this.webProjects = [];
     this.mobileProjects = [];
@@ -50,7 +84,7 @@ export class ProjectsComponent implements OnInit {
 
   initProject() {
     this.loading = true;
-    this.fireBaseStorage.getProjectClient();
+    this.fireBaseStorage.fetchProjects();
     this.fireBaseStorage.projectSubject.subscribe(data => {
       this.initProjectsArray();
       if(data.length == 0) {
@@ -90,7 +124,11 @@ export class ProjectsComponent implements OnInit {
   }
 
 
-
+  // Clean up subscriptions when the component is destroyed
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions to avoid memory leaks
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
   
 }
 
