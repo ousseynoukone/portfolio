@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter, first } from 'rxjs';
 import { Project } from '../../../models/project';
 import { PassDataThrough } from '../../shared/sharedService';
-import { FireBaseProjectService } from 'src/app/services/firebaseProjectClientServices';
+import { FireBaseProjectClientService } from 'src/app/services/firebaseProjectClientServices';
 
 interface ProjectState {
   mobile: Project[];
@@ -20,7 +20,7 @@ interface ProjectState {
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
-  private readonly fireBaseStorage = inject(FireBaseProjectService);
+  private readonly fireBaseStorage = inject(FireBaseProjectClientService);
   private readonly shareData = inject(PassDataThrough);
   private readonly router = inject(Router);
   private readonly subscriptions = new Subscription();

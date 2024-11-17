@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {  ActivatedRoute, Router } from '@angular/router';
 import { FireBaseAuthService } from 'src/app/services/firebaseAuthServices';
 
 @Component({
@@ -9,7 +10,7 @@ import { FireBaseAuthService } from 'src/app/services/firebaseAuthServices';
 export class HeaderComponent {
 
 
-  constructor(private authService: FireBaseAuthService) {}
+  constructor(private authService: FireBaseAuthService, private router : Router ) {}
 
 
   logout() {
@@ -17,6 +18,8 @@ export class HeaderComponent {
     this.authService.logout()
   }
 
-
+  goToHome(){
+    this.router.navigate(['admin'],);
+  }
 
 }

@@ -8,10 +8,13 @@
     </div>
   </div>
 
-  <div class="container">
-    <button class="btn bg-secondary-color m-2 text-white" (click)="addNewProject()">Add new Project</button>
-  </div>
+  <div class="container ">
+      <button class="btn bg-secondary-color m-2 text-white" (click)="addNewProject()">Add new Project</button>
 
+      <button type="button" (click)="navigateToOrderProject()"  class="btn bg-secondary-color m-2 text-white">
+        <span>Order Projects</span>
+      </button>
+  </div>
 
 <!-- abilities.component.html -->
 <div *ngIf="!isDataComing" class="bg-primary-color rounded">
@@ -55,6 +58,8 @@
             <button type="button" (click)="gotoProjectOrderingPage(project)"  class="btn btn-dark btn-sm m-1">
               <span  >Order IMG</span>
             </button>
+
+
 
           </td>
         </tr>

@@ -8,7 +8,7 @@ import { Project } from '../models/project';
 @Injectable({
   providedIn: 'root',
 })
-export class FireBaseProjectService {
+export class FireBaseProjectClientService {
   private projectsDb!: AngularFirestoreCollection<Project>;
 
   // BehaviorSubjects for holding project data and counts

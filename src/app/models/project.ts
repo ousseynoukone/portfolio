@@ -13,6 +13,7 @@ export class Project {
         public type : string,
         public profilePicture : File,
         public ppLink : string,
+        public placeIndex : number,
         public isVisible  : boolean =  false
         ) {
     }

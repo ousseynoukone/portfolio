@@ -26,6 +26,8 @@ import { PassDataThrough } from 'src/app/portfolio/shared/sharedService';
 @Injectable({
   providedIn:'root'
 })
+// TO CHECK IF shareData CONTAIN A PROJECT FOR IMAGE ORDERING 
+// THIS IS NOT SUITABLE FOR OTHERS ENDPOINTS
 export class RouteGuard {
   constructor(private passDataThrough: PassDataThrough, private router: Router) {}
 

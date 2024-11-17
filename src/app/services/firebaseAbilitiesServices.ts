@@ -11,7 +11,7 @@ import { AbilityUpdateDto } from '../models/dtos/abilitieUpdateDto';
 @Injectable({
   providedIn: 'root',
 })
-export class FireBaseStorageService {
+export class FireBaseAbilityService {
 
   abilitiyDB !: AngularFirestoreCollection<any>;
   private basePath = '/abilities';

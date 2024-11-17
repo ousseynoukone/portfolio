@@ -14,14 +14,14 @@ import { uploadFile, uploadFileList } from './helpers/fileUploadHelper';
 @Injectable({
   providedIn: 'root',
 })
-export class FireBaseStorageService2 {
+export class FireBaseProjectService {
 
   projectsDb !: AngularFirestoreCollection<any>;
   private basePathVideo = '/project/videos';
   private basePathImgs = '/project/imgs';
 
   // Streams  for project data
-  private _projectSibject: Subject<Project[]> = new Subject<Project[]>();
+  private _projectSubject: Subject<Project[]> = new Subject<Project[]>();
 
   //percentage
   public percentageImg: number = 0;
@@ -60,7 +60,7 @@ export class FireBaseStorageService2 {
 
 
   get projectSubject():Observable<Project[]> {
-    return this._projectSibject.asObservable();
+    return this._projectSubject.asObservable();
   }
 
   get getLastVisibleByName(): String{
@@ -162,11 +162,24 @@ export class FireBaseStorageService2 {
     }
   }
 
+  fetchProjectWithoutLimit(){
+    this.firestore.collection('projects',ref=>ref.orderBy('placeIndex','asc')).valueChanges().subscribe(querySnapshot => {
+      let projects: Project[] = [];
+      querySnapshot.forEach(doc => {
+        const project = doc as Project;
+        projects.push(project);
+      });
+
+      this._projectSubject.next(projects);
+    });
+  }
+
+
 
   getProjects(limit : any) {
     this.limit=limit
     this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc')).valueChanges().subscribe(querySnapshot => {
-      console.log(querySnapshot)
+      
       let projects: Project[] = [];
       querySnapshot.forEach(doc => {
         const project = doc as Project;
@@ -178,7 +191,7 @@ export class FireBaseStorageService2 {
       this.firstDocId = projects.at(0)?.id;
 
 
-      this._projectSibject.next(projects);
+      this._projectSubject.next(projects);
 
       if(projects.length!=0){
             //This is only to ensure that we are  on the last elements soo the suivant button is disabled
@@ -216,7 +229,7 @@ export class FireBaseStorageService2 {
           projects.push(project);
         });
 
-        this._projectSibject.next(projects);
+        this._projectSubject.next(projects);
         this.firstVisibleByDoc = projects.at(0)?.id;
 
 
@@ -247,7 +260,7 @@ export class FireBaseStorageService2 {
       this.firstVisibleByDoc = projects.length > 0 ? projects[0].id : null; // Update firstVisibleByDoc
       this.lastVisibleByDoc = projects.at(projects.length-1)?.id;
 
-      this._projectSibject.next(projects);
+      this._projectSubject.next(projects);
     });
 
     //so the suivant button is enabled
@@ -286,7 +299,8 @@ export class FireBaseStorageService2 {
               usedTools : project.usedTools,
               usefullLinks:project.usefullLinks,
               title : project.title ,
-              type : project.type
+              type : project.type,
+              placeIndex: project.placeIndex
             };
 
         if (!snapshot.empty) {

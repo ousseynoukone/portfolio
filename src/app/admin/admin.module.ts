@@ -15,6 +15,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { OrderImagesComponent } from './pages/order-images/order-images.component';
 import { HeaderComponent } from './static/header/header.component';
+import { OrderProjectComponent } from './pages/projects/sub-component/order-project/order-project.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { HeaderComponent } from './static/header/header.component';
     LoadingComponent,
     OrderImagesComponent,
     HeaderComponent,
+    OrderProjectComponent,
     
   ],
   imports: [

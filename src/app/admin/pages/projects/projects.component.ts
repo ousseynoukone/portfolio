@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from 'src/app/models/dtos/projectDto';
 import { Project } from 'src/app/models/project';
-import { FireBaseStorageService2 } from 'src/app/services/firebaseProjectServices';
+import { FireBaseProjectService } from 'src/app/services/firebaseProjectServices';
 import {  PassDataThrough, ValidatorsRegex } from 'src/app/portfolio/shared/sharedService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Helpers } from 'src/app/portfolio/shared/helper';
@@ -28,7 +28,7 @@ export class ProjectsComponent {
   shareData = inject(PassDataThrough)
 
   projectForm !: FormGroup;
-  fireBaseStorage = inject(FireBaseStorageService2);
+  fireBaseStorage = inject(FireBaseProjectService);
 
   options = [
     { value: '', label: 'Select an option' }, // Default option
@@ -137,6 +137,7 @@ export class ProjectsComponent {
   }
 
 
+
   onImageChange(event: any,isEditMode : boolean,isForAddingOneImage : boolean) {
     const fileList  =  event.target.files as FileList;
     if (!fileList[0].type.startsWith('image/') && !fileList[1].type.startsWith('image/')) {
@@ -195,11 +196,6 @@ export class ProjectsComponent {
       this.videoToBeUpdatedWith = file;
     }
 
-    // //Si on charge une image alors qu'on a edit mode , l'image dois etre mise a jour dans le db
-    // if(this.editMode){
-    //   this.withFile = true
-
-    // }
   }
 
   
@@ -507,7 +503,10 @@ gotoProjectOrderingPage(project : Project){
 
 
 
+navigateToOrderProject(){
+  this.router.navigate(['order-projects'], {relativeTo:this.route});
 
+}
 
 
 
@@ -530,17 +529,17 @@ scrollToElement(elementId: string): void {
 }
 
 
-truncateText(text: string): string {
-  const screenWidth = window.innerWidth;
+  truncateText(text: string): string {
+    const screenWidth = window.innerWidth;
 
-  if (screenWidth < 600) {
-    // Truncate to a shorter length for smaller screens
-    return text.length > 7 ? text.substring(0, 7) + '...' : text;
-  } else {
-    // Default truncation length for larger screens
-    return text.length > 30 ? text.substring(0, 30) + '...' : text;
+    if (screenWidth < 600) {
+      // Truncate to a shorter length for smaller screens
+      return text.length > 7 ? text.substring(0, 7) + '...' : text;
+    } else {
+      // Default truncation length for larger screens
+      return text.length > 30 ? text.substring(0, 30) + '...' : text;
+    }
   }
-}
 
 
 

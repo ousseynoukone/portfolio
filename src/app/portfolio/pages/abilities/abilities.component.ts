@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, inject  } from '@angular/core';
 import { Ability } from 'src/app/models/abilitie';
-import { FireBaseStorageService } from 'src/app/services/firebaseAbilitiesServices';
+import { FireBaseAbilityService } from 'src/app/services/firebaseAbilitiesServices';
 @Component({
   selector: 'app-abilities',
   templateUrl: './abilities.component.html',
@@ -36,7 +36,7 @@ export class AbilitiesComponent implements OnInit {
   gestionProjs: Ability[] = [];
 
   isDataComing: boolean = false;
-  fireBaseStorage = inject(FireBaseStorageService);
+  fireBaseStorage = inject(FireBaseAbilityService);
   abilities: Ability[] = [];
 
   constructor(private el: ElementRef) {}
