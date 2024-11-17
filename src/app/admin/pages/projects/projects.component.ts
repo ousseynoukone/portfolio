@@ -255,11 +255,11 @@ export class ProjectsComponent {
   }
 
   getNext(){
-    this.fireBaseStorage.getNextAbilities()
+    this.fireBaseStorage.getNextProject()
   }
 
   getPrevious(){
-    this.fireBaseStorage.getPreviousAbilities()
+    this.fireBaseStorage.getPreviousProject()
   }
 
 

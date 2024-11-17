@@ -138,7 +138,7 @@ export class FireBaseProjectService {
                         type : project.type,
                         ppLink :  project.ppLink,
                         isVisible : false,
-                        placeIndex: null
+                        placeIndex: this.totalOfItems+1
                         
                     };
 
@@ -219,7 +219,7 @@ export class FireBaseProjectService {
 
 
   //For the pagination
-  getNextAbilities() {
+  getNextProject() {
     this.weAreOntLastElement = true
       this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
         
@@ -247,7 +247,7 @@ export class FireBaseProjectService {
 
 
 
-  getPreviousAbilities() {
+  getPreviousProject() {
     this.firestore.collection('projects', ref =>
       ref.limitToLast(this.limit).orderBy('id','desc').endBefore(this.firstVisibleByDoc)
     ).valueChanges().subscribe(querySnapshot => {
