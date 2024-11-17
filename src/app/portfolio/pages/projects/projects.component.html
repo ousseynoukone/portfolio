@@ -4,14 +4,14 @@
     </div>
 
     <div class="row">
-      <div *ngIf="loading" class="text-center">
+      <div *ngIf="state.loading" class="text-center">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
       
-      <div *ngIf="noDataMessage !== ''" class=" badge ">
-        <p>{{ noDataMessage }}</p>
+      <div *ngIf="state.noDataMessage !== ''" class=" badge ">
+        <p>{{ state.noDataMessage }}</p>
       </div>
         <div class="col col-md-6 mt-4">
             <div class="text-center ">
@@ -19,17 +19,17 @@
                 <div class="bg-primary-color text-black rounded onhoverAccent mt-2" id="mobile">Mobile ({{mobileProjectCount()}})</div>
 
             </div> 
-            <div *ngIf="!noDataMobile" class="container mt-2 mb-2 ">
+            <div *ngIf="!state.noDataMobile" class="container mt-2 mb-2 ">
             <div   id="carousselMobile" class="carousel slide" data-bs-ride="carousel" >
               <div class="carousel-indicators" >
                 
-                <button *ngFor="let project of mobileProjects; let i = index"  type="button" [attr.data-bs-target]="'#carousselMobile'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
+                <button *ngFor="let project of state.mobile; let i = index"  type="button" [attr.data-bs-target]="'#carousselMobile'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
               </div>
                 <div class="carousel-inner bg-sobre-color rounded ">
 
 
 
-                  <div *ngFor="let project of mobileProjects;index as i" class="carousel-item " [class.active]="i==0" >
+                  <div *ngFor="let project of state.mobile;index as i" class="carousel-item " [class.active]="i==0" >
                     <div class="container  image-container  custom-container rounded col-8 offset-2">
 
                     <img class="img-fluid mx-auto d-block rounded custom-image " [src]="project.ppLink" alt="Card image cap" >
@@ -66,11 +66,11 @@
 
 
                 </div>
-                <button *ngIf="mobileProjects.length > 1"  class="carousel-control-prev" type="button" data-bs-target="#carousselMobile" data-bs-slide="prev">
+                <button *ngIf="state.mobile"  class="carousel-control-prev" type="button" data-bs-target="#carousselMobile" data-bs-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Previous</span>
                 </button>
-                <button *ngIf="mobileProjects.length > 1" class="carousel-control-next" type="button" data-bs-target="#carousselMobile" data-bs-slide="next">
+                <button *ngIf="state.mobile" class="carousel-control-next" type="button" data-bs-target="#carousselMobile" data-bs-slide="next">
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Next</span>
                 </button>
@@ -90,17 +90,17 @@
 
             </div>
 
-          <div *ngIf="!noDataWeb" class="container mt-2 mb-2">
+          <div *ngIf="!state.noDataWeb" class="container mt-2 mb-2">
             <div  id="carousselWeb" class="carousel slide" data-bs-ride="carousel" >
               <div class="carousel-indicators" >
                 
-                <button *ngFor="let project of webProjects; let i = index"  type="button" [attr.data-bs-target]="'#carousselWeb'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
+                <button *ngFor="let project of state.web; let i = index"  type="button" [attr.data-bs-target]="'#carousselWeb'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
               </div>
               <div class="carousel-inner bg-sobre-color rounded ">
 
 
 
-                <div *ngFor="let project of webProjects;index as i" class="carousel-item " [class.active]="i==0" >
+                <div *ngFor="let project of state.web;index as i" class="carousel-item " [class.active]="i==0" >
                   <div class="container  image-container  custom-container rounded col-8 offset-2 ">
 
                   <img class="img-fluid mx-auto d-block rounded custom-image" [src]="project.ppLink" alt="Card image cap" >
@@ -141,11 +141,11 @@
 
 
                 </div>
-                <button *ngIf="webProjects.length > 1"  class="carousel-control-prev" type="button" data-bs-target="#carousselWeb" data-bs-slide="prev">
+                <button *ngIf="state.web.length > 1"  class="carousel-control-prev" type="button" data-bs-target="#carousselWeb" data-bs-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Previous</span>
                 </button>
-                <button *ngIf="webProjects.length > 1"  class="carousel-control-next" type="button" data-bs-target="#carousselWeb" data-bs-slide="next">
+                <button *ngIf="state.web.length > 1"  class="carousel-control-next" type="button" data-bs-target="#carousselWeb" data-bs-slide="next">
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Next</span>
                 </button>

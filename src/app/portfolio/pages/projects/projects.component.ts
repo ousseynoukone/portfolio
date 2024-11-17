@@ -1,134 +1,131 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { Subscription, filter, first } from 'rxjs';
 import { Project } from '../../../models/project';
 import { PassDataThrough } from '../../shared/sharedService';
-import { first, Subscription } from 'rxjs';
 import { FireBaseProjectService } from 'src/app/services/firebaseProjectClientServices';
+
+interface ProjectState {
+  mobile: Project[];
+  web: Project[];
+  loading: boolean;
+  noDataMessage: string;
+  noDataMobile: boolean;
+  noDataWeb: boolean;
+}
 
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css']
 })
-export class ProjectsComponent implements OnInit {
-  mobileProjects: Project[] = [];
-  webProjects: Project[] = [];
-  loading: boolean = true;
-  noDataMessage: string = '';
-  noDataMobile: boolean = true;
-  noDataWeb: boolean = true;
+export class ProjectsComponent implements OnInit, OnDestroy {
+  private readonly fireBaseStorage = inject(FireBaseProjectService);
+  private readonly shareData = inject(PassDataThrough);
+  private readonly router = inject(Router);
+  private readonly subscriptions = new Subscription();
 
-  fireBaseStorage = inject(FireBaseProjectService);
-  shareData = inject(PassDataThrough); 
+  protected state: ProjectState = {
+    mobile: [],
+    web: [],
+    loading: true,
+    noDataMessage: '',
+    noDataMobile: true,
+    noDataWeb: true
+  };
 
-  mobileProjectCount = signal(0);  
-  totalProjectCount = signal(0);  
-  webProjectCount = signal(0);  
+  protected readonly mobileProjectCount = signal(0);
+  protected readonly webProjectCount = signal(0);
+  protected readonly totalProjectCount = signal(0);
 
-  private subscriptions: Subscription[] = []; // To store subscriptions
-
-  constructor(private router: Router) { }
-
-
-
-  navigateToDetailsPage(project : Project) {
-    this.shareData.setData = project
-
-    this.router.navigate(['/project-details'])
-    this.initialPosition()
+  ngOnInit(): void {
+    this.initializeProjects();
+    this.subscribeToProjectCounts();
   }
 
-  ngOnInit() {
-    this.initProject()
-    this.subscribeToTotalprojectCount();
-    this.subscribeToWebprojectCount();
-    this.subscribeToMobileprojectCount()
-  }
-
-
-  // Subscribe to project count observables
-  subscribeToMobileprojectCount(){
-    const subscription = this.fireBaseStorage.mobileProjectCount.subscribe(data => {
-      this.mobileProjectCount.set(data);
-    });
-    this.subscriptions.push(subscription);  // Store subscription
-  }
-
-  subscribeToWebprojectCount(){
-    const subscription = this.fireBaseStorage.webProjectCount.subscribe(data => {
-      this.webProjectCount.set(data);
-    });
-    this.subscriptions.push(subscription);  // Store subscription
-  }
-
-  subscribeToTotalprojectCount(){
-    const subscription = this.fireBaseStorage.totalOfItems.subscribe(data => {
-      this.totalProjectCount.set(data);
-    });
-    this.subscriptions.push(subscription);  // Store subscription
-  }
-
-  initialPosition(){
-    this.router.events.pipe(
-      first(evt => evt instanceof NavigationEnd)
-    ).subscribe(() => {
-      window.scrollTo(0, 0); // Scroll to the top of the page
-
-    });
-  }
-
-  initProjectsArray(){
-    this.webProjects = [];
-    this.mobileProjects = [];
-  }
-
-  initProject() {
-    this.loading = true;
-    this.fireBaseStorage.fetchProjects();
-    this.fireBaseStorage.projectSubject.subscribe(data => {
-      this.initProjectsArray();
-      if(data.length == 0) {
-        this.noDataMessage = 'No projects found.';
-      } else {
-        this.noDataMessage=""
-        data.forEach(element => {
-          if (element.type === "mobile") {
-            this.mobileProjects.push(element);
-          } else {
-            this.webProjects.push(element);
-          }
-        });
-
-       
-        if(this.mobileProjects.length === 0){
-          this.noDataMobile = true ;
-          this.noDataMessage = 'No mobile projects found.';
-
-        }else{
-          this.noDataMessage= ""
-
-          this.noDataMobile = false
-        }
-        if(this.webProjects.length === 0){
-          this.noDataWeb = true ;
-          this.noDataMessage = 'No web projects found.';
-
-        }else{
-          this.noDataWeb = false
-          this.noDataMessage=""
-
-        }
-      }
-      this.loading = false;
-    });
-  }
-
-
-  // Clean up subscriptions when the component is destroyed
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions to avoid memory leaks
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.unsubscribe();
   }
-  
-}
 
+  protected navigateToDetailsPage(project: Project): void {
+    this.shareData.setData = project;
+    this.router.navigate(['/project-details']);
+    this.scrollToTop();
+  }
+
+  private initializeProjects(): void {
+    this.state.loading = true;
+    this.fireBaseStorage.fetchProjects();
+
+    const projectSubscription = this.fireBaseStorage.projectSubject.subscribe(
+      (projects) => this.handleProjectsUpdate(projects)
+    );
+    this.subscriptions.add(projectSubscription);
+  }
+
+  private handleProjectsUpdate(projects: Project[]): void {
+    this.resetProjects();
+
+    if (projects.length === 0) {
+      this.state.noDataMessage = 'No projects found.';
+      this.state.loading = false;
+      return;
+    }
+
+    this.categorizeProjects(projects);
+    this.updateProjectAvailability();
+    this.state.loading = false;
+  }
+
+  private resetProjects(): void {
+    this.state.mobile = [];
+    this.state.web = [];
+    this.state.noDataMessage = '';
+  }
+
+  private categorizeProjects(projects: Project[]): void {
+    projects.forEach(project => {
+      if (project.type === 'mobile') {
+        this.state.mobile.push(project);
+      } else {
+        this.state.web.push(project);
+      }
+    });
+  }
+
+  private updateProjectAvailability(): void {
+    this.state.noDataMobile = this.state.mobile.length === 0;
+    this.state.noDataWeb = this.state.web.length === 0;
+
+    if (this.state.noDataMobile) {
+      this.state.noDataMessage = 'No mobile projects found.';
+    } else if (this.state.noDataWeb) {
+      this.state.noDataMessage = 'No web projects found.';
+    }
+  }
+
+  private subscribeToProjectCounts(): void {
+    const subscriptions = [
+      this.fireBaseStorage.mobileProjectCount.subscribe(
+        count => this.mobileProjectCount.set(count)
+      ),
+      this.fireBaseStorage.webProjectCount.subscribe(
+        count => this.webProjectCount.set(count)
+      ),
+      this.fireBaseStorage.totalOfItems.subscribe(
+        count => this.totalProjectCount.set(count)
+      )
+    ];
+
+    subscriptions.forEach(sub => this.subscriptions.add(sub));
+  }
+
+  private scrollToTop(): void {
+    this.subscriptions.add(
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd),
+        first()
+      ).subscribe(() => window.scrollTo(0, 0))
+    );
+  }
+}
