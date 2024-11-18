@@ -24,7 +24,9 @@ import { ElementRef, NgModule } from '@angular/core';
     ToastrModule.forRoot() // Initialize Toastr globally
 
   ],
-  providers: [],
+  providers: [
+    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

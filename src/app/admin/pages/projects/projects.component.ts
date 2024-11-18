@@ -8,6 +8,7 @@ import { FireBaseProjectService } from 'src/app/services/firebaseProjectServices
 import {  PassDataThrough, ValidatorsRegex } from 'src/app/portfolio/shared/sharedService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Helpers } from 'src/app/portfolio/shared/helper';
+import { removeStringFromArray } from 'src/app/services/helpers/helper';
 
 
 declare var $: any; // Declare $ as a variable to access jQuery
@@ -435,8 +436,19 @@ async deleteOnImage(imgLink:string){
  let projectImgsLinks =  this.updateProjectDetailForUpdateImgAndVideoOnly.imgsLink;
  let imgToDeleteLink = imgLink
  let response = await this.fireBaseStorage.deleteOneImage(projectImgsLinks,imgToDeleteLink,projectID)
- response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!)
+
+ if(response.status){
+  this.toastr.success(response.message!)
+  // Update the view
+  this.toUpdateImageUrls = removeStringFromArray( this.toUpdateImageUrls , imgToDeleteLink);
+
+ }else{
+  this.toastr.error(response.message!)
+ }
+
  this.isDeletingOneImage=false
+
+
 
 }
 
@@ -477,7 +489,8 @@ saveChange(){
 
 
 close(){
-  this.iniForm()
+  // this.iniForm()
+  this.saveChange()
 }
 
 
