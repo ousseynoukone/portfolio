@@ -1,3 +1,5 @@
+import { FieldValue } from "firebase/firestore"
+
 export interface ProjectDto {
      id : string,
      minDescription : string,
@@ -10,7 +12,9 @@ export interface ProjectDto {
      title : string ,
      type : string,
      ppLink : string,
-     isVisible : boolean
+     isVisible : boolean,
+     createdAt:FieldValue
+     
 }
 
 export interface WithImgVideoDto{

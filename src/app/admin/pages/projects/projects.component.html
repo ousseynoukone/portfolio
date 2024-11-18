@@ -16,11 +16,10 @@
       </button>
   </div>
 
-<!-- abilities.component.html -->
 <div *ngIf="!isDataComing" class="bg-primary-color rounded">
   <div class="container mt-3">
     <!-- add this to table if u want DATATABLE datatable [dtOptions]="dtOptions"  -->
-    <table    id="example" class="table table-striped" style="width: 100% !important;" >
+    <table  id="example" class="table table-striped" style="width: 100% !important;" >
 
       <thead>
         <tr>
@@ -56,27 +55,24 @@
             </button>
             
             <button type="button" (click)="gotoProjectOrderingPage(project)"  class="btn btn-dark btn-sm m-1">
-              <span  >Order IMG</span>
+              <span >Order IMG</span>
             </button>
-
-
-
           </td>
+
         </tr>
       </tbody>
     </table>
-    <div class="badge bg-secondary-color mt-1 text-white ">Total de  {{fireBaseStorage.totalOfItems}}  affiché par    {{limit}}</div>
+    <div class="badge bg-secondary-color mt-1 text-white ">Total de  {{fireBaseStorage.totalOfItems}}  affiché par    {{this.fireBaseStorage.limit}}</div>
   </div>
   
 
-  <button class="btn bg-secondary-color m-2 text-white" [disabled]="fireBaseStorage.weAreOntFirstElement" (click)="getPrevious()">Precedent</button>
+  <button class="btn bg-secondary-color m-2 text-white" [disabled]="fireBaseStorage.weAreOnTheFirstElement" (click)="getPrevious()">Precedent</button>
 
   <button class="btn  bg-secondary-color m-2  text-white" [disabled]="fireBaseStorage.weAreOntLastElement" (click)="getNext()">Suivant</button>
 
 
   
 </div>
-<!-- //TODO PAGINATINO IS NOT WORKING WELL !!! -->
   
 
 </div>

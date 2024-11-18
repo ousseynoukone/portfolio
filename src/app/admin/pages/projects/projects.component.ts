@@ -57,9 +57,7 @@ export class ProjectsComponent {
   newImgToAdd! : File;
 
   projectPPlink : string = ""
-  
-  //pagination limit
-  limit : number = 5
+
 
   editMode : boolean = false;
 
@@ -98,7 +96,6 @@ export class ProjectsComponent {
 
   ngOnInit() {
     this.iniForm()
-
     this.fetchProject();
     this.initformModalProject();
 
@@ -201,7 +198,6 @@ export class ProjectsComponent {
   
   fetchProject() {
     this.isDataComing = true;
-    this.fireBaseStorage.getProjects(this.limit);
     this.fireBaseStorage.projectSubject.subscribe((projects) => {
       this.isDataComing = false;
       this.projects = projects;
@@ -331,7 +327,8 @@ async updateProjectOnly(project : Project){
     ppLink : project.ppLink,
     isVisible : true,
     usefullLinks : project.usefullLinks,
-    placeIndex: null
+    placeIndex: null,
+    createdAt:project.createdAt
     
   }
 

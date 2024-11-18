@@ -1,3 +1,5 @@
+import { FieldValue } from "firebase/firestore";
+
 export class Project {
     constructor(
         public id : string,
@@ -14,7 +16,9 @@ export class Project {
         public profilePicture : File,
         public ppLink : string,
         public placeIndex : number,
-        public isVisible  : boolean =  false
+        public isVisible  : boolean =  false,
+        public createdAt : FieldValue
+
         ) {
     }
 }

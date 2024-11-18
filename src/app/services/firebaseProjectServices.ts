@@ -2,7 +2,8 @@
 import { Injectable, inject } from '@angular/core';
 import {ResponseDto} from '../models/dtos/responseDto';
 import { Observable } from 'rxjs/internal/Observable';
-import {Subject, forkJoin, lastValueFrom, map, subscribeOn } from 'rxjs';
+import {Subject, first, firstValueFrom, forkJoin, lastValueFrom, map, subscribeOn } from 'rxjs';
+import { serverTimestamp } from "firebase/firestore";
 
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument ,  } from '@angular/fire/compat/firestore';
 import { AngularFireStorage} from '@angular/fire/compat/storage';
@@ -37,25 +38,41 @@ export class FireBaseProjectService {
   //for pagination
   private lastVisibleByDoc: any;
   private firstVisibleByDoc: any;
-  private firstDocId : any
+  private firstDocCreatedAt : any
+
+  private firstTimeDataLoading : boolean = true
 
   //for pagination
-  public limit : number = 0
-  public weAreOntFirstElement : boolean = false;
-  public weAreOntLastElement : boolean = true;
+  public limit : number = 5
+  public weAreOnTheFirstElement : boolean = true;
+  public weAreOntLastElement : boolean = false;
   public totalOfItems : number = 0;
 
 
   constructor(private firestore : AngularFirestore, private storage: AngularFireStorage){
-
     // Initialize the collection with an orderBy clause
     this.projectsDb = this.firestore.collection('projects');
 
-    this.projectSubject.subscribe(abilities => {
-      this.weAreOntFirstElement = abilities.some(ability => ability.id === this.firstDocId);
+
+     this.getProjects()
+
+    // Subscribe to project subject to track if we're on the first element
+    // This subscription will run every time the projects are updated
+    this.projectSubject.subscribe(projects => {
+      // Check if there are projects in the array
+      if (projects.length > 0) {
+        // Compare the createdAt of the first project with the stored first document's createdAt
+        // Using isEqual() method, which is typically used with Firebase timestamps
+        this.weAreOnTheFirstElement = projects[0].createdAt.isEqual(this.firstDocCreatedAt);
+      }
     });
-    this.getProjectNumber()
+
+     this.getProjectNumber()
+
+
+
   }
+
 
 
 
@@ -138,9 +155,11 @@ export class FireBaseProjectService {
                         type : project.type,
                         ppLink :  project.ppLink,
                         isVisible : false,
-                        placeIndex: this.totalOfItems+1
+                        placeIndex: this.totalOfItems+1,
+                        createdAt: serverTimestamp()
                         
                     };
+
 
                     const newId = this.firestore.createId();
                     projectDto.id = newId;
@@ -176,31 +195,42 @@ export class FireBaseProjectService {
 
 
 
-  getProjects(limit : any) {
-    this.limit=limit
-    this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc')).valueChanges().subscribe(querySnapshot => {
+  async getProjects() {
+    this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('createdAt','desc')).valueChanges().subscribe(querySnapshot => {
       
       let projects: Project[] = [];
+      
       querySnapshot.forEach(doc => {
         const project = doc as Project;
         projects.push(project);
         //For saving the last displated project
-        this.lastVisibleByDoc = project.id
+        this.lastVisibleByDoc = project.createdAt
       });
 
-      this.firstDocId = projects.at(0)?.id;
+      // Check if this is the first time data is being loaded
+      // This mechanism ensures we only capture the first document's createdAt timestamp once
+      // Prevents repeatedly overwriting firstDocCreatedAt on subsequent data loads
+      // This help to disable de "precedent" button when we are not anymore in the first "page" of the pagination
+      if(this.firstTimeDataLoading){
+        // Store the createdAt timestamp of the first document
+        // This helps in tracking the very first document for pagination or first element detection
+        this.firstDocCreatedAt = projects.at(0)?.createdAt
+        
+        // Mark that initial data loading is complete
+        // Prevents this block from running again on subsequent data refreshes
+        this.firstTimeDataLoading = false
+      }
 
 
       this._projectSubject.next(projects);
 
       if(projects.length!=0){
             //This is only to ensure that we are  on the last elements soo the suivant button is disabled
-            this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
+            this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('createdAt','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
              
               if(querySnapshot.length!=0){
                 this.weAreOntLastElement=false;
               }
-            
             }); 
       }
 
@@ -221,7 +251,7 @@ export class FireBaseProjectService {
   //For the pagination
   getNextProject() {
     this.weAreOntLastElement = true
-      this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
+      this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('createdAt','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
         
         let projects: Project[] = [];
         querySnapshot.forEach(doc => {
@@ -230,12 +260,12 @@ export class FireBaseProjectService {
         });
 
         this._projectSubject.next(projects);
-        this.firstVisibleByDoc = projects.at(0)?.id;
+        this.firstVisibleByDoc = projects.at(0)?.createdAt;
 
 
-        this.lastVisibleByDoc = projects.at(projects.length-1)?.id;
+        this.lastVisibleByDoc = projects.at(projects.length-1)?.createdAt;
       ///////////This is only to ensure that we are  on the last elements soo the "suivant" button is disabled
-      this.firestore.collection('projects',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
+      this.firestore.collection('projects',ref=>ref.orderBy('createdAt','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
         if(querySnapshot.length!=0){
           this.weAreOntLastElement=false;
         }});
@@ -249,7 +279,7 @@ export class FireBaseProjectService {
 
   getPreviousProject() {
     this.firestore.collection('projects', ref =>
-      ref.limitToLast(this.limit).orderBy('id','desc').endBefore(this.firstVisibleByDoc)
+      ref.limitToLast(this.limit).orderBy('createdAt','desc').endBefore(this.firstVisibleByDoc)
     ).valueChanges().subscribe(querySnapshot => {
       let projects: Project[] = [];
       querySnapshot.forEach(doc => {
@@ -257,8 +287,8 @@ export class FireBaseProjectService {
         projects.push(project);
       });
 
-      this.firstVisibleByDoc = projects.length > 0 ? projects[0].id : null; // Update firstVisibleByDoc
-      this.lastVisibleByDoc = projects.at(projects.length-1)?.id;
+      this.firstVisibleByDoc = projects.length > 0 ? projects[0].createdAt : null; // Update firstVisibleByDoc
+      this.lastVisibleByDoc = projects.at(projects.length-1)?.createdAt;
 
       this._projectSubject.next(projects);
     });
@@ -611,3 +641,5 @@ export class FireBaseProjectService {
   }
 
 }
+
+
