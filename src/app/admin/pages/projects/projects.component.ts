@@ -96,6 +96,7 @@ export class ProjectsComponent {
 
   ngOnInit() {
     this.iniForm()
+    
     this.fetchProject();
     this.initformModalProject();
 
@@ -198,6 +199,7 @@ export class ProjectsComponent {
   
   fetchProject() {
     this.isDataComing = true;
+    this.fireBaseStorage.getProjects()
     this.fireBaseStorage.projectSubject.subscribe((projects) => {
       this.isDataComing = false;
       this.projects = projects;

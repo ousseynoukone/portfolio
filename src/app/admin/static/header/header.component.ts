@@ -22,4 +22,8 @@ export class HeaderComponent {
     this.router.navigate(['admin'],);
   }
 
+  goToClientView(){
+    this.router.navigate(['home'],);
+
+  }
 }
