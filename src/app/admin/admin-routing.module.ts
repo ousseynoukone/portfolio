@@ -9,7 +9,7 @@ import { OrderProjectComponent } from './pages/projects/sub-component/order-proj
 
 const routes: Routes = [
   {
-    path: 'admin',
+    path: '',
     component: LayoutComponent,
     children: [
       { path: '', component: HomeComponent }, 
@@ -22,6 +22,7 @@ const routes: Routes = [
     ]
   },
   { path: 'admin/login', component: LoginComponent },
+
 ];
 
 @NgModule({

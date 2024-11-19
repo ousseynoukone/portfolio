@@ -23,7 +23,7 @@ export class HeaderComponent {
   }
 
   goToClientView(){
-    this.router.navigate(['home'],);
+    this.router.navigate([''],);
 
   }
 }
