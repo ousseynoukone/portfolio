@@ -15,7 +15,8 @@ const routes: Routes = [
     loadChildren: () => import('./portfolio/portfolio.module').then(m => m.PortfolioModule)
   },
   
-
+  { path: '404', component: NotFoundComponent },
+  { path: '**', redirectTo: '404' }, // Added
 ];
 
 

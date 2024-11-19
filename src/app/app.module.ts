@@ -18,12 +18,13 @@ import { NotFoundComponent } from './not-found/not-found.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     PortfolioModule,
     AdminModule,
     AngularFireModule.initializeApp(environment.firebase),
     BrowserAnimationsModule, // Required for animations
-    ToastrModule.forRoot() // Initialize Toastr globally
+    ToastrModule.forRoot() ,// Initialize Toastr globally
+    AppRoutingModule,
+
 
   ],
   providers: [
