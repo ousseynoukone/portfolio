@@ -5,6 +5,7 @@ import { ProjectsDetailsComponent } from './pages/projects-details/projects-deta
 import { isRouteGuard } from '../services/guards/routeGuard';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' }, 
 
   { 
     path: 'home', 
@@ -15,10 +16,14 @@ const routes: Routes = [
     canActivate: [isRouteGuard],
     component: ProjectsDetailsComponent 
   }
+
+
 ];
 
+
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
 export class PortfolioRoutingModule { }

@@ -9,25 +9,20 @@ const routes: Routes = [
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
   },
 
-  { path: '', redirectTo: 'home', pathMatch: 'full' }, 
-  { path: 'home', redirectTo: 'home', pathMatch: 'full' }, 
-  
+
   {
-    path: '404', 
-    component: NotFoundComponent
+    path: '', pathMatch :'full',
+    loadChildren: () => import('./portfolio/portfolio.module').then(m => m.PortfolioModule)
   },
-  {
-    path: '**', 
-    redirectTo: '/404',
-    pathMatch: 'full'
-  }
+  
+
 ];
 
 
 
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{ scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
