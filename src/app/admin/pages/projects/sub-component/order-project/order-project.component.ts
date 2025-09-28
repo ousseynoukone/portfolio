@@ -5,9 +5,10 @@ import { FireBaseProjectService } from 'src/app/services/firebaseProjectServices
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
-  selector: 'app-order-project',
-  templateUrl: './order-project.component.html',
-  styleUrls: ['./order-project.component.css']
+    selector: 'app-order-project',
+    templateUrl: './order-project.component.html',
+    styleUrls: ['./order-project.component.css'],
+    standalone: false
 })
 export class OrderProjectComponent implements OnInit, OnDestroy {
   private readonly fireBaseStorage = inject(FireBaseProjectService);

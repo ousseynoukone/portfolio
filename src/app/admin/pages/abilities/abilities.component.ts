@@ -9,9 +9,10 @@ declare var $: any; // Declare $ as a variable to access jQuery
 declare var window: any; // Declare $ as a variable to access jQuery
 
 @Component({
-  selector: 'app-abilities',
-  templateUrl: './abilities.component.html',
-  styleUrls: ['./abilities.component.css']
+    selector: 'app-abilities',
+    templateUrl: './abilities.component.html',
+    styleUrls: ['./abilities.component.css'],
+    standalone: false
 })
 export class AbilitiesComponent implements OnInit {
   abilityForm !: FormGroup;

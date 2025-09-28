@@ -8,9 +8,10 @@ import { Router } from '@angular/router';
 import { ImgsLinksWithLibelle } from 'src/app/models/dtos/projectDto';
 
 @Component({
-  selector: 'app-order-images',
-  templateUrl: './order-images.component.html',
-  styleUrls: ['./order-images.component.css']
+    selector: 'app-order-images',
+    templateUrl: './order-images.component.html',
+    styleUrls: ['./order-images.component.css'],
+    standalone: false
 })
 export class OrderImagesComponent implements OnInit{
 

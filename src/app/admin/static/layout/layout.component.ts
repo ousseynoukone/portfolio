@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { FireBaseAuthService } from 'src/app/services/firebaseAuthServices';
 
 @Component({
-  selector: 'app-layout',
-  templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.css']
+    selector: 'app-layout',
+    templateUrl: './layout.component.html',
+    styleUrls: ['./layout.component.css'],
+    standalone: false
 })
 export class LayoutComponent {
   constructor(private authService: FireBaseAuthService, private router: Router) {}

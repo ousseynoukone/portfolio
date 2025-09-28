@@ -4,9 +4,10 @@ import { ViewportScroller } from '@angular/common';
 import { first } from 'rxjs';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.css'],
+    standalone: false
 })
 export class HeaderComponent {
   constructor(private router: Router, private viewportScroller: ViewportScroller) { }

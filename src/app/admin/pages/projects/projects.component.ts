@@ -15,9 +15,10 @@ declare var $: any; // Declare $ as a variable to access jQuery
 declare var window: any; 
 
 @Component({
-  selector: 'app-projects',
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.css']
+    selector: 'app-projects',
+    templateUrl: './projects.component.html',
+    styleUrls: ['./projects.component.css'],
+    standalone: false
 })
 export class ProjectsComponent {
 

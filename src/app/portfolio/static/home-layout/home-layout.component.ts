@@ -1,9 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-main-layout',
-  templateUrl: './home-layout.component.html',
-  styleUrls: ['./home-layout.component.css']
+    selector: 'app-main-layout',
+    templateUrl: './home-layout.component.html',
+    styleUrls: ['./home-layout.component.css'],
+    standalone: false
 })
 export class MainLayoutComponent implements OnInit {
   ngOnInit(): void {

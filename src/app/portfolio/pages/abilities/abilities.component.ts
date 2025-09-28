@@ -2,9 +2,10 @@ import { Component, OnInit, ElementRef, inject  } from '@angular/core';
 import { Ability } from 'src/app/models/abilitie';
 import { FireBaseAbilityService } from 'src/app/services/firebaseAbilitiesServices';
 @Component({
-  selector: 'app-abilities',
-  templateUrl: './abilities.component.html',
-  styleUrls: ['./abilities.component.css']
+    selector: 'app-abilities',
+    templateUrl: './abilities.component.html',
+    styleUrls: ['./abilities.component.css'],
+    standalone: false
 })
 export class AbilitiesComponent implements OnInit {
   //html elemetns

@@ -7,9 +7,10 @@ import { Helpers } from '../../shared/helper';
 declare var window: any;
 
 @Component({
-  selector: 'app-projects-details',
-  templateUrl: './projects-details.component.html',
-  styleUrls: ['./projects-details.component.css']
+    selector: 'app-projects-details',
+    templateUrl: './projects-details.component.html',
+    styleUrls: ['./projects-details.component.css'],
+    standalone: false
 })
 export class ProjectsDetailsComponent implements OnInit {
   project!: Project;
