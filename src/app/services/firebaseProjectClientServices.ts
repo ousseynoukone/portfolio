@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
@@ -9,6 +9,10 @@ import { Project } from '../models/project';
   providedIn: 'root',
 })
 export class FireBaseProjectClientService {
+
+  private firestore = inject(AngularFirestore);
+  private storage = inject(AngularFireStorage);
+
   private projectsDb!: AngularFirestoreCollection<Project>;
 
   // BehaviorSubjects for holding project data and counts
@@ -17,7 +21,7 @@ export class FireBaseProjectClientService {
   private _webProjectCount = new BehaviorSubject<number>(0);
   private _totalOfItems = new BehaviorSubject<number>(0);
 
-  constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {
+  constructor( ) {
     this.projectsDb = this.firestore.collection<Project>('projects', (ref) =>
       ref.orderBy('placeIndex', 'asc')
     );

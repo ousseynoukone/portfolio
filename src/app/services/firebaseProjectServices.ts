@@ -6,11 +6,14 @@ import {BehaviorSubject, Subject, first, firstValueFrom, forkJoin, lastValueFrom
 import { serverTimestamp } from "firebase/firestore";
 
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument ,  } from '@angular/fire/compat/firestore';
-import { AngularFireStorage} from '@angular/fire/compat/storage';
+import { Storage} from '@angular/fire/storage';
 import { Project } from '../models/project';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from '../models/dtos/projectDto';
 import { removeStringFromArray } from './helpers/helper';
 import { uploadFile, uploadFileList } from './helpers/fileUploadHelper';
+import { deleteObject, getDownloadURL, ref, StorageReference, uploadBytesResumable } from 'firebase/storage';
+import { get } from 'jquery';
+
 
 @Injectable({
   providedIn: 'root',
@@ -50,7 +53,7 @@ export class FireBaseProjectService {
   public totalOfItems : number = 0;
 
 
-  constructor(private firestore : AngularFirestore, private storage: AngularFireStorage){
+  constructor(private firestore : AngularFirestore, private storage: Storage){
     // Initialize the collection with an orderBy clause
     this.projectsDb = this.firestore.collection('projects');
 
@@ -293,9 +296,10 @@ export class FireBaseProjectService {
 
 
   async deleteItemFromStorage(filePath: string) {
-    try {
-      const storageRef = this.storage.refFromURL(filePath); // Get reference to file
-      storageRef.delete(); // Delete the file
+    try { 
+      
+      const storageRef = this.getFileRef(filePath); // Get reference to file 
+      deleteObject(storageRef)// Delete the file
       console.log('File deleted successfully!');
       // Handle successful deletion (e.g., update UI, notify user)
     } catch (error) {
@@ -382,15 +386,16 @@ export class FireBaseProjectService {
     const snapshot = await this.projectsDb.ref.where('id', '==', projectID).get();
 
     let imgFileRef = await this.getFileRef(imgLink);
-    const updateImgTask = imgFileRef.put(img);
+    const updateImgTask = uploadBytesResumable(imgFileRef,img);
 
-    updateImgTask.percentageChanges().subscribe((percentage) => {
-      this.ppPercentage =  parseFloat(percentage!.toFixed(2))
-  });
+    updateImgTask.on('state_changed',(snapshot)=>{
+      let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      this.ppPercentage = parseFloat(percentage!.toFixed(2))
 
+    })
 
   const uploadImgSnapshot = await updateImgTask;
-  const imgUrl = await uploadImgSnapshot.ref.getDownloadURL();
+  const imgUrl = await  getDownloadURL(uploadImgSnapshot.ref);
   let updatedProject: any = {};
 
   updatedProject.ppLink = imgUrl;
@@ -437,16 +442,20 @@ export class FireBaseProjectService {
         let updatedProject: any = {};
 
         if (withImgVideoDto.withImage) {
-            let imgFileRef = await this.getFileRef(withImgVideoDto.imgTpUpdateLink);
-            const updateImgTask = imgFileRef.put(projectFileUpdate.imgFile);
+            let imgFileRef = this.getFileRef(withImgVideoDto.imgTpUpdateLink);
+            const updateImgTask = uploadBytesResumable(imgFileRef,projectFileUpdate.imgFile)
 
-            updateImgTask.percentageChanges().subscribe((percentage) => {
-                this.percentageImg = parseFloat(percentage!.toFixed(2));
-            });
+            updateImgTask.on('state_changed',(snapshot)=>{
+              let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              this.percentageImg = parseFloat(percentage!.toFixed(2));
+
+            })
+
+         
             this.isUpdatingimg = true;
 
             const uploadImgSnapshot = await updateImgTask;
-            const imgUrl = await uploadImgSnapshot.ref.getDownloadURL();
+            const imgUrl = await getDownloadURL(uploadImgSnapshot.ref);
 
             let imgsLink = removeStringFromArray(projectFileUpdate.projectImgsLinks, withImgVideoDto.imgTpUpdateLink);
             imgsLink.push(imgUrl);
@@ -455,17 +464,19 @@ export class FireBaseProjectService {
         }
 
         if (withImgVideoDto.withVideo) {
-            let videoFileRef = await this.getFileRef(withImgVideoDto.demoLink);
-            const updateVideoTask = videoFileRef.put(projectFileUpdate.videoFile);
+            let videoFileRef = this.getFileRef(withImgVideoDto.demoLink);
+            const updateVideoTask =  uploadBytesResumable(videoFileRef,projectFileUpdate.videoFile);
 
-            updateVideoTask.percentageChanges().subscribe((percentage) => {
-            
+            updateVideoTask.on('state_changed',(snapshot)=>{
+              let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 this.percentageVideo =  parseFloat(percentage!.toFixed(2));
-            });
+
+            })
+
             this.isUpdatingVideo = true;
 
             const uploadVideoSnapshot = await updateVideoTask;
-            const videoUrl = await uploadVideoSnapshot.ref.getDownloadURL();
+            const videoUrl = await  getDownloadURL(uploadVideoSnapshot.ref);
 
             updatedProject.demoLink = videoUrl;
         }
@@ -625,10 +636,14 @@ export class FireBaseProjectService {
 
 
 
-  async getFileRef(fileUrl:string) {
-    return  this.storage.refFromURL(fileUrl); // Get reference to file  
+ getFileRef(fileUrl:string) {
+    return ref(this.storage,fileUrl) // Get reference to file  
   }
 
+
+  
 }
+
+
 
 

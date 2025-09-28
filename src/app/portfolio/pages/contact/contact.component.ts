@@ -1,6 +1,6 @@
 // contact.component.ts
 
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { EmailSenderService } from 'src/app/services/emailService';
 import { Email } from 'src/app/models/email';
@@ -17,10 +17,14 @@ export class ContactComponent implements OnInit {
   contactForm!: FormGroup;
   isSending = false;
 
+  private toastr:ToastrService
+
   constructor(
     private emailSenderService: EmailSenderService,
-    private toastr: ToastrService
-  ) {}
+   
+  ) {
+    this.toastr= inject(ToastrService)
+  }
 
   ngOnInit() {
     this.initForm();

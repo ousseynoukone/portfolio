@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FireBaseAuthService } from 'src/app/services/firebaseAuthServices';
 import { LoginDto } from 'src/app/models/dtos/loginDto';
@@ -14,8 +14,11 @@ import { ToastrService } from 'ngx-toastr';
 export class LoginComponent implements OnInit {
 loginForm ! : FormGroup<any>;
 isConnecting = false;
+private toastr:ToastrService
 
-constructor(private fAuth : FireBaseAuthService ,private toastr: ToastrService){}
+constructor(private fAuth : FireBaseAuthService){
+  this.toastr = inject(ToastrService)
+}
 
 
 

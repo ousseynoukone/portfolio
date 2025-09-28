@@ -3,19 +3,19 @@ import {ResponseDto} from '../models/dtos/responseDto';
 import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject, Subject, map } from 'rxjs';
 import { Ability } from '../models/abilitie';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument ,  } from '@angular/fire/compat/firestore';
-import { AngularFireStorage} from '@angular/fire/compat/storage';
+import { AngularFirestore, AngularFirestoreCollection ,  } from '@angular/fire/compat/firestore';
 import { AbilityUpdateDto } from '../models/dtos/abilitieUpdateDto';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class FireBaseAbilityService {
+  private storage = getStorage(); 
 
   abilitiyDB !: AngularFirestoreCollection<any>;
   private basePath = '/abilities';
-
   // Streams for percentage and abilities
   private _percentageSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private _abilitiesSubject: Subject<Ability[]> = new Subject<Ability[]>();
@@ -33,7 +33,7 @@ export class FireBaseAbilityService {
   public totalOfItems : number = 0;
 
 
-  constructor(private firestore : AngularFirestore, private storage: AngularFireStorage){
+  constructor(private firestore : AngularFirestore){
     this.abilitiyDB = firestore.collection('abilities');
 
     this.abilitiesSubject.subscribe(abilities => {
@@ -64,20 +64,19 @@ export class FireBaseAbilityService {
     this._percentageSubject.next(0);
 
     const filePath = `${this.basePath}/${file.name}`;
-    const storageRef = this.storage.ref(filePath);
-    const uploadTask = this.storage.upload(filePath, file);
+    const storageRef = ref(this.storage, filePath);
+    const uploadTask = uploadBytesResumable(storageRef,file);
     
   try {
-  uploadTask.percentageChanges().subscribe((percentage) => {
-    //update the stream
+  uploadTask.on('state_changed',(snapshot) => {
+    let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     this._percentageSubject.next(percentage!)
   });
 
-  await  uploadTask.then((uploadSnapshot) =>
-  uploadSnapshot.ref.getDownloadURL().then(url=>{
-    ability.image = url
-  })
-  );
+  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    ability.image = downloadURL;
+  });
+
 
     const newId = this.firestore.createId();
     ability.id = newId;
@@ -204,8 +203,8 @@ getNextAbilities() {
 
   async deleteItemFromStorage(fileUrl: string) {
     try {
-      const storageRef = this.storage.refFromURL(fileUrl); // Get reference to file
-      await storageRef.delete(); // Delete the file
+      const storageRef = this.getFileRef(fileUrl); // Get reference to file
+      await deleteObject(storageRef);
       console.log('File deleted successfully!');
       // Handle successful deletion (e.g., update UI, notify user)
     } catch (error) {
@@ -215,9 +214,12 @@ getNextAbilities() {
   }
 
 
-  async getFileRef(fileUrl:string) {
-    return  this.storage.refFromURL(fileUrl); // Get reference to file  
+
+
+  getFileRef(fileUrl:string) {
+    return  ref(this.storage,fileUrl) // Get reference to file  
   }
+
 
 
   async updateAbility(ability: Ability, file: File, withFile: boolean): Promise<ResponseDto> {
@@ -227,16 +229,18 @@ getNextAbilities() {
         const snapshot = await this.abilitiyDB.ref.where('id', '==', ability.id).get();
 
         if (withFile) {
-            let fileRef = await this.getFileRef(ability.image!);
-            const updateTask = fileRef.put(file);
+            let fileRef =  this.getFileRef(ability.image!);
 
-            updateTask.percentageChanges().subscribe((percentage) => {
+            const updateTask = uploadBytesResumable(fileRef,file);
+
+            updateTask.on('state_changed', (snapshot) => {
+                let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 this._percentageSubject.next(percentage!);
             });
 
             const uploadSnapshot = await updateTask;
-            const url = await uploadSnapshot.ref.getDownloadURL();
-
+            const url = await getDownloadURL(uploadSnapshot.ref);
+          
             ability.image = url;
         } else {
             abilityWithoutImage = {
@@ -318,9 +322,9 @@ getNextAbilities() {
     });
   }
 
-
-
 }
+
+
 function updateMetadata(forestRef: any, newMetadata: {
   contentType: string; customMetadata: {
     fileName: string; // Update the file name here

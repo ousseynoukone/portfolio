@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
     providedIn: 'root',
   })
   export class FireBaseAuthService {
-      constructor(private auth : AngularFireAuth, private router : Router){}
+    private auth = inject(AngularFireAuth);
+      constructor( private router : Router){}
       
       get isAuthenticated(): Observable<boolean> {
         return this.auth.authState.pipe(map(user => !!user));

@@ -1,15 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { AngularFireModule } from '@angular/fire/compat'; 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PortfolioModule } from './portfolio/portfolio.module';
 import { AdminModule } from './admin/admin.module';
-import {environment} from '../app/constent/constant';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { environment } from '../app/constent/constant';
 import { ToastrModule } from 'ngx-toastr';
-import { ElementRef, NgModule } from '@angular/core';
 import { NotFoundComponent } from './not-found/not-found.component';
-
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getStorage, provideStorage } from '@angular/fire/storage';
+import { provideAnimations } from '@angular/platform-browser/animations'; 
+import { NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -20,18 +20,17 @@ import { NotFoundComponent } from './not-found/not-found.component';
     BrowserModule,
     PortfolioModule,
     AdminModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    BrowserAnimationsModule, // Required for animations
-    ToastrModule.forRoot() ,// Initialize Toastr globally
     AppRoutingModule,
-
-
   ],
   providers: [
+    provideAnimations(), 
     
+    ToastrModule.forRoot().providers!, 
+    
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideStorage(() => getStorage())
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
- }
-
+}
