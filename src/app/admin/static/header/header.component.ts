@@ -15,12 +15,12 @@ export class HeaderComponent {
 
 
   logout() {
-    // Implement logic to handle user logout (e.g., call an authentication service)
     this.authService.logout()
   }
 
   goToHome(){
-    this.router.navigate(['admin'],);
+
+    this.router.navigate([''],);
   }
 
   goToClientView(){
