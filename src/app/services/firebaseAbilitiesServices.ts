@@ -3,18 +3,21 @@ import {ResponseDto} from '../models/dtos/responseDto';
 import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject, Subject, map } from 'rxjs';
 import { Ability } from '../models/abilitie';
-import { AngularFirestore, AngularFirestoreCollection ,  } from '@angular/fire/compat/firestore';
 import { AbilityUpdateDto } from '../models/dtos/abilitieUpdateDto';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
+import { Firestore, collection,CollectionReference, addDoc, query, orderBy, limit, startAfter, endBefore, getDocs, where, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Storage } from '@angular/fire/storage';
+import {  ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class FireBaseAbilityService {
-  private storage = getStorage(); 
 
-  abilitiyDB !: AngularFirestoreCollection<any>;
+  private firestore: Firestore = inject(Firestore);
+  private storage: Storage = inject(Storage);
+
+  abilitiyDB !: CollectionReference<any>;
   private basePath = '/abilities';
   // Streams for percentage and abilities
   private _percentageSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -33,8 +36,8 @@ export class FireBaseAbilityService {
   public totalOfItems : number = 0;
 
 
-  constructor(private firestore : AngularFirestore){
-    this.abilitiyDB = firestore.collection('abilities');
+  constructor(){
+    this.abilitiyDB = collection(this.firestore,'abilities');
 
     this.abilitiesSubject.subscribe(abilities => {
       this.weAreOntFirstElement = abilities.some(ability => ability.id === this.firstDocId);
@@ -77,11 +80,8 @@ export class FireBaseAbilityService {
     ability.image = downloadURL;
   });
 
-
-    const newId = this.firestore.createId();
-    ability.id = newId;
-    
-  await this.abilitiyDB.add(ability);
+  const docRef = await addDoc(this.abilitiyDB, ability);
+  await updateDoc(docRef, { id: docRef.id });
   return { status: true, message: 'Ability added successfully.' };
 
     } catch (error) {
@@ -98,42 +98,42 @@ export class FireBaseAbilityService {
 
   getAbilities(limit : any) {
     this.limit=limit
-    this.firestore.collection('abilities',ref=>ref.limit(this.limit).orderBy('id','desc')).valueChanges().subscribe(querySnapshot => {
-      
+    const q = query(this.abilitiyDB, orderBy('id', 'desc'), limit(this.limit));
+
+    getDocs(q).then((querySnapshot) => {
       let abilities: Ability[] = [];
       querySnapshot.forEach(doc => {
-        const ability = doc as Ability;
-        abilities.push(ability);
-        //For saving the last displated ability
-        this.lastVisibleByDoc = ability.id
-      });
+          const ability = doc.data() as Ability;
+          abilities.push(ability);
+          //For saving the last displated ability
+          this.lastVisibleByDoc = ability.id
+        });
 
-      this.firstDocId = abilities.at(0)?.id;
+      if (querySnapshot.docs.length > 0) {
+          this.firstDocId = querySnapshot.docs[0].data()['id'];
+        }
 
 
       this._abilitiesSubject.next(abilities);
 
-      if(abilities.length!=0){
+         if(abilities.length!=0){
+
+          const q = query(this.abilitiyDB, orderBy('id', 'desc'), startAfter(this.lastVisibleByDoc), limit(this.limit));
             //This is only to ensure that we are  on the last elements soo the suivant button is disabled
-            this.firestore.collection('abilities',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
-              
-              if(querySnapshot.length!=0){
-                this.weAreOntLastElement=false;
-              }
-            
-            }); 
+            getDocs(q).then((querySnapshot) => {
+              this.weAreOntLastElement = querySnapshot.empty;
+              }); 
       }
+  });
 
 
-
-        
-    });
   }
 
   getAbilitiesNumber() {
-    this.abilitiyDB.valueChanges().subscribe(querySnapshot => {
-      this.totalOfItems=querySnapshot.length
+    getDocs(this.abilitiyDB).then((querySnapshot) => {
+      this.totalOfItems=querySnapshot.size
     });
+    
   }
 
 
@@ -141,46 +141,41 @@ export class FireBaseAbilityService {
 //For the pagination
 getNextAbilities() {
   this.weAreOntLastElement = true
-    this.firestore.collection('abilities',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
-      
-      let abilities: Ability[] = [];
-      querySnapshot.forEach(doc => {
-        const ability = doc as Ability;
-        abilities.push(ability);
-      });
+  const q = query(this.abilitiyDB,limit(this.limit),orderBy('id','desc'),startAfter(this.lastVisibleByDoc));
 
-      this._abilitiesSubject.next(abilities);
-      this.firstVisibleByDoc = abilities.at(0)?.id;
+  getDocs(q).then((querySnapshot) => {
+  let abilities: Ability[] = [];
+  querySnapshot.forEach(doc => {
+    const ability = doc.data() as Ability;
+    abilities.push(ability);
+    });
 
-     
+    this._abilitiesSubject.next(abilities);
+    this.firstVisibleByDoc = abilities.at(0)?.id;
 
-      this.lastVisibleByDoc = abilities.at(abilities.length-1)?.id;
+    this.lastVisibleByDoc = abilities.at(abilities.length-1)?.id;
+
+
     ///////////This is only to ensure that we are  on the last elements soo the suivant button is disabled
-    this.firestore.collection('abilities',ref=>ref.limit(this.limit).orderBy('id','desc').startAfter(this.lastVisibleByDoc)).valueChanges().subscribe(querySnapshot => {
-      
-      if(querySnapshot.length!=0){
-        this.weAreOntLastElement=false;
-      }});
+    const nextQuery = query(this.abilitiyDB, orderBy('id','desc'), limit(this.limit), startAfter(this.lastVisibleByDoc));
+    getDocs(nextQuery).then(nextSnapshot => {
+          this.weAreOntLastElement = nextSnapshot.empty;
+      });
     //////////////////////////////////////
-
- 
-    }); 
-
-
-
-
+  });
 
   } 
 
 
 
   getPreviousAbilities() {
-    this.firestore.collection('abilities', ref =>
-      ref.limitToLast(this.limit).orderBy('id','desc').endBefore(this.firstVisibleByDoc)
-    ).valueChanges().subscribe(querySnapshot => {
+
+    const q = query(this.abilitiyDB, orderBy('id','desc'), limit(this.limit), endBefore(this.firstVisibleByDoc));
+    getDocs(q).then((querySnapshot) => {
+
       let abilities: Ability[] = [];
       querySnapshot.forEach(doc => {
-        const ability = doc as Ability;
+        const ability = doc.data() as Ability;
         abilities.push(ability);
       });
       console.log(abilities)
@@ -189,11 +184,10 @@ getNextAbilities() {
       this.lastVisibleByDoc = abilities.at(abilities.length-1)?.id;
 
       this._abilitiesSubject.next(abilities);
-    });
 
+    })
     //so the suivant button is enabled
     this.weAreOntLastElement=false;
-
       
   }
   
@@ -221,42 +215,53 @@ getNextAbilities() {
   }
 
 
-
   async updateAbility(ability: Ability, file: File, withFile: boolean): Promise<ResponseDto> {
     var abilityWithoutImage: AbilityUpdateDto;
     this._percentageSubject.next(0);
+    
     try {
-        const snapshot = await this.abilitiyDB.ref.where('id', '==', ability.id).get();
+        // 1. Find the Document ID using the `id` field
+        // We need the internal Firestore DocumentReference to use `updateDoc`
+        const q = query(this.abilitiyDB, where('id', '==', ability.id));
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+            return { status: false, message: 'Docs not found!' };
+        }
+        
+        // 'id' is unique, so we only need the first document.
+        const docRefToUpdate = snapshot.docs[0].ref;
 
         if (withFile) {
-            let fileRef =  this.getFileRef(ability.image!);
+            let fileRef = this.getFileRef(ability.image!);
+            const updateTask = uploadBytesResumable(fileRef, file);
 
-            const updateTask = uploadBytesResumable(fileRef,file);
-
-            updateTask.on('state_changed', (snapshot) => {
-                let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                this._percentageSubject.next(percentage!);
+            // Wait for the upload task to complete and get the URL
+            await new Promise<void>((resolve, reject) => {
+                updateTask.on('state_changed', (snapshot) => {
+                    let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    this._percentageSubject.next(percentage!);
+                }, (error) => reject(error), () => {
+                    getDownloadURL(updateTask.snapshot.ref).then((url) => {
+                        ability.image = url;
+                        resolve();
+                    });
+                });
             });
+            
+            await updateDoc(docRefToUpdate, ability as any);
 
-            const uploadSnapshot = await updateTask;
-            const url = await getDownloadURL(uploadSnapshot.ref);
-          
-            ability.image = url;
         } else {
             abilityWithoutImage = {
                 name: ability.name,
                 type: ability.type!,
                 id: ability.id,
-                rating: ability.rating
+                rating: ability.rating,
             };
-        }
-
-        if (!snapshot.empty) {
-            snapshot.forEach(doc => {
-                doc.ref.update(withFile ? ability : abilityWithoutImage);
-            });
-        } else {
-            return { status: false, message: 'Docs not found!' };
+            
+            // ✅ MODULAR UPDATE DOC USAGE (Update without file)
+            // Use the reference obtained earlier
+            await updateDoc(docRefToUpdate, abilityWithoutImage as any);
         }
 
         return { status: true, message: 'Ability updated successfully!' };
@@ -264,9 +269,7 @@ getNextAbilities() {
         console.error('Error updating ability:', error);
         return { status: false, message: 'Error updating ability.' };
     }
-}
-
-  
+  }
 
 
 
@@ -274,62 +277,53 @@ getNextAbilities() {
   
   
   async deleteAbility(ability: Ability): Promise<ResponseDto> {
-    // Confirm the deletion with the user
     const userConfirmed = confirm(`Are you sure you want to delete the ability "${ability.name}"?`);
-  
-    // If the user cancels, return early
     if (!userConfirmed) {
       return { status: false, message: 'Deletion canceled by user.' };
     }
     try {
-  
-      // Create query with condition
-      const snapshot = await this.abilitiyDB.ref.where('id', '==', ability.id).get();
-  
-      // Check if the document matching the condition exists
-      if (!snapshot.empty) {
-        // Delete the document
-        snapshot.forEach(doc => {
-          doc.ref.delete();
-        });
+      // 1. Find the Document ID using the `id` field
+      const q = query(this.abilitiyDB, where('id', '==', ability.id));
+      const snapshot = await getDocs(q);
 
-        await this.deleteItemFromStorage(ability.image!)
-      }else{
+      if (!snapshot.empty) {
+        // We assume 'id' is unique, so we only delete the first document.
+        const docRefToDelete = snapshot.docs[0].ref;
+        
+        // ✅ MODULAR DELETE DOC USAGE
+        await deleteDoc(docRefToDelete);
+
+        await this.deleteItemFromStorage(ability.image!);
+      } else {
         return { status: false, message: 'Docs not found!' };
       }
 
-  
       return { status: true, message: 'Ability deleted successfully!' };
     } catch (error) {
       console.error('Error deleting ability:', error);
-      // If there's an error during deletion
-      // Handle errors appropriately (e.g., display error message to the user)
       return { status: false, message: 'Error deleting ability.' };
     }
   }
   
 
-  getAbilitiesClient(){
-    this.abilitiyDB.valueChanges().subscribe(querySnapshot => {
-      let abilities: Ability[] = [];
-      querySnapshot.forEach(doc => {
-        const ability = doc as Ability;
-        abilities.push(ability);
-        //For saving the last displated ability
-        this.lastVisibleByDoc = ability.id
-      });
-      this._abilitiesSubject.next(abilities); 
+  getAbilitiesClient() {
+    // 1. Build a simple query (no limits)
+    const q = query(this.abilitiyDB, orderBy('id'));
+    
+    // 2. Execute a one-time fetch
+    getDocs(q).then(snapshot => {
+        let abilities: Ability[] = [];
+        snapshot.docs.forEach(docSnap => {
+            const ability = docSnap.data() as Ability;
+            abilities.push(ability);
+            this.lastVisibleByDoc = docSnap;
+        });
+        this._abilitiesSubject.next(abilities);
     });
   }
 
 }
 
 
-function updateMetadata(forestRef: any, newMetadata: {
-  contentType: string; customMetadata: {
-    fileName: string; // Update the file name here
-  };
-}) {
-  throw new Error('Function not implemented.');
-}
+
 

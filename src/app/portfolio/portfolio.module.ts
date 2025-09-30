@@ -28,13 +28,8 @@ import { CustumCarousselComponent } from './pages/Components/custum-caroussel/cu
   ],
   imports: [
     PortfolioRoutingModule,
-
     CommonModule,
     ReactiveFormsModule,
-    
-
-    
-    
   ]
 })
 export class PortfolioModule { }

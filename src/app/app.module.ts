@@ -7,7 +7,10 @@ import { environment } from '../app/constent/constant';
 import { ToastrModule } from 'ngx-toastr';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+
+import {  getFirestore,provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { getAuth, provideAuth } from '@angular/fire/auth';
 import { provideAnimations } from '@angular/platform-browser/animations'; 
 import { NgModule } from '@angular/core';
 
@@ -28,7 +31,9 @@ import { NgModule } from '@angular/core';
     ToastrModule.forRoot().providers!, 
     
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideStorage(() => getStorage())
+    provideStorage(() => getStorage()),
+    provideFirestore(() => getFirestore()),
+    provideAuth(() => getAuth()),
   ],
   bootstrap: [AppComponent]
 })
