@@ -7,7 +7,6 @@ import { environment } from '../app/constent/constant';
 import { ToastrModule } from 'ngx-toastr';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-
 import {  getFirestore,provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getAuth, provideAuth } from '@angular/fire/auth';

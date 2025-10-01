@@ -1,37 +1,31 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, OnInit, inject } from '@angular/core';
 import { ResponseDto } from '../models/dtos/responseDto';
 import { Observable, BehaviorSubject, Subject, firstValueFrom, forkJoin, lastValueFrom, map } from 'rxjs';
 
-// 1. Modular Firestore Imports
 import { 
   Firestore, CollectionReference, collection, query, orderBy, limit, startAfter, endBefore, where, 
   getDocs, serverTimestamp, setDoc, deleteDoc, updateDoc, doc, QueryDocumentSnapshot, 
   collectionData 
 } from '@angular/fire/firestore';
 
-// 2. Modular Storage Imports
 import { Storage, ref, deleteObject, uploadBytesResumable, getDownloadURL } from '@angular/fire/storage';
 
-// 3. Application Models/Helpers
 import { Project } from '../models/project';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from '../models/dtos/projectDto';
 import { removeStringFromArray } from './helpers/helper';
-import { uploadFile, uploadFileList } from './helpers/fileUploadHelper'; // Assumed to be modular
-
-// Type definition for firestore documents (to enforce ID presence)
+import { uploadFile, uploadFileList } from './helpers/fileUploadHelper'; // Assumed to be// Type definition for firestore documents (to enforce ID presence)
 export interface ProjectDtoWithID extends ProjectDto { id: string; }
 
 
 @Injectable({
   providedIn: 'root',
 })
-export class FireBaseProjectService {
+export class FireBaseProjectService implements OnInit {
 
-  // 4. Inject Modular Services and Use Modular Types
   private firestore: Firestore = inject(Firestore);
   private storage: Storage = inject(Storage);
   
-  // Use Modular CollectionReference type and initialize lazily via getter
+  // Use collectionReference type and initialize lazily via getter
   private _projectsDb!: CollectionReference<ProjectDtoWithID>; 
   
   private basePathVideo = '/project/videos';
@@ -63,7 +57,7 @@ export class FireBaseProjectService {
   // 5. Collection Getter (Lazy Initialization Fix)
   get projectsDb(): CollectionReference<ProjectDtoWithID> {
     if (!this._projectsDb) {
-      // Initialize lazily using the modular 'collection' function
+      // Initialize lazily using thecollection' function
       this._projectsDb = collection(this.firestore, 'projects') as CollectionReference<ProjectDtoWithID>;
     }
     return this._projectsDb;
@@ -80,8 +74,14 @@ export class FireBaseProjectService {
       }
     });
 
+  }
+
+  // Lifecycle hook to perform initial data fetch
+  ngOnInit(): void {
     this.getProjectNumber()
   }
+
+
 
   // --- GETTERS ---
 
@@ -107,12 +107,12 @@ export class FireBaseProjectService {
         imgsLink : arrayOfImgsLinks
       }
       
-      // MODULAR: Query and getDocs
+      //Query and getDocs
       const q = query(this.projectsDb, where('id', '==', projectID), limit(1));
       const snapshot = await getDocs(q);
       
       if (!snapshot.empty) {
-        // MODULAR: Get DocumentReference and use updateDoc
+        //Get DocumentReference and use updateDoc
         const docRef = snapshot.docs[0].ref;
         await updateDoc(docRef, updatedProject);
       }
@@ -152,12 +152,12 @@ export class FireBaseProjectService {
             project.demoLink = uploadResultFile.downloadLink;
             project.ppLink = upLoadResultProfilePicture.downloadLink
 
-            // MODULAR: Get a new document ID
+            //Get a new document ID
             const newDocRef = doc(this.projectsDb);
             const newId = newDocRef.id;
 
             const projectDto: ProjectDtoWithID = {
-              id: newId, // Use the new modular ID
+              id: newId, // Use the newD
               title: project.title,
               demoLink: project.demoLink,
               minDescription: project.minDescription,
@@ -172,7 +172,7 @@ export class FireBaseProjectService {
               createdAt: serverTimestamp() as any // serverTimestamp returns 'any'
             };
 
-            // MODULAR: Use setDoc to add the document
+            //Use setDoc to add the document
             return setDoc(newDocRef, projectDto);
           })
         )
@@ -191,10 +191,10 @@ export class FireBaseProjectService {
   }
 
   fetchProjectWithoutLimit(){
-    // MODULAR: Build query
+    //Build query
     const q = query(this.projectsDb, orderBy('placeIndex', 'asc'));
 
-    // MODULAR: Use collectionData for streaming behavior
+    //Use collectionData for streaming behavior
     collectionData(q).subscribe(querySnapshot => {
       let projects: Project[] = querySnapshot as Project[];
       this._projectSubject.next(projects);
@@ -203,14 +203,12 @@ export class FireBaseProjectService {
 
 
   async getProjects() {
-    // MODULAR: Build query
     const baseQuery = query(
       this.projectsDb, 
       limit(this.limit), 
       orderBy('createdAt', 'desc')
     );
 
-    // MODULAR: Use getDocs
     const querySnapshot = await getDocs(baseQuery);
     
     let projects: Project[] = [];
@@ -226,7 +224,6 @@ export class FireBaseProjectService {
     this._projectSubject.next(projects);
 
     if (projects.length !== 0) {
-      // MODULAR: Check for next page
       const nextCheckQuery = query(
         this.projectsDb,
         limit(1), 
@@ -241,7 +238,7 @@ export class FireBaseProjectService {
 
   
   getProjectNumber() {
-    // MODULAR: Use collectionData to get a live count
+    //Use collectionData to get a live count
     collectionData(this.projectsDb).subscribe(querySnapshot => {
       this.totalOfItems = querySnapshot.length
     });
@@ -256,7 +253,7 @@ export class FireBaseProjectService {
       return;
     }
 
-    // MODULAR: Build query using startAfter with the stored doc snapshot
+    //Build query using startAfter with the stored doc snapshot
     const q = query(
       this.projectsDb, 
       limit(this.limit), 
@@ -307,7 +304,7 @@ export class FireBaseProjectService {
       return;
     }
 
-    // MODULAR: Build query using endBefore with the stored doc snapshot
+    //Build query using endBefore with the stored doc snapshot
     const q = query(
       this.projectsDb, 
       limit(this.limit), 
@@ -339,7 +336,7 @@ export class FireBaseProjectService {
   async deleteItemFromStorage(filePath: string) {
     try { 
       const storageRef = this.getFileRef(filePath); 
-      await deleteObject(storageRef); // MODULAR: Use await for deleteObject
+      await deleteObject(storageRef); //Use await for deleteObject
       console.log('File deleted successfully!');
     } catch (error) {
       console.error('Error deleting file:', error);
@@ -360,12 +357,12 @@ export class FireBaseProjectService {
         placeIndex: project.placeIndex
       };
 
-      // MODULAR: Query and getDocs
+      //Query and getDocs
       const q = query(this.projectsDb, where('id', '==', project.id), limit(1));
       const snapshot = await getDocs(q);
 
       if (!snapshot.empty) {
-        // MODULAR: Get DocumentReference and use updateDoc
+        //Get DocumentReference and use updateDoc
         const docRef = snapshot.docs[0].ref;
         await updateDoc(docRef, projectWithoutImageAndVideo);
       } else {
@@ -386,12 +383,12 @@ export class FireBaseProjectService {
         isVisible : project.isVisible
       };
 
-      // MODULAR: Query and getDocs
+      //Query and getDocs
       const q = query(this.projectsDb, where('id', '==', project.id), limit(1));
       const snapshot = await getDocs(q);
 
       if (!snapshot.empty) {
-        // MODULAR: Get DocumentReference and use updateDoc
+        //Get DocumentReference and use updateDoc
         const docRef = snapshot.docs[0].ref;
         await updateDoc(docRef, projectDto);
       } else {
@@ -415,11 +412,11 @@ export class FireBaseProjectService {
   async updatePP( projectImgsLinks : string [],projectID : string , img :File,imgLink : string):Promise<ResponseDto>{
     this.isUpdatingPP = true
     try {
-      // MODULAR: Query and getDocs
+      //Query and getDocs
       const q = query(this.projectsDb, where('id', '==', projectID), limit(1));
       const snapshot = await getDocs(q);
 
-      let imgFileRef = this.getFileRef(imgLink); // Using modular ref()
+      let imgFileRef = this.getFileRef(imgLink); // Usingef()
       const updateImgTask = uploadBytesResumable(imgFileRef,img);
 
       updateImgTask.on('state_changed',(snapshot)=>{
@@ -434,7 +431,7 @@ export class FireBaseProjectService {
       updatedProject.ppLink = imgUrl;
 
       if (!snapshot.empty) {
-        // MODULAR: Get DocumentReference and use updateDoc
+        //Get DocumentReference and use updateDoc
         const docRef = snapshot.docs[0].ref;
         await updateDoc(docRef, updatedProject);
       } else {
@@ -463,7 +460,7 @@ export class FireBaseProjectService {
     this.percentageVideo=0;
 
     try {
-      // MODULAR: Query and getDocs
+      //Query and getDocs
       const q = query(this.projectsDb, where('id', '==', projectFileUpdate.projectID), limit(1));
       const snapshot = await getDocs(q);
 
@@ -510,7 +507,7 @@ export class FireBaseProjectService {
         }
 
         if (withImgVideoDto.withImage || withImgVideoDto.withVideo) {
-          // MODULAR: Use updateDoc
+          //Use updateDoc
           await updateDoc(docRef, updatedProject);
         } else {
           this.initImgVideoPercentage()
@@ -549,12 +546,12 @@ export class FireBaseProjectService {
         imgsLink : imgsLinks
       }
 
-      // MODULAR: Query and getDocs
+      //Query and getDocs
       const q = query(this.projectsDb, where('id', '==', projectId), limit(1));
       const snapshot = await getDocs(q);
     
       if (!snapshot.empty) {
-        // MODULAR: Get DocumentReference and use updateDoc
+        //Get DocumentReference and use updateDoc
         const docRef = snapshot.docs[0].ref;
         await updateDoc(docRef, updatedProject);
 
@@ -582,7 +579,7 @@ export class FireBaseProjectService {
         return response.downloadLink;
         })))
 
-      // MODULAR: Query and getDocs
+      //Query and getDocs
       const q = query(this.projectsDb, where('id', '==', projectId), limit(1));
       const snapshot = await getDocs(q);
       
@@ -593,7 +590,7 @@ export class FireBaseProjectService {
       }
 
       if (!snapshot.empty) {
-        // MODULAR: Get DocumentReference and use updateDoc
+        //Get DocumentReference and use updateDoc
         const docRef = snapshot.docs[0].ref;
         await updateDoc(docRef, updatedProject);
       }
@@ -615,12 +612,12 @@ export class FireBaseProjectService {
       return { status: false, message: 'Deletion canceled by user.' };
     }
     try {
-      // MODULAR: Query and getDocs
+      //Query and getDocs
       const q = query(this.projectsDb, where('id', '==', project.id), limit(1));
       const snapshot = await getDocs(q);
       
       if (!snapshot.empty) {
-        // MODULAR: Get DocumentReference and use deleteDoc
+        //Get DocumentReference and use deleteDoc
         const docRef = snapshot.docs[0].ref;
         await deleteDoc(docRef);
 
@@ -642,7 +639,7 @@ export class FireBaseProjectService {
 
 
   getFileRef(fileUrl:string) {
-    // MODULAR: Use firebase/storage ref()
+    //Use firebase/storage ref()
     return ref(this.storage,fileUrl)
   }
 }

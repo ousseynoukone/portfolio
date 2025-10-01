@@ -47,11 +47,15 @@
             <button class="btn btn-success btn-sm m-1" (click)="switchToEditMode(project)" >Details</button>
             <button class="btn btn-danger btn-sm m-1" (click)="deleteproject(project)">Delete</button>
             <button class="btn btn-warning btn-sm m-1" (click)="updateProjectVisibility(project)">
-
-              <span *ngIf="isChangingVisibility" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
-              <span *ngIf="!isChangingVisibility && project.isVisible" >Hide</span>
-              <span *ngIf="!isChangingVisibility && !project.isVisible" >Show</span>
-
+              @if (isChangingVisibility) {
+                <span class="spinner-border spinner-border-sm " role="status" aria-hidden="true"></span>
+              } @else {
+                @if (project.isVisible) {
+                  <span>Hide</span>
+                } @else {
+                  <span>Show</span>
+                }
+              }
             </button>
             
             <button type="button" (click)="gotoProjectOrderingPage(project)"  class="btn btn-dark btn-sm m-1">

@@ -23,13 +23,19 @@ export class FireBaseAuthService {
   private auth: Auth = inject(Auth);
   private router = inject(Router); 
 
+  private _isAuthenticated: Observable<boolean>; 
 
-  // The 'user' observable from @angular/fire/auth is the modular replacement for 'authState'.
-  // It emits the User object or null, making it perfect for isAuthenticated.
-  get isAuthenticated(): Observable<boolean> {
-    return user(this.auth).pipe(
+  constructor() {
+    // Initialize the Observable in the constructor. This ensures the 
+    // `user` function is called within the Angular injection context.
+    this._isAuthenticated = user(this.auth).pipe(
       map((currentUser: User | null) => !!currentUser)
     );
+  }
+
+  // Public getter returns the pre-initialized observable
+  get isAuthenticated(): Observable<boolean> {
+    return this._isAuthenticated;
   }
 
   async login(loginDto: LoginDto): Promise<ResponseDto> {
@@ -41,7 +47,7 @@ export class FireBaseAuthService {
       );
       
       this.router.navigate(['/admin']);
-      console.log(response);
+      console.log('Login response:', response);
 
       const successResponse: ResponseDto = {
         status: true,
@@ -49,7 +55,7 @@ export class FireBaseAuthService {
       };
       return successResponse;
     } catch (error) {
-      console.error(error); // Use console.error for errors
+      console.error(error); 
 
       const errorResponse: ResponseDto = {
         status: false,
@@ -62,7 +68,7 @@ export class FireBaseAuthService {
   async logout(): Promise<void> {
     try {
       await signOut(this.auth);
-  
+      this.router.navigate(['/login']);
     } catch (error) {
       console.error('Logout error:', error);
     }

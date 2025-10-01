@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, OnInit, inject } from '@angular/core';
 import {ResponseDto} from '../models/dtos/responseDto';
 import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject, Subject, map } from 'rxjs';
@@ -12,7 +12,7 @@ import {  ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'fireba
 @Injectable({
   providedIn: 'root',
 })
-export class FireBaseAbilityService {
+export class FireBaseAbilityService implements OnInit {
 
   private firestore: Firestore = inject(Firestore);
   private storage: Storage = inject(Storage);
@@ -39,6 +39,9 @@ export class FireBaseAbilityService {
   constructor(){
     this.abilitiyDB = collection(this.firestore,'abilities');
 
+ 
+  }
+  ngOnInit(): void {
     this.abilitiesSubject.subscribe(abilities => {
       this.weAreOntFirstElement = abilities.some(ability => ability.id === this.firstDocId);
     });
@@ -96,9 +99,9 @@ export class FireBaseAbilityService {
 
 
 
-  getAbilities(limit : any) {
-    this.limit=limit
-    const q = query(this.abilitiyDB, orderBy('id', 'desc'), limit(this.limit));
+  getAbilities(limitNumber : any) {
+    this.limit=limitNumber
+    const q = query(this.abilitiyDB, orderBy('id', 'desc'), limit(this.limit) );
 
     getDocs(q).then((querySnapshot) => {
       let abilities: Ability[] = [];
@@ -259,7 +262,7 @@ getNextAbilities() {
                 rating: ability.rating,
             };
             
-            // ✅ MODULAR UPDATE DOC USAGE (Update without file)
+            // ✅ UPDATE DOC USAGE (Update without file)
             // Use the reference obtained earlier
             await updateDoc(docRefToUpdate, abilityWithoutImage as any);
         }
@@ -290,7 +293,7 @@ getNextAbilities() {
         // We assume 'id' is unique, so we only delete the first document.
         const docRefToDelete = snapshot.docs[0].ref;
         
-        // ✅ MODULAR DELETE DOC USAGE
+        // ✅ DELETE DOC USAGE
         await deleteDoc(docRefToDelete);
 
         await this.deleteItemFromStorage(ability.image!);

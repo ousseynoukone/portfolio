@@ -365,6 +365,7 @@ async updateProjectVisibility(project : Project){
   }
   let response = await this.fireBaseStorage.updateProjectVisibility(projectDto);
   this.isChangingVisibility = false;
+   project.isVisible = !project.isVisible
   response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
 }
 
