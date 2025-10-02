@@ -1,8 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { FireBaseAuthService } from 'src/app/services/firebaseAuthServices';
-import { LoadingHandler } from '../../loadingHandler';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-home',
@@ -11,13 +7,5 @@ import { LoadingHandler } from '../../loadingHandler';
     standalone: false
 })
 export class HomeComponent {
-
-  showComponentName: string = "projects"
-  
-  showComponent(componentName: string) {
-    this.showComponentName = componentName;
-  }
-
-
-
+  // Dashboard component - no additional logic needed
 }

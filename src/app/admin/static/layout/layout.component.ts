@@ -11,14 +11,7 @@ import { FireBaseAuthService } from 'src/app/services/firebaseAuthServices';
 export class LayoutComponent {
   constructor(private authService: FireBaseAuthService, private router: Router) {}
 
-  showComponentName: string = "projects"
   isLoading = true;
-
-
-  
-  showComponent(componentName: string) {
-    this.showComponentName = componentName;
-  }
 
 
   ngOnInit() {

@@ -101,7 +101,9 @@ export class ProjectsComponent {
     
     this.fetchProject();
     this.initformModalProject();
-
+    
+    // Ensure count is loaded
+    this.fireBaseStorage.getProjectNumber();
   }
 
   initformModalProject(){

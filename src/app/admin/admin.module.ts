@@ -16,6 +16,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { OrderImagesComponent } from './pages/order-images/order-images.component';
 import { HeaderComponent } from './static/header/header.component';
 import { OrderProjectComponent } from './pages/projects/sub-component/order-project/order-project.component';
+import { BreadcrumbComponent } from './static/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { OrderProjectComponent } from './pages/projects/sub-component/order-proj
     OrderImagesComponent,
     HeaderComponent,
     OrderProjectComponent,
+    BreadcrumbComponent,
     
   ],
   imports: [

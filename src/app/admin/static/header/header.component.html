@@ -1,7 +1,16 @@
 <header class="bg-dark text-light p-3">
-
-    <button class="btn bg-secondary h1" (click)="goToHome()" > Portfolio Dashboard</button>
-    <button class="btn bg-accent-color text-white float-end ms-3" (click)="goToClientView()">Client View</button>
-    <button class="btn bg-accent-color text-white float-end" (click)="logout()">Logout</button>
-
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <button class="btn bg-secondary h1 me-3" (click)="goToHome()">Portfolio Dashboard</button>
+            <nav class="navbar-nav d-flex flex-row">
+                <a class="nav-link text-light me-3" routerLink="/admin" routerLinkActive="active">Dashboard</a>
+                <a class="nav-link text-light me-3" routerLink="/admin/projects" routerLinkActive="active">Projets</a>
+                <a class="nav-link text-light me-3" routerLink="/admin/abilities" routerLinkActive="active">Compétences</a>
+            </nav>
+        </div>
+        <div>
+            <button class="btn bg-accent-color text-white me-2" (click)="goToClientView()">Client View</button>
+            <button class="btn bg-accent-color text-white" (click)="logout()">Logout</button>
+        </div>
+    </div>
 </header>

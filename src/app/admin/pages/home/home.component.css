@@ -1,0 +1,75 @@
+/* Ensure Font Awesome icons are visible */
+.fas, .fa {
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* Fallback icons if Font Awesome is not loaded */
+.card-body i.fas::before {
+  content: attr(data-fallback);
+}
+
+/* Specific fallback content for each icon */
+.fa-folder-open::before {
+  content: "\f07c"; /* Font Awesome folder-open icon */
+}
+
+.fa-folder-open[data-fallback]::before {
+  content: "📁"; /* Fallback emoji */
+}
+
+.fa-tools::before {
+  content: "\f7d9"; /* Font Awesome tools icon */
+}
+
+.fa-tools[data-fallback]::before {
+  content: "🔧"; /* Fallback emoji */
+}
+
+.fa-sort-amount-down::before {
+  content: "\f161"; /* Font Awesome sort-amount-down icon */
+}
+
+.fa-sort-amount-down[data-fallback]::before {
+  content: "📊"; /* Fallback emoji */
+}
+
+/* Ensure icons are visible and properly sized */
+.card-body i {
+  display: block !important;
+  margin: 0 auto 1rem auto;
+  width: auto;
+  height: auto;
+}
+
+/* Color classes for icons */
+.text-primary {
+  color: #007bff !important;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
+
+.text-warning {
+  color: #ffc107 !important;
+}
+
+/* Button icons */
+.btn i {
+  margin-right: 0.5rem;
+}
+
+/* Fallback for button icons */
+.fa-plus[data-fallback]::before {
+  content: "➕";
+}
+
+.fa-external-link-alt[data-fallback]::before {
+  content: "🔗";
+}

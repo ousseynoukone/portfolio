@@ -183,6 +183,10 @@ export class FireBaseProjectService implements OnInit {
       subscribeProfilePicturePercentage.unsubscribe()
       this.initImgVideoPercentage()
 
+      // Refresh the project count and reload data
+      this.getProjectNumber();
+      this.getProjects();
+
       return { status: true, message: 'Project added successfully.' };
     } catch (error) {
       this.initImgVideoPercentage()
@@ -237,11 +241,16 @@ export class FireBaseProjectService implements OnInit {
   }
 
   
-  getProjectNumber() {
-    //Use collectionData to get a live count
-    collectionData(this.projectsDb).subscribe(querySnapshot => {
-      this.totalOfItems = querySnapshot.length
-    });
+  async getProjectNumber() {
+    try {
+      // Use getDocs to get a reliable count
+      const q = query(this.projectsDb);
+      const snapshot = await getDocs(q);
+      this.totalOfItems = snapshot.size;
+    } catch (error) {
+      console.error('Error getting project count:', error);
+      this.totalOfItems = 0;
+    }
   }
 
   //For the pagination
@@ -630,6 +639,10 @@ export class FireBaseProjectService implements OnInit {
         return { status: false, message: 'Docs not found!' };
       }
 
+      // Refresh the project count and reload data
+      this.getProjectNumber();
+      this.getProjects();
+      
       return { status: true, message: 'Project deleted successfully!' };
     } catch (error) {
       console.error('Error deleting project:', error);

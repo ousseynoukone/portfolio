@@ -29,7 +29,7 @@ export class AbilitiesComponent implements OnInit {
   formModal: any;
 
   toUpdateImageUrl : string  = ""
-
+  selectedImagePreview: string = ""; // For image preview
 
   options = [
     { value: '', label: 'Select an option' }, // Default option
@@ -61,6 +61,9 @@ export class AbilitiesComponent implements OnInit {
 
     this.fetchAbilities();
     this.initFormModal();
+    
+    // Ensure count is loaded
+    this.fireBaseStorage.getAbilitiesNumber();
   }
 
   initFormModal(){
@@ -112,6 +115,15 @@ export class AbilitiesComponent implements OnInit {
     }
     this.file = file;
 
+    // Create a preview URL for the selected image
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.selectedImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     //Si on charge une image alors qu'on a edit mode , l'image dois etre mise a jour dans le db
     if(this.editMode){
       this.withFile = true
@@ -143,6 +155,7 @@ export class AbilitiesComponent implements OnInit {
             this.toastr.success(value.message??"");
 
             this.abilityForm.reset({type : ['']})
+            this.selectedImagePreview = ""; // Clear preview
           }
 
           if(!value.status){
@@ -216,6 +229,7 @@ async updateAbility(ability : Ability){
   this.file = new File([], 'none'); 
   this.previousSelectedValue="default";
   this.withFile=false
+  this.selectedImagePreview = ""; // Clear preview
   response.status?  this.toastr.success(response.message!) :  this.toastr.error(response.message!);
 }
 
@@ -232,6 +246,7 @@ cancelEditing(){
   this.editMode = false;
   this.formModal.hide();
   this.iniForm()
+  this.selectedImagePreview = ""; // Clear preview
 }
 
 scrollToElement(elementId: string): void {

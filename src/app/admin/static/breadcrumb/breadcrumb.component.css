@@ -1,0 +1,105 @@
+.breadcrumb-nav {
+  background-color: #f8f9fa;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 1rem;
+}
+
+.breadcrumb {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: ">";
+  color: #6c757d;
+  margin: 0 0.5rem;
+  font-weight: 500;
+}
+
+.breadcrumb-link {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.breadcrumb-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.breadcrumb-item.active .breadcrumb-current {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.breadcrumb-link i {
+  margin-right: 0.25rem;
+  font-size: 0.8rem;
+  display: inline-block;
+}
+
+/* Ensure Font Awesome icons are visible */
+.fas, .fa {
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+/* Fallback icon style */
+.icon-fallback {
+  margin-right: 0.25rem;
+  font-size: 0.8rem;
+  display: inline-block;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .breadcrumb-nav {
+    padding: 0.5rem;
+  }
+  
+  .breadcrumb {
+    font-size: 0.8rem;
+  }
+  
+  .breadcrumb-item + .breadcrumb-item::before {
+    margin: 0 0.25rem;
+  }
+}
+
+/* Dark theme support */
+.breadcrumb-nav.dark-theme {
+  background-color: #343a40;
+  border-bottom-color: #495057;
+}
+
+.breadcrumb-nav.dark-theme .breadcrumb-link {
+  color: #17a2b8;
+}
+
+.breadcrumb-nav.dark-theme .breadcrumb-link:hover {
+  color: #138496;
+}
+
+.breadcrumb-nav.dark-theme .breadcrumb-item.active .breadcrumb-current {
+  color: #adb5bd;
+}
+
+.breadcrumb-nav.dark-theme .breadcrumb-item + .breadcrumb-item::before {
+  color: #adb5bd;
+}

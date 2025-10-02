@@ -5,9 +5,8 @@ import { BehaviorSubject, Subject, map } from 'rxjs';
 import { Ability } from '../models/abilitie';
 import { AbilityUpdateDto } from '../models/dtos/abilitieUpdateDto';
 import { Firestore, collection,CollectionReference, addDoc, query, orderBy, limit, startAfter, endBefore, getDocs, where, updateDoc, deleteDoc } from '@angular/fire/firestore';
-import { Storage } from '@angular/fire/storage';
-import {  ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 
+import { Storage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from '@angular/fire/storage'; 
 
 @Injectable({
   providedIn: 'root',
@@ -67,6 +66,10 @@ export class FireBaseAbilityService implements OnInit {
 
 
   async addAbility(ability: Ability, file: File): Promise<ResponseDto> {
+  if (!this.storage) {
+    console.error("Firebase Storage instance is undefined. Check AngularFire setup.");
+    return { status: false, message: 'Firebase Storage is not initialized.' };
+  }
     this._percentageSubject.next(0);
 
     const filePath = `${this.basePath}/${file.name}`;
@@ -74,18 +77,33 @@ export class FireBaseAbilityService implements OnInit {
     const uploadTask = uploadBytesResumable(storageRef,file);
     
   try {
-  uploadTask.on('state_changed',(snapshot) => {
-    let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    this._percentageSubject.next(percentage!)
-  });
+    // Wait for upload to complete and get the download URL
+    await new Promise<void>((resolve, reject) => {
+      uploadTask.on('state_changed',(snapshot) => {
+        let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        this._percentageSubject.next(percentage!)
+      }, (error) => {
+        reject(error);
+      }, async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          ability.image = downloadURL;
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
 
-  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    ability.image = downloadURL;
-  });
-
-  const docRef = await addDoc(this.abilitiyDB, ability);
-  await updateDoc(docRef, { id: docRef.id });
-  return { status: true, message: 'Ability added successfully.' };
+    // Now save to Firestore with the correct image URL
+    const docRef = await addDoc(this.abilitiyDB, ability);
+    await updateDoc(docRef, { id: docRef.id });
+    
+    // Refresh the abilities count and reload data
+    this.getAbilitiesNumber();
+    this.getAbilities(this.limit);
+    
+    return { status: true, message: 'Ability added successfully.' };
 
     } catch (error) {
        return { status: false, message: String(error) };
@@ -132,11 +150,15 @@ export class FireBaseAbilityService implements OnInit {
 
   }
 
-  getAbilitiesNumber() {
-    getDocs(this.abilitiyDB).then((querySnapshot) => {
-      this.totalOfItems=querySnapshot.size
-    });
-    
+  async getAbilitiesNumber() {
+    try {
+      const q = query(this.abilitiyDB);
+      const snapshot = await getDocs(q);
+      this.totalOfItems = snapshot.size;
+    } catch (error) {
+      console.error('Error getting abilities count:', error);
+      this.totalOfItems = 0;
+    }
   }
 
 
@@ -301,6 +323,10 @@ getNextAbilities() {
         return { status: false, message: 'Docs not found!' };
       }
 
+      // Refresh the abilities count and reload data
+      this.getAbilitiesNumber();
+      this.getAbilities(this.limit);
+      
       return { status: true, message: 'Ability deleted successfully!' };
     } catch (error) {
       console.error('Error deleting ability:', error);

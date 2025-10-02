@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FireBaseAuthService } from './services/firebaseAuthServices';
 import { NavigationEnd, Router } from '@angular/router';
+import { inject } from '@vercel/analytics';
 
 @Component({
     selector: 'app-root',
@@ -11,4 +12,7 @@ import { NavigationEnd, Router } from '@angular/router';
 export class AppComponent {
   title = 'portfolio';
 
+  constructor() {
+    inject();
+  }
 }

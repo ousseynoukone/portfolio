@@ -1,0 +1,24 @@
+<nav aria-label="breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb">
+    <li 
+      *ngFor="let breadcrumb of breadcrumbs; let last = last" 
+      class="breadcrumb-item"
+      [class.active]="breadcrumb.active"
+      [attr.aria-current]="breadcrumb.active ? 'page' : null"
+    >
+      <a 
+        *ngIf="!breadcrumb.active" 
+        (click)="navigateTo(breadcrumb.url)" 
+        class="breadcrumb-link"
+        [attr.href]="breadcrumb.url"
+      >
+        <i *ngIf="breadcrumb.label === 'Admin'" class="fas fa-home" aria-hidden="true"></i>
+        <span *ngIf="breadcrumb.label === 'Admin' && !isFontAwesomeLoaded()" class="icon-fallback">🏠</span>
+        {{ breadcrumb.label }}
+      </a>
+      <span *ngIf="breadcrumb.active" class="breadcrumb-current">
+        {{ breadcrumb.label }}
+      </span>
+    </li>
+  </ol>
+</nav>
