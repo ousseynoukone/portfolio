@@ -41,43 +41,7 @@
                 
                 @if (!state.noDataMobile) {
                 <div class="projects-carousel">
-                    <div id="carousselMobile" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div *ngFor="let project of state.mobile; index as i" 
-                                 class="carousel-item" 
-                                 [class.active]="i==0">
-                                
-                                <div class="project-card">
-                                    <div class="project-image">
-                                        <img [src]="project.ppLink" [alt]="project.title">
-                                        <div class="project-overlay">
-                                            <button class="btn btn-primary" (click)="navigateToDetailsPage(project)">
-                                                <i class="fas fa-eye"></i>
-                                                Voir les détails
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="project-info">
-                                        <h4>{{ project.title }}</h4>
-                                        <p>{{ project.minDescription }}</p>
-                                        <div class="project-tags">
-                                            <span *ngFor="let tool of project.usedTools" class="tag">{{ tool }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="carousel-indicators">
-                            <button *ngFor="let project of state.mobile; let i = index" 
-                                    type="button" 
-                                    [attr.data-bs-target]="'#carousselMobile'" 
-                                    [attr.data-bs-slide-to]="i" 
-                                    [class.active]="i === 0" 
-                                    aria-current="true">
-                            </button>
-                        </div>
-                        
+                    <div class="carousel-wrapper">
                         @if (state.mobile && state.mobile.length > 1) {
                         <button class="carousel-control-prev" 
                                 type="button" 
@@ -86,6 +50,47 @@
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Précédent</span>
                         </button>
+                        }
+                        
+                        <div id="carousselMobile" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div *ngFor="let project of state.mobile; index as i" 
+                                     class="carousel-item" 
+                                     [class.active]="i==0">
+                                    
+                                    <div class="project-card">
+                                        <div class="project-image">
+                                            <img [src]="project.ppLink" [alt]="project.title">
+                                            <div class="project-overlay">
+                                                <button class="btn btn-primary" (click)="navigateToDetailsPage(project)">
+                                                    <i class="fas fa-eye"></i>
+                                                    Voir les détails
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="project-info">
+                                            <h4>{{ project.title }}</h4>
+                                            <p>{{ project.minDescription }}</p>
+                                            <div class="project-tags">
+                                                <span *ngFor="let tool of project.usedTools" class="tag">{{ tool }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-indicators">
+                                <button *ngFor="let project of state.mobile; let i = index" 
+                                        type="button" 
+                                        [attr.data-bs-target]="'#carousselMobile'" 
+                                        [attr.data-bs-slide-to]="i" 
+                                        [class.active]="i === 0" 
+                                        aria-current="true">
+                                </button>
+                            </div>
+                        </div>
+                        
+                        @if (state.mobile && state.mobile.length > 1) {
                         <button class="carousel-control-next" 
                                 type="button" 
                                 data-bs-target="#carousselMobile" 
@@ -113,43 +118,7 @@
                 
                 @if (!state.noDataWeb) {
                 <div class="projects-carousel">
-                    <div id="carousselWeb" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div *ngFor="let project of state.web; index as i" 
-                                 class="carousel-item" 
-                                 [class.active]="i==0">
-                                
-                                <div class="project-card">
-                                    <div class="project-image">
-                                        <img [src]="project.ppLink" [alt]="project.title">
-                                        <div class="project-overlay">
-                                            <button class="btn btn-primary" (click)="navigateToDetailsPage(project)">
-                                                <i class="fas fa-eye"></i>
-                                                Voir les détails
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="project-info">
-                                        <h4>{{ project.title }}</h4>
-                                        <p>{{ project.minDescription }}</p>
-                                        <div class="project-tags">
-                                            <span *ngFor="let tool of project.usedTools" class="tag">{{ tool }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="carousel-indicators">
-                            <button *ngFor="let project of state.web; let i = index" 
-                                    type="button" 
-                                    [attr.data-bs-target]="'#carousselWeb'" 
-                                    [attr.data-bs-slide-to]="i" 
-                                    [class.active]="i === 0" 
-                                    aria-current="true">
-                            </button>
-                        </div>
-                        
+                    <div class="carousel-wrapper">
                         @if (state.web && state.web.length > 1) {
                         <button class="carousel-control-prev" 
                                 type="button" 
@@ -158,6 +127,47 @@
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Précédent</span>
                         </button>
+                        }
+                        
+                        <div id="carousselWeb" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div *ngFor="let project of state.web; index as i" 
+                                     class="carousel-item" 
+                                     [class.active]="i==0">
+                                    
+                                    <div class="project-card">
+                                        <div class="project-image">
+                                            <img [src]="project.ppLink" [alt]="project.title">
+                                            <div class="project-overlay">
+                                                <button class="btn btn-primary" (click)="navigateToDetailsPage(project)">
+                                                    <i class="fas fa-eye"></i>
+                                                    Voir les détails
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="project-info">
+                                            <h4>{{ project.title }}</h4>
+                                            <p>{{ project.minDescription }}</p>
+                                            <div class="project-tags">
+                                                <span *ngFor="let tool of project.usedTools" class="tag">{{ tool }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-indicators">
+                                <button *ngFor="let project of state.web; let i = index" 
+                                        type="button" 
+                                        [attr.data-bs-target]="'#carousselWeb'" 
+                                        [attr.data-bs-slide-to]="i" 
+                                        [class.active]="i === 0" 
+                                        aria-current="true">
+                                </button>
+                            </div>
+                        </div>
+                        
+                        @if (state.web && state.web.length > 1) {
                         <button class="carousel-control-next" 
                                 type="button" 
                                 data-bs-target="#carousselWeb" 

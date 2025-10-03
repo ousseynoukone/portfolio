@@ -10,7 +10,9 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
   displayAnimationFlag: boolean = false;
   clickTimestamps: number[] = [];
+  moonClickCount: number = 0;
   readonly CLICK_THRESHOLD = 3; // Number of clicks needed
+  readonly MOON_CLICK_THRESHOLD = 3; // Number of clicks needed for moon
   readonly TIME_WINDOW = 3000; // 3 seconds in milliseconds
 
   constructor(private router: Router) {}
@@ -46,6 +48,17 @@ export class HomeComponent implements OnInit {
       this.router.navigate(['admin']);
       // Reset the timestamps after successful navigation
       this.clickTimestamps = [];
+    }
+  }
+
+  goToAdminPanelMoon() {
+    this.moonClickCount++;
+    
+    // Check if we have reached 36 clicks
+    if (this.moonClickCount >= this.MOON_CLICK_THRESHOLD) {
+      this.router.navigate(['admin']);
+      // Reset the counter after successful navigation
+      this.moonClickCount = 0;
     }
   }
 

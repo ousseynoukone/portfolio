@@ -122,6 +122,10 @@
 
 /* Responsive typing animation for mobile */
 @media (max-width: 576px) {
+  .hero-section {
+    padding-top: 80px; /* Add space for mobile navbar */
+  }
+  
   .typing-animation {
     white-space: normal;
     border-right: none;
@@ -135,6 +139,10 @@
 
 /* Add bottom margin for mobile L and M */
 @media (max-width: 768px) {
+  .hero-section {
+    padding-top: 60px; /* Add space for tablet navbar */
+  }
+  
   .hero-buttons .btn {
     margin-bottom: 16px;
   }
@@ -212,6 +220,9 @@
   width: 100%;
   height: 100%;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .floating-card {
@@ -227,7 +238,7 @@
   color: #FCF6F6;
   font-weight: 600;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  animation: float 6s ease-in-out infinite;
+  animation: float 6s ease-in-out infinite, neonGlow 4s ease-in-out infinite;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -244,13 +255,14 @@
   color: #990012;
 }
 
-.card-1 { top: 10%; left: 10%; animation-delay: 0s; }
-.card-2 { top: 20%; right: 5%; animation-delay: 1s; }
-.card-3 { top: 50%; left: 5%; animation-delay: 2s; }
-.card-4 { bottom: 30%; right: 10%; animation-delay: 3s; }
-.card-5 { bottom: 10%; left: 20%; animation-delay: 4s; }
-.card-6 { top: 70%; right: 5%; animation-delay: 5s; }
-.card-7 { bottom: 50%; left: 30%; animation-delay: 6s; }
+/* Orbital positioning with staggered delays */
+.orbit-card.card-1 { animation-delay: 0s; }
+.orbit-card.card-2 { animation-delay: -2.1s; }
+.orbit-card.card-3 { animation-delay: -4.2s; }
+.orbit-card.card-4 { animation-delay: -6.3s; }
+.orbit-card.card-5 { animation-delay: -8.4s; }
+.orbit-card.card-6 { animation-delay: -10.5s; }
+.orbit-card.card-7 { animation-delay: -12.6s; }
 
 /* Button responsive sizing */
 @media (min-width: 576px) {
@@ -563,6 +575,67 @@
     transform: translateY(100vh);
     opacity: 0;
   }
+}
+
+/* Orbital animation for floating cards */
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg) translateX(250px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(250px) rotate(-360deg);
+  }
+}
+
+/* Glowing animation for orbit cards */
+@keyframes orbitGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 15px rgba(153, 0, 18, 0.6),
+      0 0 30px rgba(153, 0, 18, 0.4),
+      0 0 45px rgba(153, 0, 18, 0.2);
+    border-color: rgba(153, 0, 18, 0.7);
+  }
+  50% {
+    box-shadow: 
+      0 0 25px rgba(153, 0, 18, 0.8),
+      0 0 40px rgba(153, 0, 18, 0.6),
+      0 0 60px rgba(153, 0, 18, 0.4);
+    border-color: rgba(153, 0, 18, 0.9);
+  }
+}
+
+/* Circular orbit container */
+.orbit-container {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  width: 500px;
+  height: 500px;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.orbit-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0 0;
+  animation: orbit 15s linear infinite;
+}
+
+.orbit-card .floating-card {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  animation: orbitGlow 4s ease-in-out infinite;
+  box-shadow: 
+    0 0 15px rgba(153, 0, 18, 0.6),
+    0 0 30px rgba(153, 0, 18, 0.4),
+    0 0 45px rgba(153, 0, 18, 0.2);
+  border: 2px solid rgba(153, 0, 18, 0.7);
+  background: rgba(153, 0, 18, 0.1);
 }
 
 

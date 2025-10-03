@@ -137,6 +137,18 @@
   margin: 0 40px; /* Add margin to accommodate the arrows */
 }
 
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 0;
+}
+
+.carousel-wrapper .carousel {
+  flex: 1;
+  margin: 0;
+}
+
 .carousel {
   border-radius: 15px;
   overflow: hidden;
@@ -490,10 +502,6 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .project-details-page {
-    padding-top: 70px;
-  }
-  
   .project-header {
     padding: 1.5rem 0;
   }
@@ -547,10 +555,6 @@
 }
 
 @media (max-width: 576px) {
-  .project-details-page {
-    padding-top: 60px;
-  }
-  
   .project-header {
     padding: 1rem 0;
   }

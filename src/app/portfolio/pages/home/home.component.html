@@ -46,43 +46,57 @@
             <div class="col-lg-6 order-lg-2 order-1 d-none d-lg-block">
                 <div class="hero-visual">
                     <!-- Floating Cards Animation -->
-                    <div class="floating-cards">
-                        <div class="floating-card card-1" (click)="goToAdminPanel()">
-                            <i class="fab fa-angular"></i>
-                            <span>Angular</span>
+                    <div class="orbit-container">
+                        <div class="orbit-card card-1" (click)="goToAdminPanel()">
+                            <div class="floating-card">
+                                <i class="fab fa-angular"></i>
+                                <span>Angular</span>
+                            </div>
                         </div>
 
-                        <div class="floating-card card-2" (click)="goToAdminPanel()">
-                            <i class="fab fa-java"></i>
-                            <span>Spring Boot</span>
+                        <div class="orbit-card card-2" (click)="goToAdminPanel()">
+                            <div class="floating-card">
+                                <i class="fab fa-java"></i>
+                                <span>Spring Boot</span>
+                            </div>
                         </div>
                
-                        <div class="floating-card card-3" (click)="goToAdminPanel()">
-                            <i class="fab fa-node-js"></i>
-                            <span>Node.js</span>
+                        <div class="orbit-card card-3" (click)="goToAdminPanel()">
+                            <div class="floating-card">
+                                <i class="fab fa-node-js"></i>
+                                <span>Node.js</span>
+                            </div>
                         </div>
-                        <div class="floating-card card-4" (click)="goToAdminPanel()">
-                            <i class="fab fa-react"></i>
-                            <span>React</span>
+                        <div class="orbit-card card-4" (click)="goToAdminPanel()">
+                            <div class="floating-card">
+                                <i class="fab fa-react"></i>
+                                <span>React</span>
+                            </div>
                         </div>
                         
-                        <div class="floating-card card-5" (click)="goToAdminPanel()">
-                            <i class="fab fa-js-square"></i>
-                            <span>JavaScript</span>
+                        <div class="orbit-card card-5" (click)="goToAdminPanel()">
+                            <div class="floating-card">
+                                <i class="fab fa-js-square"></i>
+                                <span>JavaScript</span>
+                            </div>
                         </div>
-                        <div class="floating-card card-6" (click)="goToAdminPanel()">
-                            <i class="fab fa-python"></i>
-                            <span>Python</span>
+                        <div class="orbit-card card-6" (click)="goToAdminPanel()">
+                            <div class="floating-card">
+                                <i class="fab fa-python"></i>
+                                <span>Flask</span>
+                            </div>
                         </div>
-                        <div class="floating-card card-7" (click)="goToAdminPanel()">
-                            <i class="fas fa-database"></i>
-                            <span>Database</span>
+                        <div class="orbit-card card-7" (click)="goToAdminPanel()">
+                            <div class="floating-card">
+                                <i class="fas fa-laravel"></i>
+                                <span>Laravel</span>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- Central Image - Hidden on mobile -->
                     <div class="central-image d-none d-lg-block">
-                        <img src="../../../../assets/imgs/sharingan2.png" alt="Developer Illustration" class="img-fluid">
+                        <img src="../../../../assets/imgs/sharingan2.png" alt="Developer Illustration" class="img-fluid" (click)="goToAdminPanelMoon()">
                     </div>
                 </div>
             </div>

@@ -96,4 +96,14 @@ export class ProjectsDetailsComponent implements OnInit {
   onVideoEnded() {
     this.isVideoPlaying = false;
   }
+
+  toggleVideo() {
+    if (this.videoPlayer) {
+      if (this.isVideoPlaying) {
+        this.videoPlayer.nativeElement.pause();
+      } else {
+        this.videoPlayer.nativeElement.play();
+      }
+    }
+  }
 }

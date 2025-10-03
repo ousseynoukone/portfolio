@@ -43,39 +43,7 @@
             </div>
             
             <div class="image-carousel-container">
-              <div id="carousselDetailProjet" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                  <button *ngFor="let image of project.imgsLink; index as i" 
-                          type="button" 
-                          [attr.data-bs-target]="'#carousselDetailProjet'" 
-                          [attr.data-bs-slide-to]="i" 
-                          [class.active]="i === 0" 
-                          aria-current="true">
-                  </button>
-                </div>
-                
-                <div class="carousel-inner" (click)="openImageModal()">
-                  <div *ngFor="let image of project.imgsLink; index as i" 
-                       class="carousel-item" 
-                       [class.active]="i === 0">
-                    <div class="image-container">
-                      <img [src]="image"
-                           [alt]="'Screenshot ' + (i + 1) + ' de ' + project.title"
-                           class="project-image"
-                           (load)="onImageLoad(i)">
-                      <div *ngIf="!imagesLoaded[i]" class="image-loading">
-                        <div class="spinner-border" role="status">
-                          <span class="visually-hidden">Chargement...</span>
-                        </div>
-                      </div>
-                      <div class="image-overlay">
-                        <i class="fas fa-expand"></i>
-                        <span>Cliquer pour agrandir</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
+              <div class="carousel-wrapper">
                 <button class="carousel-control-prev" 
                         type="button" 
                         data-bs-target="#carousselDetailProjet" 
@@ -83,6 +51,41 @@
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Précédent</span>
                 </button>
+                
+                <div id="carousselDetailProjet" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-indicators">
+                    <button *ngFor="let image of project.imgsLink; index as i" 
+                            type="button" 
+                            [attr.data-bs-target]="'#carousselDetailProjet'" 
+                            [attr.data-bs-slide-to]="i" 
+                            [class.active]="i === 0" 
+                            aria-current="true">
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-inner" (click)="openImageModal()">
+                    <div *ngFor="let image of project.imgsLink; index as i" 
+                         class="carousel-item" 
+                         [class.active]="i === 0">
+                      <div class="image-container">
+                        <img [src]="image"
+                             [alt]="'Screenshot ' + (i + 1) + ' de ' + project.title"
+                             class="project-image"
+                             (load)="onImageLoad(i)">
+                        <div *ngIf="!imagesLoaded[i]" class="image-loading">
+                          <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Chargement...</span>
+                          </div>
+                        </div>
+                        <div class="image-overlay">
+                          <i class="fas fa-expand"></i>
+                          <span>Cliquer pour agrandir</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
                 <button class="carousel-control-next" 
                         type="button" 
                         data-bs-target="#carousselDetailProjet" 
@@ -117,7 +120,7 @@
                   <source [src]="project.demoLink" type="video/mp4">
                   Votre navigateur ne supporte pas la lecture de vidéos.
                 </video>
-                <div class="video-overlay" [class.hidden]="isVideoPlaying">
+                <div class="video-overlay" [class.hidden]="isVideoPlaying" (click)="toggleVideo()">
                   <i class="fas" [class.fa-play]="!isVideoPlaying" [class.fa-pause]="isVideoPlaying"></i>
                 </div>
               </div>
