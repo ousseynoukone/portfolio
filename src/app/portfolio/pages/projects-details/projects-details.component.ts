@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
 import { Project } from 'src/app/models/project';
 import { PassDataThrough } from '../../shared/sharedService';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,8 @@ declare var window: any;
     standalone: false
 })
 export class ProjectsDetailsComponent implements OnInit {
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
+  
   project!: Project;
   shareData = inject(PassDataThrough);
   router = inject(Router);
@@ -22,6 +24,7 @@ export class ProjectsDetailsComponent implements OnInit {
   isMessageDisplayed: boolean = false;
   usefullLinks: string[] = [];
   imagesLoaded: boolean[] = [];
+  isVideoPlaying: boolean = false;
 
   ngOnInit(): void {
     this.project = this.shareData.getData as Project;
@@ -57,5 +60,40 @@ export class ProjectsDetailsComponent implements OnInit {
     } else {
       return true;
     }
+  }
+
+  goBack() {
+    this.router.navigate(['/']);
+  }
+
+  getProjectDate(): string {
+    if (this.project.createdAt) {
+      // Handle Firestore FieldValue
+      const date = this.project.createdAt as any;
+      if (date.toDate) {
+        return date.toDate().toLocaleDateString('fr-FR', { 
+          year: 'numeric', 
+          month: 'long' 
+        });
+      } else if (date instanceof Date) {
+        return date.toLocaleDateString('fr-FR', { 
+          year: 'numeric', 
+          month: 'long' 
+        });
+      }
+    }
+    return 'Date non disponible';
+  }
+
+  onVideoPlay() {
+    this.isVideoPlaying = true;
+  }
+
+  onVideoPause() {
+    this.isVideoPlaying = false;
+  }
+
+  onVideoEnded() {
+    this.isVideoPlaying = false;
   }
 }

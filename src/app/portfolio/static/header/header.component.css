@@ -1,39 +1,204 @@
-/* styles.css */
+/* Modern Navigation Styles */
+.modern-navbar {
+  background: rgba(36, 35, 35, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(252, 246, 246, 0.1);
+  padding: 1rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
 
-/* Initially hide subMenu items */
-.nav-item .subMenu {
+.modern-navbar.scrolled {
+  background: rgba(36, 35, 35, 0.98);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Brand Logo */
+.navbar-brand {
+  text-decoration: none;
+  color: #FCF6F6;
+  font-weight: 700;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: #990012;
+  transform: scale(1.05);
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-logo i {
+  color: #990012;
+  font-size: 1.8rem;
+  transition: all 0.3s ease;
+}
+
+.brand-logo:hover i {
+  transform: rotate(360deg);
+}
+
+.brand-logo span {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* Mobile Toggle */
+.navbar-toggler {
+  border: none;
+  padding: 0.5rem;
+  background: transparent;
+  color: #FCF6F6;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.navbar-toggler:hover {
+  color: #990012;
+  transform: scale(1.1);
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.navbar-toggler-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navigation Links */
+.navbar-nav {
+  gap: 0.5rem;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  color: #FCF6F6;
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.navbar-brand {
+  cursor: pointer;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #990012 0%, #cc0018 100%);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.nav-link:hover::before,
+.nav-link.active::before {
+  left: 0;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(153, 0, 18, 0.3);
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, #990012 0%, #cc0018 100%);
+  border: 2px solid rgba(252, 246, 246, 0.2);
+  font-weight: 700;
+}
+
+.nav-link i {
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover i,
+.nav-link.active i {
+  transform: scale(1.2);
+}
+
+
+/* Responsive Design */
+@media (max-width: 991px) {
+  .modern-navbar {
+    padding: 0.75rem 0;
+  }
+  
+  .brand-logo span {
+    font-size: 1.1rem;
+  }
+  
+  .navbar-collapse {
+    background: rgba(36, 35, 35, 0.98);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    margin-top: 1rem;
+    padding: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .navbar-nav {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .nav-link {
+    justify-content: flex-start;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+}
+
+@media (max-width: 576px) {
+  .brand-logo span {
     display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    width: 25vh;
+  }
+  
+  .brand-logo i {
+    font-size: 2rem;
+  }
+  
+  .nav-link span {
+    font-size: 0.9rem;
+  }
 }
 
-.nav-item:hover .subMenu {
-    display: block;
-    opacity: 1;
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
 }
 
-
-
-.decoration {
-    background-color: #990012;
-    height: 1em;
-    width: 25%;
+/* Add padding to body to account for fixed navbar */
+body {
+  padding-top: 80px;
 }
 
-.active{
-    background-color: #990012!important;
-    color: #FCF6F6 !important;
-}
-
-.on-hover:hover{
-    text-decoration: underline;
-    color:#FCF6F6;
-    transition: all 0.35s ease-in-out;
-    background-color: #242323!important;
-
-}
-
-.nav-link{
-    cursor: pointer;
+/* Ensure proper spacing for sections */
+section {
+  scroll-margin-top: 100px;
 }

@@ -1,47 +1,96 @@
 
-<div class="container-fluid home bg-secondary-color pt-3 pb-3">
-    <div class="row">
-        <div class="col-lg-5 offset-lg-1 rounded order-lg-1 order-2">
-
-            <div class="row p-1">
-                <div class="d-flex align-items-center">
-                    <div class="me-3">
-                      <img class="rounded-circle img-fluid img-size" src="../../../../assets/imgs/me.png" alt="MyPhoto">
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6 order-lg-1 order-2">
+                <div class="hero-content">
+                    <!-- Profile Image -->
+                    <div class="profile-image-container mb-4">
+                        <img class="profile-image" src="../../../../assets/imgs/me.png" alt="Ousseynou Koné" (click)="goToAdminPanel()">
+                        <div class="profile-badge">
+                            <i class="fas fa-code"></i>
+                        </div>
                     </div>
-                    <div>
-                      <div class="d-flex flex-wrap">
-                        <div class="text-uppercase text-primary-color fs-2 animation animation--accent">Ousseynou</div>
-                        &nbsp;
-                        <div class="text-uppercase text-primary-color fs-2 animation animation--primary">Koné</div>
-                      </div>
-                    </div>
-                </div>
-
-                <div class="col-md-12 mt-4 "> 
-                    <div [class.animation--primary]="displayAnimationFlag"  class="text-uppercase text-primary-color fs-5 animation d-inline-flex">Developpeur Junior FullStack Web/Mobile</div>
-
-                </div>
-                <div class="col-md-12 mt-4">
-                    <div class="text-primary-color">
-                        Bienvenue sur mon Portfolio ! Je suis Ousseynou Koné, un développeur passionné basé en Île-de-France, France. Explorez mes projets et découvrez comment je transforme des idées en expériences interactives. Prêt pour de nouveaux défis !
+                    
+                    <!-- Name and Title -->
+                    <div class="hero-text">
+                        <h1 class="hero-title">
+                            <span class="text-gradient mr-4">Ousseynou Koné</span>
+                        </h1>
+                        
+                        <div class="hero-subtitle">
+                            <span class="typing-animation">Développeur FullStack Web/Mobile</span>
+                        </div>
+                        <p class="hero-description">
+                            Passionné par le développement web et mobile, je transforme des idées créatives en expériences digitales exceptionnelles. Basé en Île-de-France, je suis prêt à relever de nouveaux défis technologiques.
+                        </p>
+                        
+                        <!-- CTA Buttons -->
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary btn-lg me-3" (click)="scrollToSection('projets')">
+                                <i class="fas fa-folder-open me-2"></i>
+                                Voir mes Projets
+                            </button>
+                            <button class="btn btn-outline-primary btn-lg" (click)="scrollToSection('contact')">
+                                <i class="fas fa-envelope me-2"></i>
+                                Me Contacter
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-6 rounded order-lg-2 order-1">
+            
+            <div class="col-lg-6 order-lg-2 order-1">
+                <div class="hero-visual">
+                    <!-- Floating Cards Animation -->
+                    <div class="floating-cards">
+                        <div class="floating-card card-1">
+                            <i class="fab fa-angular"></i>
+                            <span>Angular</span>
+                        </div>
 
-
-            <div class="row">
-
-                <div class="col-md-3 offset-md-9 mb-4">
-                    <div class="badge bg-accent-color fs-5 p-2">Portfolio</div>
+                        <div class="floating-card card-2">
+                            <i class="fab fa-java"></i>
+                            <span>Spring Boot</span>
+                        </div>
+               
+                        <div class="floating-card card-3">
+                            <i class="fab fa-node-js"></i>
+                            <span>Node.js</span>
+                        </div>
+                        <div class="floating-card card-4">
+                            <i class="fab fa-react"></i>
+                            <span>React</span>
+                        </div>
+                        
+                        <div class="floating-card card-5">
+                            <i class="fab fa-js-square"></i>
+                            <span>JavaScript</span>
+                        </div>
+                        <div class="floating-card card-6">
+                            <i class="fab fa-python"></i>
+                            <span>Python</span>
+                        </div>
+                        <div class="floating-card card-7">
+                            <i class="fas fa-database"></i>
+                            <span>Database</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Central Image -->
+                    <div class="central-image">
+                        <img src="../../../../assets/imgs/sharingan2.png" alt="Developer Illustration" class="img-fluid">
+                    </div>
                 </div>
-                <div class="col-md-7 offset-md-4 " (click)="goToAdminPanel()">
-                    <img src="../../../../assets/imgs/sharingan2.png"  alt="" class="img-fluid"> 
-                </div>
-
             </div>
         </div>
     </div>
-
-</div>
+    
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-arrow">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </div>
+</section>

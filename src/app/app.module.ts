@@ -12,6 +12,7 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { provideAnimations } from '@angular/platform-browser/animations'; 
 import { NgModule } from '@angular/core';
+import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 
 @NgModule({
   declarations: [
@@ -26,9 +27,11 @@ import { NgModule } from '@angular/core';
   ],
   providers: [
     provideAnimations(), 
-    
+
     ToastrModule.forRoot().providers!, 
-    
+    provideAnalytics(() => getAnalytics()), // Initialize Firebase Analytics,
+    ScreenTrackingService,
+    UserTrackingService,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideStorage(() => getStorage()),
     provideFirestore(() => getFirestore()),

@@ -1,169 +1,205 @@
-<div class="container-fluid pt-3 bg-secondary-color">
-    <div class="row">
-      <div class="text-center mb-3">
-        <div class="badge bg-accent-color  fs-5 p-2">{{project.title}}</div>
-      </div>
-      
-      <div class="col-md-6 col-12" *ngIf="displayImage()">
-  
-        <div class="container-fluid pt-2 pb-3">
-          <div class="text-center">
-            <div class="bg-primary-color text-accent h5 rounded onhoverAccent mt-2">Captures d'écrans</div>
+<!-- Modern Project Details Page -->
+<div class="project-details-page">
+  <!-- Project Header -->
+  <section class="project-header">
+    <div class="container">
+      <div class="project-header-content">
+        <!-- Back Button -->
+        <button class="back-button" (click)="goBack()">
+          <i class="fas fa-arrow-left"></i>
+          <span>Retour aux projets</span>
+        </button>
+        
+        <!-- Project Title -->
+        <div class="project-title-section">
+          <h1 class="project-title">{{ project.title }}</h1>
+          <div class="project-meta">
+            <span class="project-type">
+              <i class="fas fa-tag"></i>
+              {{ project.type === 'mobile' ? 'Application Mobile' : 'Application Web' }}
+            </span>
+            <span class="project-date">
+              <i class="fas fa-calendar"></i>
+              {{ getProjectDate() }}
+            </span>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-          <div class="mt-2 mb-5">
-            <div  id="carousselDetailProjet" class="carousel slide" data-bs-ride="carousel" >
-              <div class="carousel-indicators" >
+  <!-- Project Content -->
+  <section class="project-content">
+    <div class="container">
+      <div class="row">
+        <!-- Project Images -->
+        <div class="col-lg-6" *ngIf="displayImage()">
+          <div class="images-section">
+            <div class="section-header">
+              <h3>
+                <i class="fas fa-images"></i>
+                Captures d'écran
+              </h3>
+            </div>
+            
+            <div class="image-carousel-container">
+              <div id="carousselDetailProjet" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                  <button *ngFor="let image of project.imgsLink; index as i" 
+                          type="button" 
+                          [attr.data-bs-target]="'#carousselDetailProjet'" 
+                          [attr.data-bs-slide-to]="i" 
+                          [class.active]="i === 0" 
+                          aria-current="true">
+                  </button>
+                </div>
                 
-                <button *ngFor="let image of project.imgsLink;index as i"  type="button" [attr.data-bs-target]="'#carousselDetailProjet'" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" ></button>
-              </div>
                 <div class="carousel-inner" (click)="openImageModal()">
-
-                  <div *ngFor="let image of project.imgsLink; index as i" class="carousel-item" [class.active]="i === 0">
-                    <div class="rounded image-container bg-sobre-color col-8 offset-2">
-                      <img
-                        class="img-fluid mx-auto d-block rounded custom-image"
-                        [src]="image"
-                        (load)="onImageLoad(i)"
-                        [alt]="'Card image cap ' + (i + 1)"
-                      />
-                      <div *ngIf="!imagesLoaded[i]" class="spinner-overlay">
-                        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-                          <span class="visually-hidden">Loading...</span>
+                  <div *ngFor="let image of project.imgsLink; index as i" 
+                       class="carousel-item" 
+                       [class.active]="i === 0">
+                    <div class="image-container">
+                      <img [src]="image"
+                           [alt]="'Screenshot ' + (i + 1) + ' de ' + project.title"
+                           class="project-image"
+                           (load)="onImageLoad(i)">
+                      <div *ngIf="!imagesLoaded[i]" class="image-loading">
+                        <div class="spinner-border" role="status">
+                          <span class="visually-hidden">Chargement...</span>
                         </div>
+                      </div>
+                      <div class="image-overlay">
+                        <i class="fas fa-expand"></i>
+                        <span>Cliquer pour agrandir</span>
                       </div>
                     </div>
                   </div>
-                  
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carousselDetailProjet" data-bs-slide="prev">
+                
+                <button class="carousel-control-prev" 
+                        type="button" 
+                        data-bs-target="#carousselDetailProjet" 
+                        data-bs-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Previous</span>
+                  <span class="visually-hidden">Précédent</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carousselDetailProjet" data-bs-slide="next">
+                <button class="carousel-control-next" 
+                        type="button" 
+                        data-bs-target="#carousselDetailProjet" 
+                        data-bs-slide="next">
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Next</span>
+                  <span class="visually-hidden">Suivant</span>
                 </button>
-            </div>  
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-
-
-
-
-      
-
-      <!-- Modal Image  -->
-<div class="modal fade"  id="modalImages" tabindex="-1" aria-labelledby="modalImagesLabel" aria-hidden="true">
-  <div class="modal-dialog modal-fullscreen">
-    <div class="modal-content modal-color">
-      <div class="modal-header">
-        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      
-      <div class="modal-body ">
-        <!-- <div class="d-flex justify-content-end">
-          <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-
-        </div> -->
-
-
-        <div class="col-12">
-          <app-custum-caroussel [imgLinks]="project.imgsLink"></app-custum-caroussel>
-        </div>
-
-        
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-      <div class="col-md-6 col-12">
-
-  
-        <div class="container-fluid pt-2 pb-3">
-          <div class="text-center">
-            <div class="bg-primary-color text-black h5 rounded onhoverAccent mt-2">Démo</div>
-          </div>
-  
-          <div class="container bg-sobre-color  rounded  d-flex align-items-center justify-content-center video-container">
-            <div class="embed-responsive embed-responsive-16by9 ">
-              <video controls muted >
-                <source [src]="project.demoLink" type="video/mp4" >
-                Your browser does not support the video tag.
-              </video>
+        <!-- Project Demo Video -->
+        <div class="col-lg-6">
+          <div class="demo-section">
+            <div class="section-header">
+              <h3>
+                <i class="fas fa-play-circle"></i>
+                Démonstration
+              </h3>
+            </div>
+            
+            <div class="video-container">
+              <div class="video-wrapper">
+                <video #videoPlayer 
+                       controls 
+                       muted 
+                       preload="metadata"
+                       (play)="onVideoPlay()"
+                       (pause)="onVideoPause()"
+                       (ended)="onVideoEnded()">
+                  <source [src]="project.demoLink" type="video/mp4">
+                  Votre navigateur ne supporte pas la lecture de vidéos.
+                </video>
+                <div class="video-overlay" [class.hidden]="isVideoPlaying">
+                  <i class="fas" [class.fa-play]="!isVideoPlaying" [class.fa-pause]="isVideoPlaying"></i>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-  
 
-
-    </div>
-
-    <hr class="handsome-hr">
-
-    <div class="row pb-3 mt-3">
-
-
-
-    <div class="col-md-4 col-12 mt-3 rounded ">
-        <div class="card-header rounded p-2 bg-accent-color">
-            <h5 class="text-white ">Description</h5>
+      <!-- Project Information Cards -->
+      <div class="project-info-section">
+        <div class="row">
+          <!-- Description Card -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="info-card">
+              <div class="card-header">
+                <i class="fas fa-file-alt"></i>
+                <h4>Description</h4>
+              </div>
+              <div class="card-content">
+                <p>{{ project.fullDescription }}</p>
+              </div>
+            </div>
           </div>
 
-        <div class=" rounded card-color p-2 mt-1">
-          <p class="text-white">
-            {{project.fullDescription}}
-          </p>
-        </div>
-  </div>
+          <!-- Useful Links Card -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="info-card">
+              <div class="card-header">
+                <i class="fas fa-external-link-alt"></i>
+                <h4>Liens utiles</h4>
+              </div>
+              <div class="card-content">
+                <div class="links-list">
+                  <a *ngFor="let link of usefullLinks" 
+                     [href]="link" 
+                     target="_blank" 
+                     class="link-item">
+                    <i class="fas fa-link"></i>
+                    <span>{{ link }}</span>
+                    <i class="fas fa-external-link-alt external-icon"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <div class="col-md-4 col-12 mt-3 rounded">
-    <div class="card-header rounded p-2 bg-accent-color">
-      <h5 class="text-white">Liens utiles</h5>
-    </div>
-    <div class="rounded card-color p-2 mt-1 link-container">
-      <div *ngFor="let link of usefullLinks" class="d-flex align-items-center link-item  rounded">
-        <svg  class="link-icon"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-          <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-          <path fill="#ffffff" d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z" />
-        </svg>
-        <a target="_blank" class="link text-white" [href]="link">{{ link }}</a>
+          <!-- Technologies Card -->
+          <div class="col-lg-4 col-md-12 mb-4">
+            <div class="info-card">
+              <div class="card-header">
+                <i class="fas fa-tools"></i>
+                <h4>Technologies utilisées</h4>
+              </div>
+              <div class="card-content">
+                <div class="technologies-grid">
+                  <span *ngFor="let tool of project.usedTools" 
+                        class="technology-tag">
+                    {{ tool }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+</div>
 
-
-    <div class="col-md-4 col-12 mt-3 rounded">
-        <div class="card-header rounded p-2  bg-accent-color">
-            <h5 class="text-white">Outils/Technologies utilisés</h5>
-          </div>
-
-        <div class=" rounded card-color p-2 mt-1 text-white">
-          <ul>
-            <li *ngFor="let tool of project.usedTools ">{{tool}}</li>
-          </ul>
-      
-
-
+<!-- Image Modal -->
+<div class="modal fade" id="modalImages" tabindex="-1" aria-labelledby="modalImagesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ project.title }} - Galerie</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-custum-caroussel [imgLinks]="project.imgsLink"></app-custum-caroussel>
+      </div>
     </div>
-
-  </div>
-
-
-
-
-
   </div>
 </div>

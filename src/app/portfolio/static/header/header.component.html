@@ -1,34 +1,50 @@
 
-  <nav class="navbar navbar-expand-lg bg-primary-color">
-    <div class="container-fluid">
-      <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse " id="navbarSupportedContent">
-        <div class="decoration d-md-block d-none"></div>
-        <ul class="navbar-nav mx-auto justify-content-evenly flex-grow-1">
-          <li class="nav-item">
-            <a class="nav-link on-hover d-inline-flex p-2" routerLink="home" routerLinkActive="active" (click)="scrollToSection('home')">Accueil</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link on-hover d-inline-flex p-2"  (click)="scrollToSection('competences')">Compétences</a>
-          </li>
-          <li class="nav-item position-relative">
-            <a class="nav-link on-hover d-inline-flex p-2" [class.active]="isRouteActive('/project-details')" aria-current="page"  (click)="scrollToSection('projets')">Projets</a>
-            <ul class="navbar-nav subMenu bg-accent-color position-absolute">
-              <li class="nav-item">
-                <a class="nav-link on-hover text-white text-center" aria-current="page"  (click)="scrollToSection('web')">Mobile</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link on-hover text-white text-center" aria-current="page"  (click)="scrollToSection('mobile')">Web</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link on-hover d-inline-flex p-2" [class.active]="isRouteActive('/contact')"  (click)="scrollToSection('contact')">Contact</a>
-          </li>
-        </ul>
-        <div class="decoration d-md-block d-none"></div>
+<!-- Modern Navigation -->
+<nav class="navbar navbar-expand-lg modern-navbar">
+  <div class="container">
+    <!-- Brand/Logo -->
+    <a class="navbar-brand" (click)="scrollToSection('home')" style="cursor: pointer;">
+      <div class="brand-logo">
+        <i class="fas fa-code"></i>
+        <span>Ousseynou Koné</span>
       </div>
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon">
+        <i class="fas fa-bars"></i>
+      </span>
+    </button>
+
+    <!-- Navigation Menu -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeSection === 'home'" (click)="scrollToSection('home')" style="cursor: pointer;">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeSection === 'competences'" (click)="scrollToSection('competences')" style="cursor: pointer;">
+            <i class="fas fa-tools"></i>
+            <span>Compétences</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeSection === 'projets'" (click)="scrollToSection('projets')" style="cursor: pointer;">
+            <i class="fas fa-folder-open"></i>
+            <span>Projets</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeSection === 'contact'" (click)="scrollToSection('contact')" style="cursor: pointer;">
+            <i class="fas fa-envelope"></i>
+            <span>Contact</span>
+          </a>
+        </li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
