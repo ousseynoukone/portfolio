@@ -119,10 +119,11 @@
 /* Projects Carousel */
 .projects-carousel {
   position: relative;
-  margin: 0 40px; /* Add margin to accommodate the arrows */
+  margin: 0 20px; /* Add margin to accommodate the arrows */
 }
 
 .carousel {
+  position: relative;
   border-radius: 15px;
   overflow: hidden;
 }
@@ -199,7 +200,7 @@
 }
 
 .project-info {
-  padding: 1.5rem;
+  padding: 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -273,21 +274,36 @@
 }
 
 .carousel-indicators {
-  bottom: -50px;
+  position: relative;
+  bottom: auto;
+  left: auto;
+  transform: none;
+  margin: 20px auto 20px auto;
+  text-align: center;
+  z-index: 10;
 }
 
 .carousel-indicators button {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: rgba(252, 246, 246, 0.3);
-  border: none;
-  margin: 0 5px;
+  background: rgba(252, 246, 246, 0.4);
+  border: 2px solid rgba(252, 246, 246, 0.6);
+  margin: 0 6px;
   transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.carousel-indicators button:hover {
+  opacity: 1;
+  transform: scale(1.1);
 }
 
 .carousel-indicators button.active {
   background: #990012;
+  border-color: #cc0018;
+  opacity: 1;
+  transform: scale(1.2);
 }
 
 /* Responsive Design */
@@ -319,9 +335,7 @@
     height: 150px;
   }
   
-  .projects-carousel {
-    margin: 0 35px; /* Reduce margin for mobile */
-  }
+
   
   .carousel-control-prev,
   .carousel-control-next {
@@ -352,10 +366,7 @@
   .section-title {
     font-size: 2rem;
   }
-  
-  .project-category {
-    padding: 1rem;
-  }
+
   
   .project-info {
     padding: 1rem;

@@ -7,6 +7,8 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
+  z-index: 1;
+  padding-top: 20px; /* Reduced padding for navbar */
 }
 
 .hero-section::before {
@@ -22,13 +24,14 @@
 
 .hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 10;
 }
 
 .profile-image-container {
   position: relative;
   display: inline-block;
   margin-bottom: 2rem;
+  z-index: 15;
 }
 
 .profile-image {
@@ -65,10 +68,21 @@
 }
 
 .hero-title {
-  font-size: 3.5rem;
-  font-weight: 700;
+  font-size: 2.5rem;
   margin-bottom: 1rem;
-  line-height: 1.5
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: 3.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero-title {
+    font-size: 4rem;
+  }
 }
 
 .text-gradient {
@@ -80,10 +94,21 @@
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #990012;
   margin-bottom: 1.5rem;
-  font-weight: 500;
+}
+
+@media (min-width: 768px) {
+  .hero-subtitle {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero-subtitle {
+    font-size: 1.8rem;
+  }
 }
 
 .typing-animation {
@@ -91,6 +116,26 @@
   animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
   white-space: nowrap;
   overflow: hidden;
+}
+
+/* Responsive typing animation for mobile */
+@media (max-width: 576px) {
+  .typing-animation {
+    white-space: normal;
+    border-right: none;
+    animation: none;
+  }
+  
+  .hero-buttons .btn {
+    margin-bottom: 16px;
+  }
+}
+
+/* Add bottom margin for mobile L and M */
+@media (max-width: 768px) {
+  .hero-buttons .btn {
+    margin-bottom: 16px;
+  }
 }
 
 @keyframes typing {
@@ -104,15 +149,24 @@
 }
 
 .hero-description {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
+  font-size: 1rem;
   color: #e0e0e0;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .hero-description {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero-description {
+    font-size: 1.2rem;
+  }
 }
 
 .hero-buttons .btn {
-  padding: 12px 30px;
-  font-weight: 600;
   border-radius: 50px;
   transition: all 0.3s ease;
   text-transform: uppercase;
@@ -148,12 +202,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 5;
 }
 
 .floating-cards {
   position: absolute;
   width: 100%;
   height: 100%;
+  z-index: 1;
 }
 
 .floating-card {
@@ -170,6 +226,15 @@
   font-weight: 600;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   animation: float 6s ease-in-out infinite;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.floating-card:hover {
+  transform: scale(1.1);
+  background: rgba(252, 246, 246, 0.2);
+  border-color: rgba(153, 0, 18, 0.5);
+  box-shadow: 0 12px 40px rgba(153, 0, 18, 0.3);
 }
 
 .floating-card i {
@@ -184,6 +249,50 @@
 .card-5 { bottom: 10%; left: 20%; animation-delay: 4s; }
 .card-6 { top: 70%; right: 5%; animation-delay: 5s; }
 .card-7 { bottom: 50%; left: 30%; animation-delay: 6s; }
+
+/* Button responsive sizing */
+@media (min-width: 576px) {
+  .hero-buttons .btn {
+    font-size: 0.95rem;
+    padding: 12px 24px;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-buttons .btn {
+    font-size: 1rem;
+    padding: 14px 28px;
+  }
+}
+
+@media (min-width: 992px) {
+  .hero-buttons .btn {
+    font-size: 1rem;
+    padding: 16px 32px;
+  }
+}
+
+/* Responsive floating cards positioning */
+@media (max-width: 1200px) {
+  .card-1 { top: 15%; left: 5%; }
+  .card-2 { top: 25%; right: 2%; }
+  .card-3 { top: 45%; left: 2%; }
+  .card-4 { bottom: 35%; right: 5%; }
+  .card-5 { bottom: 15%; left: 15%; }
+  .card-6 { top: 65%; right: 2%; }
+  .card-7 { bottom: 45%; left: 25%; }
+}
+
+@media (max-width: 992px) {
+  .card-1 { top: 20%; left: 2%; }
+  .card-2 { top: 30%; right: 1%; }
+  .card-3 { top: 40%; left: 1%; }
+  .card-4 { bottom: 40%; right: 2%; }
+  .card-5 { bottom: 20%; left: 10%; }
+  .card-6 { top: 60%; right: 1%; }
+  .card-7 { bottom: 40%; left: 20%; }
+}
 
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -201,72 +310,47 @@
   50% { transform: scale(1.05); }
 }
 
+/* Scroll Indicator */
 .scroll-indicator {
   position: absolute;
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 2;
+  z-index: 10;
+  animation: bounce 2s infinite;
 }
 
 .scroll-arrow {
-  width: 50px;
-  height: 50px;
-  border: 2px solid #990012;
+  width: 40px;
+  height: 40px;
+  background: rgba(153, 0, 18, 0.8);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #990012;
+  color: white;
   font-size: 1.2rem;
-  animation: bounce 2s infinite;
-  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(153, 0, 18, 0.4);
   transition: all 0.3s ease;
 }
 
 .scroll-arrow:hover {
-  background: #990012;
-  color: white;
+  background: rgba(153, 0, 18, 1);
+  transform: scale(1.1);
 }
+
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-  60% { transform: translateY(-5px); }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(-50%) translateY(0);
   }
-  
-  .hero-subtitle {
-    font-size: 1.2rem;
+  40% {
+    transform: translateX(-50%) translateY(-10px);
   }
-  
-  .profile-image {
-    width: 150px;
-    height: 150px;
-  }
-  
-  .floating-cards {
-    display: none;
-  }
-  
-  .hero-buttons .btn {
-    display: block;
-    width: 100%;
-    margin-bottom: 1rem;
+  60% {
+    transform: translateX(-50%) translateY(-5px);
   }
 }
 
-@media (max-width: 576px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-  
-  .hero-description {
-    font-size: 1rem;
-  }
-}
+
+

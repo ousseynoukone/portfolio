@@ -6,7 +6,7 @@
             <div class="col-lg-6 order-lg-1 order-2">
                 <div class="hero-content">
                     <!-- Profile Image -->
-                    <div class="profile-image-container mb-4">
+                    <div class="profile-image-container mb-4 mt-4  ">
                         <img class="profile-image" src="../../../../assets/imgs/me.png" alt="Ousseynou Koné" (click)="goToAdminPanel()">
                         <div class="profile-badge">
                             <i class="fas fa-code"></i>
@@ -15,24 +15,26 @@
                     
                     <!-- Name and Title -->
                     <div class="hero-text">
-                        <h1 class="hero-title">
-                            <span class="text-gradient mr-4">Ousseynou Koné</span>
+                        <h1 class="hero-title fw-bold">
+                            <span class="text-gradient">Ousseynou Koné</span>
                         </h1>
                         
-                        <div class="hero-subtitle">
+                        <div class="hero-subtitle fw-semibold mb-3">
                             <span class="typing-animation">Développeur FullStack Web/Mobile</span>
                         </div>
-                        <p class="hero-description">
+                        <p class="hero-description lh-lg">
                             Passionné par le développement web et mobile, je transforme des idées créatives en expériences digitales exceptionnelles. Basé en Île-de-France, je suis prêt à relever de nouveaux défis technologiques.
                         </p>
                         
                         <!-- CTA Buttons -->
-                        <div class="hero-buttons">
-                            <button class="btn btn-primary btn-lg me-3" (click)="scrollToSection('projets')">
+                        <div class="hero-buttons d-flex flex-column flex-sm-row">
+                          
+                            <button class="btn btn-primary me-0 mb-3 mb-sm-0 me-sm-3" (click)="scrollToSection('projets')">
                                 <i class="fas fa-folder-open me-2"></i>
                                 Voir mes Projets
                             </button>
-                            <button class="btn btn-outline-primary btn-lg" (click)="scrollToSection('contact')">
+
+                            <button class="btn btn-outline-primary mb-3 mb-sm-0" (click)="scrollToSection('contact')">
                                 <i class="fas fa-envelope me-2"></i>
                                 Me Contacter
                             </button>
@@ -41,45 +43,45 @@
                 </div>
             </div>
             
-            <div class="col-lg-6 order-lg-2 order-1">
+            <div class="col-lg-6 order-lg-2 order-1 d-none d-lg-block">
                 <div class="hero-visual">
                     <!-- Floating Cards Animation -->
                     <div class="floating-cards">
-                        <div class="floating-card card-1">
+                        <div class="floating-card card-1" (click)="goToAdminPanel()">
                             <i class="fab fa-angular"></i>
                             <span>Angular</span>
                         </div>
 
-                        <div class="floating-card card-2">
+                        <div class="floating-card card-2" (click)="goToAdminPanel()">
                             <i class="fab fa-java"></i>
                             <span>Spring Boot</span>
                         </div>
                
-                        <div class="floating-card card-3">
+                        <div class="floating-card card-3" (click)="goToAdminPanel()">
                             <i class="fab fa-node-js"></i>
                             <span>Node.js</span>
                         </div>
-                        <div class="floating-card card-4">
+                        <div class="floating-card card-4" (click)="goToAdminPanel()">
                             <i class="fab fa-react"></i>
                             <span>React</span>
                         </div>
                         
-                        <div class="floating-card card-5">
+                        <div class="floating-card card-5" (click)="goToAdminPanel()">
                             <i class="fab fa-js-square"></i>
                             <span>JavaScript</span>
                         </div>
-                        <div class="floating-card card-6">
+                        <div class="floating-card card-6" (click)="goToAdminPanel()">
                             <i class="fab fa-python"></i>
                             <span>Python</span>
                         </div>
-                        <div class="floating-card card-7">
+                        <div class="floating-card card-7" (click)="goToAdminPanel()">
                             <i class="fas fa-database"></i>
                             <span>Database</span>
                         </div>
                     </div>
                     
-                    <!-- Central Image -->
-                    <div class="central-image">
+                    <!-- Central Image - Hidden on mobile -->
+                    <div class="central-image d-none d-lg-block">
                         <img src="../../../../assets/imgs/sharingan2.png" alt="Developer Illustration" class="img-fluid">
                     </div>
                 </div>
@@ -93,4 +95,5 @@
             <i class="fas fa-chevron-down"></i>
         </div>
     </div>
+    
 </section>

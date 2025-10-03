@@ -9,17 +9,21 @@
         </div>
 
         <!-- Loading State -->
-        <div *ngIf="state.loading" class="text-center">
+        @if (state.loading) {
+        <div class="text-center">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Chargement...</span>
             </div>
         </div>
+        }
         
         <!-- No Data Message -->
-        <div *ngIf="state.noDataMessage !== ''" class="no-data-message">
+        @if (state.noDataMessage !== '') {
+        <div class="no-data-message">
             <i class="fas fa-folder-open"></i>
             <p>{{ state.noDataMessage }}</p>
         </div>
+        }
 
         <!-- Projects Grid -->
         <div class="projects-grid">
@@ -35,18 +39,9 @@
                     </div>
                 </div>
                 
-                <div *ngIf="!state.noDataMobile" class="projects-carousel">
+                @if (!state.noDataMobile) {
+                <div class="projects-carousel">
                     <div id="carousselMobile" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-indicators">
-                            <button *ngFor="let project of state.mobile; let i = index" 
-                                    type="button" 
-                                    [attr.data-bs-target]="'#carousselMobile'" 
-                                    [attr.data-bs-slide-to]="i" 
-                                    [class.active]="i === 0" 
-                                    aria-current="true">
-                            </button>
-                        </div>
-                        
                         <div class="carousel-inner">
                             <div *ngFor="let project of state.mobile; index as i" 
                                  class="carousel-item" 
@@ -73,24 +68,35 @@
                             </div>
                         </div>
                         
-                        <button *ngIf="state.mobile && state.mobile.length > 1" 
-                                class="carousel-control-prev" 
+                        <div class="carousel-indicators">
+                            <button *ngFor="let project of state.mobile; let i = index" 
+                                    type="button" 
+                                    [attr.data-bs-target]="'#carousselMobile'" 
+                                    [attr.data-bs-slide-to]="i" 
+                                    [class.active]="i === 0" 
+                                    aria-current="true">
+                            </button>
+                        </div>
+                        
+                        @if (state.mobile && state.mobile.length > 1) {
+                        <button class="carousel-control-prev" 
                                 type="button" 
                                 data-bs-target="#carousselMobile" 
                                 data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Précédent</span>
                         </button>
-                        <button *ngIf="state.mobile && state.mobile.length > 1" 
-                                class="carousel-control-next" 
+                        <button class="carousel-control-next" 
                                 type="button" 
                                 data-bs-target="#carousselMobile" 
                                 data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Suivant</span>
                         </button>
+                        }
                     </div>
                 </div>
+                }
             </div>
 
             <!-- Web Projects -->
@@ -105,18 +111,9 @@
                     </div>
                 </div>
                 
-                <div *ngIf="!state.noDataWeb" class="projects-carousel">
+                @if (!state.noDataWeb) {
+                <div class="projects-carousel">
                     <div id="carousselWeb" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-indicators">
-                            <button *ngFor="let project of state.web; let i = index" 
-                                    type="button" 
-                                    [attr.data-bs-target]="'#carousselWeb'" 
-                                    [attr.data-bs-slide-to]="i" 
-                                    [class.active]="i === 0" 
-                                    aria-current="true">
-                            </button>
-                        </div>
-                        
                         <div class="carousel-inner">
                             <div *ngFor="let project of state.web; index as i" 
                                  class="carousel-item" 
@@ -143,24 +140,35 @@
                             </div>
                         </div>
                         
-                        <button *ngIf="state.web && state.web.length > 1" 
-                                class="carousel-control-prev" 
+                        <div class="carousel-indicators">
+                            <button *ngFor="let project of state.web; let i = index" 
+                                    type="button" 
+                                    [attr.data-bs-target]="'#carousselWeb'" 
+                                    [attr.data-bs-slide-to]="i" 
+                                    [class.active]="i === 0" 
+                                    aria-current="true">
+                            </button>
+                        </div>
+                        
+                        @if (state.web && state.web.length > 1) {
+                        <button class="carousel-control-prev" 
                                 type="button" 
                                 data-bs-target="#carousselWeb" 
                                 data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Précédent</span>
                         </button>
-                        <button *ngIf="state.web && state.web.length > 1" 
-                                class="carousel-control-next" 
+                        <button class="carousel-control-next" 
                                 type="button" 
                                 data-bs-target="#carousselWeb" 
                                 data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Suivant</span>
                         </button>
+                        }
                     </div>
                 </div>
+                }
             </div>
         </div>
     </div>

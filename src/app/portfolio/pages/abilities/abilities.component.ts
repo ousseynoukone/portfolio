@@ -61,8 +61,8 @@ export class AbilitiesComponent implements OnInit {
 
     // Show Framework by default
     this.framework.removeAttribute("hidden");
-    // Add activeAccent class to frameworkButton by default
-    this.frameworkButton.classList.add("activeAccent");
+    // Add active class to frameworkButton by default
+    this.frameworkButton.classList.add("active");
 
     
     this.addGestionProjCaller();
@@ -118,41 +118,36 @@ export class AbilitiesComponent implements OnInit {
   showInformation(choice: string) {
     // Hide all sections before showing the selected one
     this.hideAllSections();
-    // Remove activeAccent class from all buttons
+    // Remove active class from all buttons
     this.removeActiveAccentClassFromButtons();
     // Show the selected section
     switch (choice) {
       case "framework":
         this.framework.removeAttribute("hidden");
-        this.frameworkButton.classList.add("activeAccent");
+        this.frameworkButton.classList.add("active");
         break;
       case "langProg":
         this.langageDeProg.removeAttribute("hidden");
-        this.langProgButton.classList.add("activeAccent");
+        this.langProgButton.classList.add("active");
         break;
       case "archiConcept":
         this.archiConcept.removeAttribute("hidden");
-        this.archiConceptButton.classList.add("activeAccent");
+        this.archiConceptButton.classList.add("active");
         break;
       case "gestionProjet":
         this.gestionProj.removeAttribute("hidden");
-        this.gestionProjetButton.classList.add("activeAccent");
+        this.gestionProjetButton.classList.add("active");
         break;
       case "modelisation":
         this.modelisation.removeAttribute("hidden");
-        this.modelisationButton.classList.add("activeAccent");
+        this.modelisationButton.classList.add("active");
         break;
       case "autreCompetence":
         this.autreCompetence.removeAttribute("hidden");
-        this.autreCompetenceButton.classList.add("activeAccent");
-        this.scrollToElement(choice)
-
+        this.autreCompetenceButton.classList.add("active");
+        this.scrollToElement(choice);
         break;
-
-    
     }
-
-
   }
 
   hideAllSections() {
@@ -167,9 +162,9 @@ export class AbilitiesComponent implements OnInit {
 
   removeActiveAccentClassFromButtons() {
     // Remove activeAccent class from all buttons
-    const buttons = document.querySelectorAll('.badge');
+    const buttons = document.querySelectorAll('.filter-tab');
     buttons.forEach(button => {
-      button.classList.remove('activeAccent');
+      button.classList.remove('active');
     });
   }
 
