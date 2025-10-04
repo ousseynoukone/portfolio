@@ -1,81 +1,165 @@
 
-<div class="container-fluid bg-primary-color mt-3 ">
-  <h3 class="bg-secondary-color text-white p-3 text-center ">Project Section</h3>
-<div class="row">
-  <div *ngIf="isDataComing" class="col-md-12 text-center mt-5">
-    <div class="spinner-grow text-danger" role="status">
-      <span class="visually-hidden">Loading...</span>
+<div class="container-fluid bg-primary-color mt-3">
+  <div class="row">
+    <div *ngIf="isDataComing" class="col-md-12 text-center mt-5">
+      <div class="spinner-grow text-danger" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div class="container mb-4">
+      <div class="d-flex gap-2 flex-wrap">
+        <button class="btn btn-lg shadow-sm" (click)="addNewProject()" style="background: #990012; border-color: #990012; color: white;">
+          <i class="fas fa-plus me-2"></i>Add New Project
+        </button>
+
+        <button type="button" (click)="navigateToOrderProject()" class="btn btn-outline-dark btn-lg shadow-sm">
+          <i class="fas fa-sort me-2"></i>Order Projects
+        </button>
+      </div>
+    </div>
+
+<!-- Enhanced Projects Table -->
+<div *ngIf="!isDataComing" class="projects-container">
+  <div class="container-fluid">
+    <!-- Table Header with Stats -->
+    <div class="table-header mb-4">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <h4 class="mb-0">
+            <i class="fas fa-project-diagram me-2"></i>Projects Management
+          </h4>
+        </div>
+        <div class="col-md-6 text-end">
+          <div class="stats-badge">
+            <span class="badge bg-primary fs-6">
+              <i class="fas fa-database me-1"></i>
+              {{ fireBaseStorage.totalOfItems }} total • {{ this.fireBaseStorage.limit }} displayed
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Table -->
+    <div class="table-responsive">
+      <table id="example" class="table table-hover table-striped projects-table">
+        <thead class="table-dark">
+          <tr>
+            <th>
+              <i class="fas fa-tag me-1"></i>Title
+            </th>
+            <th>
+              <i class="fas fa-align-left me-1"></i>Description
+            </th>
+            <th>
+              <i class="fas fa-layer-group me-1"></i>Type
+            </th>
+            <th>
+              <i class="fas fa-eye me-1"></i>Status
+            </th>
+            <th class="text-center">
+              <i class="fas fa-cogs me-1"></i>Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let project of projects" class="project-row">
+            <!-- Title Column -->
+            <td>
+              <div class="project-title-cell">
+                <h6 class="mb-0 fw-bold">{{ project.title }}</h6>
+                <small class="text-muted d-md-none">{{ project.type | uppercase }}</small>
+              </div>
+            </td>
+
+            <!-- Description Column -->
+            <td>
+              <div class="project-description-cell">
+                <p class="project-description">{{ truncateText(project.minDescription) }}</p>
+              </div>
+            </td>
+
+            <!-- Type Column -->
+            <td>
+              <span class="project-type-badge" [ngClass]="getProjectTypeClass(project.type)">
+                <i [class]="getProjectTypeIcon(project.type)" class="me-1"></i>
+                {{ getProjectTypeLabel(project.type) }}
+              </span>
+            </td>
+
+            <!-- Status Column -->
+            <td>
+              <span class="visibility-status" [class.visible]="project.isVisible" [class.hidden]="!project.isVisible">
+                <i class="fas" [class.fa-eye]="project.isVisible" [class.fa-eye-slash]="!project.isVisible"></i>
+                {{ project.isVisible ? 'Visible' : 'Hidden' }}
+              </span>
+            </td>
+
+            <!-- Actions Column -->
+            <td class="text-center">
+              <div class="btn-group" role="group">
+                <button class="btn btn-outline-primary btn-sm" 
+                        (click)="switchToEditMode(project)"
+                        title="Edit Project">
+                  <i class="fas fa-edit"></i>
+                  <span class="d-none d-lg-inline ms-1">Edit</span>
+                </button>
+                <button class="btn btn-outline-danger btn-sm" 
+                        (click)="deleteproject(project)"
+                        title="Delete Project">
+                  <i class="fas fa-trash"></i>
+                  <span class="d-none d-lg-inline ms-1">Delete</span>
+                </button>
+                <button class="btn btn-outline-warning btn-sm" 
+                        (click)="updateProjectVisibility(project)"
+                        [disabled]="isChangingVisibility"
+                        title="Toggle Visibility">
+                  <span *ngIf="isChangingVisibility" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                  <i *ngIf="!isChangingVisibility" class="fas" [class.fa-eye]="!project.isVisible" [class.fa-eye-slash]="project.isVisible"></i>
+                  <span *ngIf="!isChangingVisibility" class="d-none d-lg-inline ms-1">{{ project.isVisible ? 'Hide' : 'Show' }}</span>
+                </button>
+                <button type="button" 
+                        (click)="gotoProjectOrderingPage(project)" 
+                        class="btn btn-outline-dark btn-sm"
+                        title="Manage Images">
+                  <i class="fas fa-images"></i>
+                  <span class="d-none d-lg-inline ms-1">Images</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container mt-4">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="pagination-info">
+            <span class="text-muted">
+              Showing {{ projects.length }} of {{ fireBaseStorage.totalOfItems }} projects
+            </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="pagination-controls d-flex justify-content-end gap-2">
+            <button class="btn btn-outline-primary" 
+                    [disabled]="fireBaseStorage.weAreOnTheFirstElement" 
+                    (click)="getPrevious()">
+              <i class="fas fa-chevron-left me-1"></i>Previous
+            </button>
+            <button class="btn btn-outline-primary" 
+                    [disabled]="fireBaseStorage.weAreOntLastElement" 
+                    (click)="getNext()">
+              Next<i class="fas fa-chevron-right ms-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="container ">
-      <button class="btn bg-secondary-color m-2 text-white" (click)="addNewProject()">Add new Project</button>
-
-      <button type="button" (click)="navigateToOrderProject()"  class="btn bg-secondary-color m-2 text-white">
-        <span>Order Projects</span>
-      </button>
-  </div>
-
-<div *ngIf="!isDataComing" class="bg-primary-color rounded">
-  <div class="container mt-3">
-    <!-- add this to table if u want DATATABLE datatable [dtOptions]="dtOptions"  -->
-    <table  id="example" class="table table-striped" style="width: 100% !important;" >
-
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Min Description</th>
-          <th>Options</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let project of projects">
-
-
-          <td>
-            {{ truncateText(project.title) }}
-          </td>
-          
-          <td >
-            {{ truncateText(project!.minDescription)}}
-
-          </td>
-          
-      
- 
-          <td>
-            <button class="btn btn-success btn-sm m-1" (click)="switchToEditMode(project)" >Details</button>
-            <button class="btn btn-danger btn-sm m-1" (click)="deleteproject(project)">Delete</button>
-            <button class="btn btn-warning btn-sm m-1" (click)="updateProjectVisibility(project)">
-              @if (isChangingVisibility) {
-                <span class="spinner-border spinner-border-sm " role="status" aria-hidden="true"></span>
-              } @else {
-                @if (project.isVisible) {
-                  <span>Hide</span>
-                } @else {
-                  <span>Show</span>
-                }
-              }
-            </button>
-            
-            <button type="button" (click)="gotoProjectOrderingPage(project)"  class="btn btn-dark btn-sm m-1">
-              <span >Order IMG</span>
-            </button>
-          </td>
-
-        </tr>
-      </tbody>
-    </table>
-    <div class="badge bg-secondary-color mt-1 text-white ">Total de  {{fireBaseStorage.totalOfItems}}  affiché par    {{this.fireBaseStorage.limit}}</div>
-  </div>
-  
-
-  <button class="btn bg-secondary-color m-2 text-white" [disabled]="fireBaseStorage.weAreOnTheFirstElement" (click)="getPrevious()">Precedent</button>
-
-  <button class="btn  bg-secondary-color m-2  text-white" [disabled]="fireBaseStorage.weAreOntLastElement" (click)="getNext()">Suivant</button>
-
-
-  
 </div>
   
 
@@ -88,82 +172,92 @@
 
 
 
-<!-- Modal Client -->
+<!-- Enhanced Modal Client -->
 <div class="modal fade" id="formModalProject" tabindex="-1" role="dialog" aria-labelledby="formModalProjectLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-accent-color ">
-        <div class="h5 rounded  modal-title bg-secondary-color text-white p-2 ">
-          <span *ngIf="this.editMode" >Update project</span>
-          <span *ngIf="!this.editMode" >Add project</span>
-          
-          </div>
-            <button type="button" class="btn-close bg-white m-2" (click)="close()"  *ngIf="!isLoading" data-bs-dismiss="modal" aria-label="Close"></button>
-  
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-gradient-primary text-white">
+        <div class="modal-title d-flex align-items-center">
+          <i class="fas fa-project-diagram me-2"></i>
+          <span *ngIf="this.editMode">Update Project</span>
+          <span *ngIf="!this.editMode">Add New Project</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white" (click)="close()" *ngIf="!isLoading" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
-      <div class="modal-body ">
+      <div class="modal-body modern-body">
         <div class="row">
-          <div class="col-12  " [class.col-md-6]="this.editMode">
-        <div class="container">
-          <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="mt-4 col-12 " id="projectForm">
+          <div class="col-12" [class.col-md-6]="this.editMode">
+            <div class="form-container">
+              <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="modern-form" id="projectForm">
           
           
-              <div class="form-group ">
-                <label for="libelle">Title : </label>
-                <input type="text" maxlength="40" id="libelle" class="form-control" formControlName="title" required>
-          
-                <div *ngIf="projectForm.get('title')?.errors && projectForm.get('title')?.touched">
-                  <p class="badge bg-danger mt-1" *ngIf="projectForm.get('title')!.hasError('required')">Title is required.</p>
-                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('title')!.hasError('maxlength')">40 char max.</p>
-                    
+              <div class="form-group modern-field">
+                <label for="libelle" class="modern-label">
+                  <i class="fas fa-tag me-2"></i>Project Title
+                </label>
+                <input type="text" maxlength="40" id="libelle" class="form-control modern-input" formControlName="title" required placeholder="Enter project title">
+                <div class="char-counter">{{projectForm.get('title')?.value?.length || 0}}/40</div>
+                <div *ngIf="projectForm.get('title')?.errors && projectForm.get('title')?.touched" class="error-messages">
+                  <div class="error-message" *ngIf="projectForm.get('title')!.hasError('required')">
+                    <i class="fas fa-exclamation-circle me-1"></i>Title is required
+                  </div>
+                  <div class="error-message" *ngIf="projectForm.get('title')!.hasError('maxlength')">
+                    <i class="fas fa-exclamation-circle me-1"></i>Maximum 40 characters allowed
+                  </div>
                 </div>
               </div>
 
 
-              <div class="form-group ">
-                <label for="libelle">Type : </label>
-                <select formControlName="type" class="form-select form-group" aria-label="Default select example">
-                  <option *ngFor="let option of options" [value]="option.value"  [disabled]="option.value === '' " [selected]="option.value === ''">
+              <div class="form-group modern-field">
+                <label for="type" class="modern-label">
+                  <i class="fas fa-layer-group me-2"></i>Project Type
+                </label>
+                <select formControlName="type" class="form-select modern-select" aria-label="Select project type">
+                  <option *ngFor="let option of options" [value]="option.value" [disabled]="option.value === ''" [selected]="option.value === ''">
                     {{ option.label }}
                   </option>
-          
                 </select>
-                
-            
-              <!-- Display validation message if the control is touched and not valid -->
-              <div *ngIf="projectForm.get('type')?.errors && projectForm.get('type')?.touched">
-                
-                <p class="badge bg-danger mt-1" > Type is required.</p>
-          
+                <div *ngIf="projectForm.get('type')?.errors && projectForm.get('type')?.touched" class="error-messages">
+                  <div class="error-message">
+                    <i class="fas fa-exclamation-circle me-1"></i>Please select a project type
+                  </div>
+                </div>
               </div>
-          
-              
-          
-              
-            </div>
 
                         
-              <div class="form-group ">
-                <label for="minDescription">Min Description : </label>
-                <textarea type="text" id="minDescription" maxlength="50" class="form-control" formControlName="minDescription" required> </textarea>
-          
-                <div *ngIf="projectForm.get('minDescription')?.errors && projectForm.get('minDescription')?.touched">
-                  <p class="badge bg-danger mt-1" *ngIf="projectForm.get('minDescription')!.hasError('required')">minDescription is required.</p>
-                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('minDescription')!.hasError('maxlength')">50 char max.</p>
-                    
+              <div class="form-group modern-field">
+                <label for="minDescription" class="modern-label">
+                  <i class="fas fa-align-left me-2"></i>Short Description
+                </label>
+                <textarea id="minDescription" maxlength="50" class="form-control modern-textarea" formControlName="minDescription" required placeholder="Brief description of the project"></textarea>
+                <div class="char-counter">{{projectForm.get('minDescription')?.value?.length || 0}}/50</div>
+                <div *ngIf="projectForm.get('minDescription')?.errors && projectForm.get('minDescription')?.touched" class="error-messages">
+                  <div class="error-message" *ngIf="projectForm.get('minDescription')!.hasError('required')">
+                    <i class="fas fa-exclamation-circle me-1"></i>Short description is required
+                  </div>
+                  <div class="error-message" *ngIf="projectForm.get('minDescription')!.hasError('maxlength')">
+                    <i class="fas fa-exclamation-circle me-1"></i>Maximum 50 characters allowed
+                  </div>
                 </div>
               </div>
 
 
 
-              <div class="form-group ">
-                <label for="fullDescription">Full Description : </label>
-                <textarea type="text" id="fullDescription" maxlength="500" class="form-control" formControlName="fullDescription" required> </textarea>
-          
-                <div *ngIf="projectForm.get('fullDescription')?.errors && projectForm.get('fullDescription')?.touched">
-                  <p class="badge bg-danger mt-1" *ngIf="projectForm.get('fullDescription')!.hasError('required')">fullDescription is required.</p>
-                    <p class="badge bg-danger mt-1" *ngIf="projectForm.get('fullDescription')!.hasError('maxlength')">500 char max.</p>
-                    
+              <div class="form-group modern-field">
+                <label for="fullDescription" class="modern-label">
+                  <i class="fas fa-file-alt me-2"></i>Full Description
+                </label>
+                <textarea id="fullDescription" maxlength="500" class="form-control modern-textarea large" formControlName="fullDescription" required placeholder="Detailed description of the project"></textarea>
+                <div class="char-counter">{{projectForm.get('fullDescription')?.value?.length || 0}}/500</div>
+                <div *ngIf="projectForm.get('fullDescription')?.errors && projectForm.get('fullDescription')?.touched" class="error-messages">
+                  <div class="error-message" *ngIf="projectForm.get('fullDescription')!.hasError('required')">
+                    <i class="fas fa-exclamation-circle me-1"></i>Full description is required
+                  </div>
+                  <div class="error-message" *ngIf="projectForm.get('fullDescription')!.hasError('maxlength')">
+                    <i class="fas fa-exclamation-circle me-1"></i>Maximum 500 characters allowed
+                  </div>
                 </div>
               </div>
 
@@ -254,12 +348,11 @@
  
           <div class="d-flex justify-content-center">
             <hr *ngIf="this.editMode">  
-            <button type="submit"  [disabled]="isLoading" class="btn bg-accent-color p-2 mt-3 text-white" >
-          
-              <span *ngIf="isLoading" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
-              <span *ngIf="!isLoading && !this.editMode" >Add</span>
-              <span *ngIf="!isLoading && this.editMode" >Update</span>
-            
+            <button type="submit" [disabled]="isLoading" class="btn btn-lg mt-3" style="background: #990012; border-color: #990012; color: white;">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <i *ngIf="!isLoading" class="fas fa-save me-1"></i>
+              <span *ngIf="!isLoading && !this.editMode">Add Project</span>
+              <span *ngIf="!isLoading && this.editMode">Update Project</span>
             </button>
  
 

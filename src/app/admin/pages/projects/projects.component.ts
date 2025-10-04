@@ -514,14 +514,13 @@ resetInputs() {
 
 gotoProjectOrderingPage(project : Project){
   this.shareData.setData=project
-  this.router.navigate(['order-images'], {relativeTo:this.route});
+  this.router.navigate(['../order-images'], {relativeTo:this.route});
 }
 
 
 
 navigateToOrderProject(){
-  this.router.navigate(['order-projects'], {relativeTo:this.route});
-
+  this.router.navigate(['../order-projects'], {relativeTo:this.route});
 }
 
 
@@ -554,6 +553,39 @@ scrollToElement(elementId: string): void {
     } else {
       // Default truncation length for larger screens
       return text.length > 30 ? text.substring(0, 30) + '...' : text;
+    }
+  }
+
+  getProjectTypeClass(type: string): string {
+    switch (type) {
+      case 'mobile':
+        return 'project-type-mobile';
+      case 'web':
+        return 'project-type-web';
+      default:
+        return 'project-type-web';
+    }
+  }
+
+  getProjectTypeIcon(type: string): string {
+    switch (type) {
+      case 'mobile':
+        return 'fas fa-mobile-alt';
+      case 'web':
+        return 'fas fa-globe';
+      default:
+        return 'fas fa-globe';
+    }
+  }
+
+  getProjectTypeLabel(type: string): string {
+    switch (type) {
+      case 'mobile':
+        return 'Mobile';
+      case 'web':
+        return 'Web';
+      default:
+        return 'Web';
     }
   }
 

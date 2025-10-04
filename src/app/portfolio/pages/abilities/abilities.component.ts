@@ -96,23 +96,23 @@ export class AbilitiesComponent implements OnInit {
 
 
   addGestionProjCaller() {
-    this.addGestionProj('scrum.png', 'Méthodologies Agile (SCRUM)');
-    this.addGestionProj('cascade.png', 'Cascade');
+    this.addGestionProj('scrum.png', 'Méthodologies Agile (SCRUM)', 5);
+    this.addGestionProj('cascade.png', 'Cascade', 4);
   }
 
-  addGestionProj(imgName: string, name: string) {
-    this.gestionProjs.push(new Ability(null,name, "../../../../assets/imgs/" + imgName,0,null));
+  addGestionProj(imgName: string, name: string, rating: number = 4) {
+    this.gestionProjs.push(new Ability(null,name, "../../../../assets/imgs/" + imgName,rating,null));
   }
 
 
 
   addModelisationsCaller() {
-    this.addModelisations('uml.png', 'UML (Unified Modeling Language)');
-    this.addModelisations('merise.png', 'Merise');
+    this.addModelisations('uml.png', 'UML (Unified Modeling Language)', 4);
+    this.addModelisations('merise.png', 'Merise', 3);
   }
 
-  addModelisations(imgName: string, name: string) {
-    this.modelisations.push(new Ability(null,name, "../../../../assets/imgs/" + imgName, 0,null));
+  addModelisations(imgName: string, name: string, rating: number = 4) {
+    this.modelisations.push(new Ability(null,name, "../../../../assets/imgs/" + imgName, rating,null));
   }
 
   showInformation(choice: string) {

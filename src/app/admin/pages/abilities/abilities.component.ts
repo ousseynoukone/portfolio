@@ -79,7 +79,7 @@ export class AbilitiesComponent implements OnInit {
       type: ['',Validators.required],
       name: ['', [Validators.required, Validators.maxLength(40)]],
       image: ['', Validators.required],
-      rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
+      rating: [1, [Validators.required, Validators.min(1), Validators.max(5)]]
     });
   }
 
@@ -201,7 +201,7 @@ switchToEditMode(ability : Ability){
     name: ['', [Validators.required, Validators.maxLength(40)]],
     type: [ability.type,Validators.required],
     image: [],
-    rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]]
+    rating: [ability.rating || 1, [Validators.required, Validators.min(1), Validators.max(5)]]
   });
 
   this.abilityForm.patchValue({
@@ -257,17 +257,61 @@ scrollToElement(elementId: string): void {
 }
 
 
-truncateText(text: string): string {
-  const screenWidth = window.innerWidth;
+  truncateText(text: string): string {
+    const screenWidth = window.innerWidth;
 
-  if (screenWidth < 600) {
-    // Truncate to a shorter length for smaller screens
-    return text.length > 7 ? text.substring(0, 7) + '...' : text;
-  } else {
-    // Default truncation length for larger screens
-    return text.length > 30 ? text.substring(0, 30) + '...' : text;
+    if (screenWidth < 600) {
+      // Truncate to a shorter length for smaller screens
+      return text.length > 7 ? text.substring(0, 7) + '...' : text;
+    } else {
+      // Default truncation length for larger screens
+      return text.length > 30 ? text.substring(0, 30) + '...' : text;
+    }
   }
-}
+
+  onRatingChange(event: any): void {
+    const rating = parseInt(event.target.value);
+    this.abilityForm.patchValue({ rating: rating });
+  }
+
+  getCategoryClass(type: string): string {
+    switch (type) {
+      case 'fr':
+        return 'category-framework';
+      case 'lg':
+        return 'category-language';
+      case 'ac':
+        return 'category-architecture';
+      default:
+        return 'category-framework';
+    }
+  }
+
+  getCategoryIcon(type: string): string {
+    switch (type) {
+      case 'fr':
+        return 'fas fa-layer-group';
+      case 'lg':
+        return 'fas fa-code';
+      case 'ac':
+        return 'fas fa-sitemap';
+      default:
+        return 'fas fa-tag';
+    }
+  }
+
+  getCategoryLabel(type: string): string {
+    switch (type) {
+      case 'fr':
+        return 'Framework';
+      case 'lg':
+        return 'Language';
+      case 'ac':
+        return 'Architecture';
+      default:
+        return 'Unknown';
+    }
+  }
 
 
 
