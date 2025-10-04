@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
+import { FireBaseCvService, CvData } from 'src/app/services/firebaseCvService';
 
 @Component({
     selector: 'app-home',
@@ -11,15 +12,20 @@ export class HomeComponent implements OnInit {
   displayAnimationFlag: boolean = false;
   clickTimestamps: number[] = [];
   moonClickCount: number = 0;
+  currentCv: CvData | null = null;
   readonly CLICK_THRESHOLD = 3; // Number of clicks needed
   readonly MOON_CLICK_THRESHOLD = 3; // Number of clicks needed for moon
   readonly TIME_WINDOW = 3000; // 3 seconds in milliseconds
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private cvService: FireBaseCvService
+  ) {}
 
   ngOnInit(): void {
     this.displayImage();
     window.addEventListener('resize', this.onResize.bind(this));
+    this.loadCurrentCv();
   }
 
   displayImage() {
@@ -72,6 +78,16 @@ export class HomeComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.displayImage();
+  }
+
+  async loadCurrentCv() {
+    this.currentCv = await this.cvService.getCurrentCv();
+  }
+
+  downloadCv() {
+    if (this.currentCv) {
+      this.cvService.downloadCv(this.currentCv);
+    }
   }
 
   // Clean up event listener on component destruction

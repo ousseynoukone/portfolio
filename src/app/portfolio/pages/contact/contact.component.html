@@ -49,6 +49,27 @@
                         </div>
                     </div>
 
+                    <!-- CV Download -->
+                    <div class="cv-download-section" *ngIf="currentCv">
+                        <h4>Télécharger mon CV</h4>
+                        <div class="cv-download-card">
+                            <div class="cv-info">
+                                <i class="fas fa-file-pdf cv-icon"></i>
+                                <div class="cv-details">
+                                    <h5>{{ currentCv.fileName }}</h5>
+                                    <p class="cv-meta">
+                                        {{ formatFileSize(currentCv.fileSize) }} • 
+                                        {{ formatDate(currentCv.uploadDate) }}
+                                    </p>
+                                </div>
+                            </div>
+                            <button class="btn btn-cv-download" (click)="downloadCv()">
+                                <i class="fas fa-download me-2"></i>
+                                Télécharger
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Social Links -->
                     <div class="social-links">
                         <h4>Suivez-moi</h4>

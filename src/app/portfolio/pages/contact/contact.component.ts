@@ -6,6 +6,7 @@ import { EmailSenderService } from 'src/app/services/emailService';
 import { Email } from 'src/app/models/email';
 import { ToastrService } from 'ngx-toastr';
 import { phoneValidator } from 'src/app/tools/validators';
+import { FireBaseCvService, CvData } from 'src/app/services/firebaseCvService';
 
 @Component({
     selector: 'app-contact',
@@ -16,19 +17,22 @@ import { phoneValidator } from 'src/app/tools/validators';
 export class ContactComponent implements OnInit {
   contactForm!: FormGroup;
   isSending = false;
+  currentCv: CvData | null = null;
 
   private toastr:ToastrService
+  private cvService: FireBaseCvService
 
   constructor(
     private emailSenderService: EmailSenderService,
    
   ) {
     this.toastr= inject(ToastrService)
+    this.cvService = inject(FireBaseCvService)
   }
 
   ngOnInit() {
     this.initForm();
-
+    this.loadCurrentCv();
   }
 
   private initForm() {
@@ -70,5 +74,31 @@ export class ContactComponent implements OnInit {
     } else {
       console.log('Form is invalid');
     }
+  }
+
+  async loadCurrentCv() {
+    this.currentCv = await this.cvService.getCurrentCv();
+  }
+
+  downloadCv() {
+    if (this.currentCv) {
+      this.cvService.downloadCv(this.currentCv);
+    }
+  }
+
+  formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  formatDate(date: Date): string {
+    return new Date(date).toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 }

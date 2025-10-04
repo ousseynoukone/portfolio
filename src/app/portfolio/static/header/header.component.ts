@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
 import { first } from 'rxjs';
+import { FireBaseCvService, CvData } from '../../../services/firebaseCvService';
 
 @Component({
     selector: 'app-header',
@@ -9,10 +10,29 @@ import { first } from 'rxjs';
     styleUrls: ['./header.component.css'],
     standalone: false
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   activeSection: string = 'home';
+  currentCv: CvData | null = null;
 
-  constructor(private router: Router, private viewportScroller: ViewportScroller) { }
+  constructor(
+    private router: Router, 
+    private viewportScroller: ViewportScroller,
+    private cvService: FireBaseCvService
+  ) { }
+
+  ngOnInit() {
+    this.loadCurrentCv();
+  }
+
+  async loadCurrentCv() {
+    this.currentCv = await this.cvService.getCurrentCv();
+  }
+
+  downloadCv() {
+    if (this.currentCv) {
+      this.cvService.downloadCv(this.currentCv);
+    }
+  }
 
   isRouteActive(routePath: string): boolean {
     return this.router.url.includes(routePath);

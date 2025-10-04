@@ -68,4 +68,95 @@
       </div>
     </div>
   </div>
+
+  <!-- CV Management Section -->
+  <div class="row mt-4 mb-5">
+    <div class="col-12">
+      <div class="card cv-management-card">
+        <div class="card-header cv-header">
+          <div class="d-flex align-items-center">
+            <div class="cv-icon-header">
+              <i class="fas fa-file-pdf"></i>
+            </div>
+            <div>
+              <h5 class="mb-0">Gestion du CV</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-4">
+          @if (currentCv) {
+            <div class="cv-file-info">
+              <div class="cv-file-preview">
+                <div class="cv-file-icon">
+                  <i class="fas fa-file-pdf"></i>
+                </div>
+                <div class="cv-file-details">
+                  <h6 class="cv-file-name">{{ currentCv.fileName }}</h6>
+                  <div class="cv-file-meta">
+                    <span class="cv-meta-item">
+                      <i class="fas fa-weight me-1"></i>
+                      {{ formatFileSize(currentCv.fileSize) }}
+                    </span>
+                    <span class="cv-meta-item">
+                      <i class="fas fa-calendar me-1"></i>
+                      {{ formatDate(currentCv.uploadDate) }}
+                    </span>
+                    <span class="cv-meta-item">
+                      <i class="fas fa-clock me-1"></i>
+                      {{ formatTime(currentCv.uploadDate) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="cv-actions">
+                <button type="button" class="btn btn-primary btn-cv-action" (click)="fileInput.click()">
+                  <i class="fas fa-upload me-2"></i>
+                  Remplacer CV
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-cv-action" (click)="deleteCv()">
+                  <i class="fas fa-trash me-2"></i>
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="cv-empty-state">
+              <div class="cv-empty-icon">
+                <i class="fas fa-file-upload"></i>
+              </div>
+              <h6 class="cv-empty-title">Aucun CV disponible</h6>
+              <p class="cv-empty-description">Téléchargez votre CV pour le rendre disponible sur votre portfolio</p>
+              <button type="button" class="btn btn-primary btn-cv-upload" (click)="fileInput.click()">
+                <i class="fas fa-upload me-2"></i>
+                Télécharger mon CV
+              </button>
+            </div>
+          }
+          
+          <!-- Upload Progress -->
+          @if (isUploading) {
+          <div class="cv-upload-progress">
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                   [style.width.%]="uploadProgress" 
+                   role="progressbar">
+                {{ uploadProgress | number:'1.0-0' }}%
+              </div>
+            </div>
+            <div class="upload-status">
+              <i class="fas fa-spinner fa-spin me-2"></i>
+              <span>Upload en cours...</span>
+            </div>
+          </div>
+          }
+          
+          <!-- Hidden file input -->
+          <input #fileInput type="file" 
+                 accept=".pdf,.doc,.docx" 
+                 (change)="onFileSelected($event)" 
+                 style="display: none;">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

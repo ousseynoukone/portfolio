@@ -496,6 +496,47 @@
   font-size: 1.2rem;
 }
 
+/* Mobile and Tablet Optimizations */
+@media (max-width: 991px) {
+  .modal-header {
+    padding: 1rem 1.5rem;
+    min-height: auto;
+  }
+  
+  .modal-title {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  
+  .btn-close {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .btn-close i {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .modal-title {
+    font-size: 1rem;
+  }
+  
+  .btn-close {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .btn-close i {
+    font-size: 0.9rem;
+  }
+}
+
 .modal-body {
   padding: 0;
 }

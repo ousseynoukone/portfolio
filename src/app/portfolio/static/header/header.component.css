@@ -141,11 +141,41 @@
   transform: scale(1.2);
 }
 
+/* CV Download Button */
+.cv-download-btn {
+  background: linear-gradient(135deg, #990012, #cc0018) !important;
+  color: white !important;
+  border: 2px solid #990012;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cv-download-btn::before {
+  background: linear-gradient(135deg, #cc0018, #dc3545) !important;
+}
+
+.cv-download-btn:hover {
+  color: white !important;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(153, 0, 18, 0.4);
+}
+
+.cv-download-btn i {
+  color: white !important;
+  transition: all 0.3s ease;
+}
+
+.cv-download-btn:hover i {
+  transform: translateY(-1px);
+}
+
 
 /* Responsive Design */
 @media (max-width: 991px) {
   .modern-navbar {
-    padding: 0.75rem 0;
+    padding: 0.5rem 0;
   }
   
   .brand-logo span {
@@ -156,8 +186,8 @@
     background: rgba(36, 35, 35, 0.98);
     backdrop-filter: blur(10px);
     border-radius: 15px;
-    margin-top: 1rem;
-    padding: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   }
   
@@ -168,10 +198,15 @@
   
   .nav-link {
     justify-content: flex-start;
-    padding: 1rem;
+    padding: 0.75rem;
     border-radius: 10px;
   }
   
+  .cv-download-btn {
+    margin-left: 0;
+    margin-top: 0.25rem;
+    text-align: center;
+  }
 }
 
 @media (max-width: 576px) {
@@ -196,6 +231,12 @@ html {
 /* Add padding to body to account for fixed navbar */
 body {
   padding-top: 80px;
+}
+
+@media (max-width: 991px) {
+  body {
+    padding-top: 70px;
+  }
 }
 
 /* Ensure proper spacing for sections */
