@@ -230,12 +230,29 @@ html {
 
 /* Add padding to body to account for fixed navbar */
 body {
-  padding-top: 80px;
+  padding-top: 0; /* Let individual sections handle their own padding */
+}
+
+/* Ensure proper spacing for sections */
+.hero-section {
+  margin-top: 100px; /* Desktop margin */
 }
 
 @media (max-width: 991px) {
-  body {
-    padding-top: 70px;
+  .hero-section {
+    margin-top: 80px; /* Tablet margin */
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    margin-top: 60px; /* Small tablet margin */
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section {
+    margin-top: 20px; /* Mobile margin - reduced */
   }
 }
 

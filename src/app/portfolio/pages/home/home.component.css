@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   z-index: 1;
-  padding-top: 20px; /* Reduced padding for navbar */
+  /* padding-top handled by header.component.css */
 }
 
 .hero-section::before {
@@ -120,16 +120,20 @@
   overflow: hidden;
 }
 
-/* Responsive typing animation for mobile */
-@media (max-width: 576px) {
+/* Tablet styles */
+@media (max-width: 768px) and (min-width: 577px) {
   .hero-section {
-    padding-top: 80px; /* Add space for mobile navbar */
+    padding-bottom: 2rem;
   }
   
-  .typing-animation {
-    white-space: normal;
-    border-right: none;
-    animation: none;
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .profile-image-container {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
   }
   
   .hero-buttons .btn {
@@ -137,10 +141,26 @@
   }
 }
 
-/* Add bottom margin for mobile L and M */
-@media (max-width: 768px) {
+/* Mobile styles */
+@media (max-width: 576px) {
   .hero-section {
-    padding-top: 60px; /* Add space for tablet navbar */
+    padding-bottom: 2rem;
+  }
+  
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .profile-image-container {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .typing-animation {
+    white-space: normal;
+    border-right: none;
+    animation: none;
   }
   
   .hero-buttons .btn {

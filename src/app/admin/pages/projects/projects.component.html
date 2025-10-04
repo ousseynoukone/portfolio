@@ -183,7 +183,6 @@
           <span *ngIf="!this.editMode">Add New Project</span>
         </div>
         <button type="button" class="btn-close btn-close-white" (click)="close()" *ngIf="!isLoading" data-bs-dismiss="modal" aria-label="Close">
-          <i class="fas fa-times"></i>
         </button>
       </div>
       <div class="modal-body modern-body">
@@ -348,9 +347,9 @@
  
           <div class="d-flex justify-content-center">
             <hr *ngIf="this.editMode">  
-            <button type="submit" [disabled]="isLoading" class="btn btn-lg mt-3" style="background: #990012; border-color: #990012; color: white;">
-              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              <i *ngIf="!isLoading" class="fas fa-save me-1"></i>
+            <button type="submit" [disabled]="isLoading" class="btn btn-lg mt-3 btn-loading" style="background: #990012; border-color: #990012; color: white;">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <i *ngIf="!isLoading" class="fas fa-save"></i>
               <span *ngIf="!isLoading && !this.editMode">Add Project</span>
               <span *ngIf="!isLoading && this.editMode">Update Project</span>
             </button>
@@ -383,10 +382,9 @@
               <label for="imgsFile">Image :</label>
               <input type="file" #imageAddInput id="imgsFile" class="form-control" accept="image/*" (change)="onImageChange($event,editMode,true)">
     
-              <button type="button" (click)="addNewImageToProject()" [disabled]="isAddinggNewImage" class="btn bg-secondary-color p-2 mt-3  text-white mx-1" > 
-
-                <span *ngIf="isAddinggNewImage" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
-                <span *ngIf="!isAddinggNewImage" role="status" aria-hidden="true">Add image</span>
+              <button type="button" (click)="addNewImageToProject()" [disabled]="isAddinggNewImage" class="btn bg-secondary-color p-2 mt-3 text-white mx-1 btn-loading" > 
+                <span *ngIf="isAddinggNewImage" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span *ngIf="!isAddinggNewImage">Add image</span>
               </button>
     
               <div *ngIf="this.isAddinggNewImage ">
@@ -417,10 +415,9 @@
               <label for="imgsFile">Image :</label>
               <input type="file" #imageProfileInput id="imgsFile" class="form-control" accept="image/*" (change)="onImageProfileChange($event)">
     
-              <button type="button" (click)="updatePP()" [disabled]="this.fireBaseStorage.isUpdatingPP" class="btn bg-secondary-color p-2 mt-3  text-white mx-1" > 
-
-                <span *ngIf="this.fireBaseStorage.isUpdatingPP" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
-                <span *ngIf="!this.fireBaseStorage.isUpdatingPP" role="status" aria-hidden="true">Update the image</span>
+              <button type="button" (click)="updatePP()" [disabled]="this.fireBaseStorage.isUpdatingPP" class="btn bg-secondary-color p-2 mt-3 text-white mx-1 btn-loading" > 
+                <span *ngIf="this.fireBaseStorage.isUpdatingPP" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span *ngIf="!this.fireBaseStorage.isUpdatingPP">Update the image</span>
               </button>
     
               <div *ngIf="this.fireBaseStorage.isUpdatingPP ">
@@ -503,11 +500,9 @@
                     </div>
                   </div>
 
-                  <button type="button" (click)="updateVideoImage()" [disabled]="isUpdatingMultimedia" class="btn bg-accent-color p-2 m-3 text-white" >
-          
-                    <span *ngIf="isUpdatingMultimedia" class="spinner-border spinner-border-sm p-3" role="status" aria-hidden="true"></span>
-                    <span *ngIf="!isUpdatingMultimedia && this.editMode" >Update multimedia</span>
-                  
+                  <button type="button" (click)="updateVideoImage()" [disabled]="isUpdatingMultimedia" class="btn bg-accent-color p-2 m-3 text-white btn-loading" >
+                    <span *ngIf="isUpdatingMultimedia" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span *ngIf="!isUpdatingMultimedia && this.editMode">Update multimedia</span>
                   </button>
 
 

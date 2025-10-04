@@ -9,38 +9,47 @@ import { UploadResultForManyFiles, UploadResultForOneFile } from "src/app/models
 
 export function uploadFileList(fileList: FileList, basePathImgs : String ,storage : Storage): Observable<UploadResultForManyFiles> {
     const totalFiles = fileList.length;
-    let totalProgress = 0;
     const progressSubject = new Subject<UploadResultForManyFiles>();
     const downloadLinks: string[] = [];
-
+    let completedFiles = 0;
+    const fileProgress: number[] = new Array(totalFiles).fill(0);
 
     for (let i = 0; i < totalFiles; i++) {
         const file = fileList[i];
         const filePath = `${basePathImgs}/${file.name}`;
         const storageRef = ref(storage,filePath);
         const uploadTask =  uploadBytesResumable(storageRef,file);
+        
         uploadTask.on('state_changed', (snapshot) => {
            let  percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            totalProgress += percentage / totalFiles;
-            progressSubject.next({
-              progress:  parseFloat(totalProgress.toFixed(2)) , downloadLinks: downloadLinks,
+           fileProgress[i] = percentage;
+           
+           // Calculate total progress as average of all files
+           const totalProgress = fileProgress.reduce((sum, progress) => sum + progress, 0) / totalFiles;
+           
+           progressSubject.next({
+              progress: Math.min(parseFloat(totalProgress.toFixed(2)), 100), 
+              downloadLinks: downloadLinks,
               
             });
-        })
-      
-
-        uploadTask.then(async (snapshot) => {   
-            downloadLinks.push(await getDownloadURL(snapshot.ref)); // Get download link and add to the list
-            if (downloadLinks.length === totalFiles) {
-                progressSubject.next({
-                  progress: 100, downloadLinks: downloadLinks,
-                 
-                }); // Emit 100% progress and download links
-                progressSubject.complete(); // Complete when all files are uploaded
+        }, (error) => {
+            progressSubject.error(error);
+        }, async () => {
+            try {
+                const downloadLink = await getDownloadURL(uploadTask.snapshot.ref);
+                downloadLinks.push(downloadLink);
+                completedFiles++;
+                
+                if (completedFiles === totalFiles) {
+                    progressSubject.next({
+                      progress: 100, downloadLinks: downloadLinks,
+                     
+                    });
+                    progressSubject.complete();
+                }
+            } catch (error) {
+                progressSubject.error(error);
             }
-            unsubscribe()
-        }).catch((error) => {
-            progressSubject.error(error); // Emit error if any
         });
     }
 
@@ -54,32 +63,26 @@ export function uploadFile(file: File ,  basePathVideo : String , storage : Stor
     let downloadLink: string = "";
     let currentPercentage = 0 ;
   
-        const filePath = `${basePathVideo}/${file.name}`;
-        const storageRef = ref(storage,filePath);
-        const uploadTask =  uploadBytesResumable(storageRef,file);
+    const filePath = `${basePathVideo}/${file.name}`;
+    const storageRef = ref(storage,filePath);
+    const uploadTask =  uploadBytesResumable(storageRef,file);
 
-        uploadTask.on('state_changed', (snapshot) => {
-            let  percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-             if(percentage!=undefined){
-            progressSubject.next({progress: parseFloat(percentage!.toFixed(2)),downloadLink:downloadLink}); 
-            currentPercentage = percentage??0
-          }
-        });
-       
+    uploadTask.on('state_changed', (snapshot) => {
+        let  percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        currentPercentage = percentage;
+        progressSubject.next({progress: parseFloat(percentage.toFixed(2)),downloadLink:downloadLink}); 
+    }, (error) => {
+        progressSubject.error(error);
+    }, async () => {
+        try {
+            downloadLink = await getDownloadURL(uploadTask.snapshot.ref);
+            progressSubject.next({progress: 100, downloadLink: downloadLink}); 
+            progressSubject.complete();
+        } catch (error) {
+            progressSubject.error(error);
+        }
+    });
     
-  
-        uploadTask.then(async snapshot => {
-          downloadLink = await getDownloadURL(snapshot.ref); // Get download link and add to the list
-
-          progressSubject.next({progress:currentPercentage??0,downloadLink:downloadLink}); 
-          progressSubject.complete();  
-          unsubscribe()
-        }).catch((error) => {
-            progressSubject.error(error); // Emit error if any
-        });
     return  progressSubject.asObservable();
-  }
-
-function unsubscribe() {
-  throw new Error('Function not implemented.');
 }
+

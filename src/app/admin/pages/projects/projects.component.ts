@@ -141,11 +141,19 @@ export class ProjectsComponent {
 
 
   onImageChange(event: any,isEditMode : boolean,isForAddingOneImage : boolean) {
-    const fileList  =  event.target.files as FileList;
-    if (!fileList[0].type.startsWith('image/') && !fileList[1].type.startsWith('image/')) {
-      alert('Please select an image file.');
+    const fileList = event.target.files as FileList;
+    if (!fileList || fileList.length === 0) {
       return;
     }
+    
+    // Check if all files are images
+    for (let i = 0; i < fileList.length; i++) {
+      if (!fileList[i] || !fileList[i].type || !fileList[i].type.startsWith('image/')) {
+        alert('Please select valid image files only.');
+        return;
+      }
+    }
+    
     this.FileImg = fileList;
 
     //Si on charge une image alors qu'on a edit mode , l'image dois etre mise a jour dans le db
@@ -172,9 +180,14 @@ export class ProjectsComponent {
   }
   
   onImageProfileChange(event: any) {
-    const pp  =  event.target.files[0];
-    if (!pp.type.startsWith('image/') && !pp.type.startsWith('image/')) {
-      alert('Please select an image file.');
+    const files = event.target.files;
+    if (!files || files.length === 0) {
+      return;
+    }
+    
+    const pp = files[0];
+    if (!pp || !pp.type || !pp.type.startsWith('image/')) {
+      alert('Please select a valid image file.');
       return;
     }
     this.profileImg = pp;
@@ -187,9 +200,14 @@ export class ProjectsComponent {
 
 
   onVideoChange(event: any,isEditMode : boolean) {
-    const file = event.target.files[0];
-    if (!file.type.startsWith('video/')) {
-      alert('Please select an video file.');
+    const files = event.target.files;
+    if (!files || files.length === 0) {
+      return;
+    }
+    
+    const file = files[0];
+    if (!file || !file.type || !file.type.startsWith('video/')) {
+      alert('Please select a valid video file.');
       return;
     }
     this.FileVideo = file;
@@ -597,4 +615,5 @@ scrollToElement(elementId: string): void {
 
 }
   
+
 
