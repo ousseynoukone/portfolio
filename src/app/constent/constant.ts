@@ -2,7 +2,7 @@ export const receiverEmail = "ousseynou781227@gmail.com";
 export const emailJsPublicKey = "H-rrgqZVF8hP_A0VM";
 
 export const environment = {
-    production: false,
+    production: true,
     firebase: {
       apiKey: "AIzaSyA-xQi7zfWIZqSViMIMzd6Z2kngtDq1xmw",
       authDomain: "portfoliov2-1a369.firebaseapp.com",
