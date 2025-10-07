@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FireBaseAuthService } from './services/firebaseAuthServices';
 import { NavigationEnd, Router } from '@angular/router';
 import { inject } from '@vercel/analytics';
+import { environment } from '../app/constent/constant';
 
 @Component({
     selector: 'app-root',
@@ -13,6 +14,6 @@ export class AppComponent {
   title = 'portfolio';
 
   constructor() {
-    inject();
+    inject({ mode: environment.production ? 'production' : 'development' });
   }
 }

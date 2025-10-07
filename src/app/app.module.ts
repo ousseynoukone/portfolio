@@ -29,10 +29,10 @@ import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingServ
     provideAnimations(), 
 
     ToastrModule.forRoot().providers!, 
-    provideAnalytics(() => getAnalytics()), // Initialize Firebase Analytics,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAnalytics(() => getAnalytics()), // Initialize Firebase Analytics
     ScreenTrackingService,
     UserTrackingService,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideStorage(() => getStorage()),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),

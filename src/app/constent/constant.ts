@@ -9,6 +9,7 @@ export const environment = {
       projectId: "portfoliov2-1a369",
       storageBucket: "portfoliov2-1a369.appspot.com",
       messagingSenderId: "25492313762",
-      appId: "1:25492313762:web:547685d03b7b17be4ca9fb"
+      appId: "1:25492313762:web:547685d03b7b17be4ca9fb",
+      measurementId: "G-XXXXXXXXXX" // Replace with your real Measurement ID from Firebase
     }
   };
