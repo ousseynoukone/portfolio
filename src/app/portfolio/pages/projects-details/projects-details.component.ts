@@ -28,9 +28,11 @@ export class ProjectsDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.project = this.shareData.getData as Project;
-    this.usefullLinks = this.project.usefullLinks;
+    this.usefullLinks = this.project.usefullLinks.map(link => this.ensureHttps(link));
+    
     this.initImageModal();
     this.initImagesLoaded();
+    
   }
 
   initImagesLoaded() {
@@ -106,4 +108,18 @@ export class ProjectsDetailsComponent implements OnInit {
       }
     }
   }
+
+  ensureHttps(link: string): string {
+  link = link.trim();
+
+  if (/^https?:\/\//i.test(link)) {
+    return link;
+  }
+
+  if (link.startsWith('//')) {
+    return 'https:' + link;
+  }
+  return 'https://' + link;
+}
+
 }

@@ -154,16 +154,15 @@
               </div>
               <div class="card-content">
                 <div class="links-list">
-                  <a *ngFor="let link of usefullLinks" 
-                     [href]="link" 
-                     target="_blank" 
-                     class="link-item">
-                    <i class="fas fa-link"></i>
-                    <span>{{ link }}</span>
-                    <i class="fas fa-external-link-alt external-icon"></i>
-                  </a>
+                  @for (link of usefullLinks; track $index) {
+                    <a [href]="link" target="_blank" class="link-item">
+                      <i class="fas fa-link"></i>
+                      <span>{{ link }}</span>
+                      <i class="fas fa-external-link-alt external-icon"></i>
+                    </a>
+                  }
                 </div>
-              </div>
+             </div>
             </div>
           </div>
 
@@ -176,10 +175,11 @@
               </div>
               <div class="card-content">
                 <div class="technologies-grid">
-                  <span *ngFor="let tool of project.usedTools" 
-                        class="technology-tag">
+                  @for(tool of project.usedTools; track $index) {
+                  <span class="technology-tag">
                     {{ tool }}
                   </span>
+                  }
                 </div>
               </div>
             </div>
