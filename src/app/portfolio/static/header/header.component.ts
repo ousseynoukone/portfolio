@@ -11,6 +11,7 @@ import { FireBaseCvService, CvData } from '../../../services/firebaseCvService';
     standalone: false
 })
 export class HeaderComponent implements OnInit {
+
   activeSection: string = 'home';
   currentCv: CvData | null = null;
 
@@ -36,6 +37,10 @@ export class HeaderComponent implements OnInit {
 
   isRouteActive(routePath: string): boolean {
     return this.router.url.includes(routePath);
+  }
+
+  redirectToGithub() {
+    window.open('https://github.com/ousseynoukone', '_blank');
   }
 
   scrollToSection(elementId: string) {
