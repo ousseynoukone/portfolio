@@ -3,8 +3,8 @@
     <div class="container">
         <!-- Section Header -->
         <div class="section-header text-center mb-5">
-            <h2 class="section-title">Mes Projets</h2>
-            <p class="section-subtitle">{{ totalProjectCount() }} projets réalisés avec passion</p>
+            <h2 class="section-title">{{ 'PROJECTS.TITLE' | translate }}</h2>
+            <p class="section-subtitle">{{ totalProjectCount() }} {{ 'PROJECTS.SUBTITLE' | translate }}</p>
             <div class="title-underline"></div>
         </div>
 
@@ -12,7 +12,7 @@
         @if (state.loading) {
         <div class="text-center">
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Chargement...</span>
+                <span class="visually-hidden">{{ 'PROJECTS.LOADING' | translate }}</span>
             </div>
         </div>
         }
@@ -34,8 +34,8 @@
                         <i class="fas fa-mobile-alt"></i>
                     </div>
                     <div class="category-info">
-                        <h3>Applications Mobile</h3>
-                        <p>{{ mobileProjectCount() }} projets</p>
+                        <h3>{{ 'PROJECTS.MOBILE_APPS' | translate }}</h3>
+                        <p>{{ mobileProjectCount() }} {{ 'PROJECTS.PROJECTS_COUNT' | translate }}</p>
                     </div>
                 </div>
                 
@@ -48,7 +48,7 @@
                                 data-bs-target="#carousselMobile" 
                                 data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Précédent</span>
+                            <span class="visually-hidden">{{ 'PROJECTS.PREVIOUS' | translate }}</span>
                         </button>
                         }
                         
@@ -64,7 +64,7 @@
                                             <div class="project-overlay">
                                                 <button class="btn btn-primary" (click)="navigateToDetailsPage(project)">
                                                     <i class="fas fa-eye"></i>
-                                                    Voir les détails
+                                                    {{ 'PROJECTS.VIEW_DETAILS' | translate }}
                                                 </button>
                                             </div>
                                         </div>
@@ -96,7 +96,7 @@
                                 data-bs-target="#carousselMobile" 
                                 data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Suivant</span>
+                            <span class="visually-hidden">{{ 'PROJECTS.NEXT' | translate }}</span>
                         </button>
                         }
                     </div>
@@ -111,8 +111,8 @@
                         <i class="fas fa-globe"></i>
                     </div>
                     <div class="category-info">
-                        <h3>Applications Web</h3>
-                        <p>{{ webProjectCount() }} projets</p>
+                        <h3>{{ 'PROJECTS.WEB_APPS' | translate }}</h3>
+                        <p>{{ webProjectCount() }} {{ 'PROJECTS.PROJECTS_COUNT' | translate }}</p>
                     </div>
                 </div>
                 
@@ -125,7 +125,7 @@
                                 data-bs-target="#carousselWeb" 
                                 data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Précédent</span>
+                            <span class="visually-hidden">{{ 'PROJECTS.PREVIOUS' | translate }}</span>
                         </button>
                         }
                         
@@ -141,7 +141,7 @@
                                             <div class="project-overlay">
                                                 <button class="btn btn-primary" (click)="navigateToDetailsPage(project)">
                                                     <i class="fas fa-eye"></i>
-                                                    Voir les détails
+                                                    {{ 'PROJECTS.VIEW_DETAILS' | translate }}
                                                 </button>
                                             </div>
                                         </div>
@@ -173,7 +173,7 @@
                                 data-bs-target="#carousselWeb" 
                                 data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Suivant</span>
+                            <span class="visually-hidden">{{ 'PROJECTS.NEXT' | translate }}</span>
                         </button>
                         }
                     </div>

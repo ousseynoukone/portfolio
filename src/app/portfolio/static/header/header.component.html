@@ -22,25 +22,31 @@
         <li class="nav-item">
           <a class="nav-link" [class.active]="activeSection === 'home'" (click)="scrollToSection('home')" style="cursor: pointer;">
             <i class="fas fa-home"></i>
-            <span>Accueil</span>
+            <span>{{ 'NAV.HOME' | translate }}</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [class.active]="activeSection === 'competences'" (click)="scrollToSection('competences')" style="cursor: pointer;">
             <i class="fas fa-tools"></i>
-            <span>Compétences</span>
+            <span>{{ 'NAV.ABILITIES' | translate }}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeSection === 'experience'" (click)="scrollToSection('experience')" style="cursor: pointer;">
+            <i class="fas fa-briefcase"></i>
+            <span>{{ 'NAV.EXPERIENCE' | translate }}</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [class.active]="activeSection === 'projets'" (click)="scrollToSection('projets')" style="cursor: pointer;">
             <i class="fas fa-folder-open"></i>
-            <span>Projets</span>
+            <span>{{ 'NAV.PROJECTS' | translate }}</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [class.active]="activeSection === 'contact'" (click)="scrollToSection('contact')" style="cursor: pointer;">
             <i class="fas fa-envelope"></i>
-            <span>Contact</span>
+            <span>{{ 'NAV.CONTACT' | translate }}</span>
           </a>
         </li>
         <li class="nav-item">
@@ -49,6 +55,19 @@
             <span>Github</span>
           </a>
         </li>
+
+        <!-- Language Switcher -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-globe"></i>
+            <span class="ms-1">{{ currentLang | uppercase }}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+            <li><a class="dropdown-item" (click)="switchLanguage('fr')">Français</a></li>
+            <li><a class="dropdown-item" (click)="switchLanguage('en')">English</a></li>
+          </ul>
+        </li>
+
         <li class="nav-item" *ngIf="currentCv">
           <a class="nav-link cv-download-btn" (click)="downloadCv()" style="cursor: pointer;">
             <i class="fas fa-download"></i>

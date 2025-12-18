@@ -3,15 +3,15 @@
     <div class="container">
         <!-- Section Header -->
         <div class="section-header text-center mb-5">
-            <h2 class="section-title">Mes Compétences</h2>
-            <p class="section-subtitle">Technologies et outils que je maîtrise</p>
+            <h2 class="section-title">{{ 'SKILLS.TITLE' | translate }}</h2>
+            <p class="section-subtitle">{{ 'SKILLS.SUBTITLE' | translate }}</p>
             <div class="title-underline"></div>
         </div>
 
         <!-- Loading State -->
         <div *ngIf="isDataComing" class="text-center">
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Chargement</span>
+                <span class="visually-hidden">{{ 'SKILLS.LOADING' | translate }}</span>
             </div>
         </div>
 
@@ -20,27 +20,27 @@
             <div class="filter-tabs">
                 <button class="filter-tab active" (click)="showInformation('framework')" id="frameworkButton">
                     <i class="fas fa-layer-group"></i>
-                    <span>Frameworks</span>
+                    <span>{{ 'SKILLS.FRAMEWORKS' | translate }}</span>
                 </button>
                 <button class="filter-tab" (click)="showInformation('langProg')" id="langProgButton">
                     <i class="fas fa-code"></i>
-                    <span>Langages</span>
+                    <span>{{ 'SKILLS.LANGUAGES' | translate }}</span>
                 </button>
                 <button class="filter-tab" (click)="showInformation('archiConcept')" id="archiConceptButton">
                     <i class="fas fa-sitemap"></i>
-                    <span>Architecture</span>
+                    <span>{{ 'SKILLS.ARCHITECTURE' | translate }}</span>
                 </button>
                 <button class="filter-tab" (click)="showInformation('gestionProjet')" id="gestionProjetButton">
                     <i class="fas fa-tasks"></i>
-                    <span>Gestion Projet</span>
+                    <span>{{ 'SKILLS.PROJECT_MANAGEMENT' | translate }}</span>
                 </button>
                 <button class="filter-tab" (click)="showInformation('modelisation')" id="modelisationButton">
                     <i class="fas fa-project-diagram"></i>
-                    <span>Modélisation</span>
+                    <span>{{ 'SKILLS.MODELING' | translate }}</span>
                 </button>
                 <button class="filter-tab" (click)="showInformation('autreCompetence')" id="autreCompetenceButton">
                     <i class="fas fa-tools"></i>
-                    <span>Outils</span>
+                    <span>{{ 'SKILLS.TOOLS' | translate }}</span>
                 </button>
             </div>
         </div>

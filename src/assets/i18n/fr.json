@@ -1,0 +1,69 @@
+{
+  "NAV": {
+    "HOME": "Accueil",
+    "ABILITIES": "Compétences",
+    "EXPERIENCE": "Expérience",
+    "PROJECTS": "Projets",
+    "CONTACT": "Contact"
+  },
+  "HERO": {
+    "TITLE": "Développeur FullStack Web/Mobile",
+    "DESCRIPTION": "Passionné par le développement web et mobile, je transforme des idées créatives en expériences digitales exceptionnelles. Basé en Île-de-France, je suis prêt à relever de nouveaux défis technologiques.",
+    "VIEW_PROJECTS": "Voir mes Projets",
+    "CONTACT_ME": "Me Contacter"
+  },
+  "SKILLS": {
+    "TITLE": "Mes Compétences",
+    "SUBTITLE": "Technologies et outils que je maîtrise",
+    "LOADING": "Chargement",
+    "FRAMEWORKS": "Frameworks",
+    "LANGUAGES": "Langages",
+    "ARCHITECTURE": "Architecture",
+    "PROJECT_MANAGEMENT": "Gestion Projet",
+    "MODELING": "Modélisation",
+    "TOOLS": "Outils"
+  },
+  "PROJECTS": {
+    "TITLE": "Mes Projets",
+    "SUBTITLE": "projets réalisés avec passion",
+    "LOADING": "Chargement...",
+    "MOBILE_APPS": "Applications Mobile",
+    "WEB_APPS": "Applications Web",
+    "PROJECTS_COUNT": "projets",
+    "VIEW_DETAILS": "Voir les détails",
+    "PREVIOUS": "Précédent",
+    "NEXT": "Suivant"
+  },
+  "CONTACT": {
+    "TITLE": "Contactez-moi",
+    "SUBTITLE": "Prêt à collaborer ? Discutons de votre prochain projet",
+    "STAY_IN_TOUCH": "Restons en contact",
+    "STAY_IN_TOUCH_DESC": "N'hésitez pas à me contacter pour discuter de vos projets ou simplement pour échanger.",
+    "EMAIL": "Email",
+    "LOCATION": "Localisation",
+    "AVAILABILITY": "Disponibilité",
+    "AVAILABILITY_TIME": "Lun - Ven, 9h - 18h",
+    "DOWNLOAD_CV": "Télécharger mon CV",
+    "CV_INFO": "Téléchargez ma dernière version de CV",
+    "SOCIAL_NETWORKS": "Réseaux sociaux",
+    "SEND_MESSAGE": "Envoyer un message",
+    "MESSAGE_DESC": "Remplissez le formulaire ci-dessous et je vous répondrai dans les plus brefs délais.",
+    "NAME": "Nom",
+    "NAME_PLACEHOLDER": "Votre nom",
+    "EMAIL_LABEL": "Email",
+    "EMAIL_PLACEHOLDER": "votre@email.com",
+    "SUBJECT": "Sujet",
+    "SUBJECT_PLACEHOLDER": "Sujet de votre message",
+    "MESSAGE": "Message",
+    "MESSAGE_PLACEHOLDER": "Votre message...",
+    "SEND": "Envoyer",
+    "SENDING": "Envoi en cours...",
+    "REQUIRED": "est obligatoire",
+    "EMAIL_INVALID": "Adresse email invalide"
+  },
+  "TIMELINE": {
+    "TITLE": "Expériences Professionnelles",
+    "EXPERIENCE": "Expérience",
+    "EDUCATION": "Éducation"
+  }
+}

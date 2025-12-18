@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
 import { first } from 'rxjs';
 import { FireBaseCvService, CvData } from '../../../services/firebaseCvService';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-header',
@@ -14,15 +15,24 @@ export class HeaderComponent implements OnInit {
 
   activeSection: string = 'home';
   currentCv: CvData | null = null;
+  currentLang: string = 'fr';
 
   constructor(
     private router: Router, 
     private viewportScroller: ViewportScroller,
-    private cvService: FireBaseCvService
-  ) { }
+    private cvService: FireBaseCvService,
+    private translate: TranslateService
+  ) { 
+    this.currentLang = this.translate.currentLang || 'fr';
+  }
 
   ngOnInit() {
     this.loadCurrentCv();
+  }
+
+  switchLanguage(lang: string) {
+    this.translate.use(lang);
+    this.currentLang = lang;
   }
 
   async loadCurrentCv() {

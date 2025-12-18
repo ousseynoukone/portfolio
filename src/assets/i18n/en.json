@@ -1,0 +1,69 @@
+{
+  "NAV": {
+    "HOME": "Home",
+    "ABILITIES": "Skills",
+    "EXPERIENCE": "Experience",
+    "PROJECTS": "Projects",
+    "CONTACT": "Contact"
+  },
+  "HERO": {
+    "TITLE": "FullStack Web/Mobile Developer",
+    "DESCRIPTION": "Passionate about web and mobile development, I transform creative ideas into exceptional digital experiences. Based in Île-de-France, I'm ready to take on new technological challenges.",
+    "VIEW_PROJECTS": "View my Projects",
+    "CONTACT_ME": "Contact Me"
+  },
+  "SKILLS": {
+    "TITLE": "My Skills",
+    "SUBTITLE": "Technologies and tools I master",
+    "LOADING": "Loading",
+    "FRAMEWORKS": "Frameworks",
+    "LANGUAGES": "Languages",
+    "ARCHITECTURE": "Architecture",
+    "PROJECT_MANAGEMENT": "Project Management",
+    "MODELING": "Modeling",
+    "TOOLS": "Tools"
+  },
+  "PROJECTS": {
+    "TITLE": "My Projects",
+    "SUBTITLE": "projects completed with passion",
+    "LOADING": "Loading...",
+    "MOBILE_APPS": "Mobile Applications",
+    "WEB_APPS": "Web Applications",
+    "PROJECTS_COUNT": "projects",
+    "VIEW_DETAILS": "View Details",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next"
+  },
+  "CONTACT": {
+    "TITLE": "Contact Me",
+    "SUBTITLE": "Ready to collaborate? Let's discuss your next project",
+    "STAY_IN_TOUCH": "Let's stay in touch",
+    "STAY_IN_TOUCH_DESC": "Feel free to contact me to discuss your projects or just to chat.",
+    "EMAIL": "Email",
+    "LOCATION": "Location",
+    "AVAILABILITY": "Availability",
+    "AVAILABILITY_TIME": "Mon - Fri, 9am - 6pm",
+    "DOWNLOAD_CV": "Download my CV",
+    "CV_INFO": "Download my latest CV version",
+    "SOCIAL_NETWORKS": "Social Networks",
+    "SEND_MESSAGE": "Send a message",
+    "MESSAGE_DESC": "Fill out the form below and I'll get back to you as soon as possible.",
+    "NAME": "Name",
+    "NAME_PLACEHOLDER": "Your name",
+    "EMAIL_LABEL": "Email",
+    "EMAIL_PLACEHOLDER": "your@email.com",
+    "SUBJECT": "Subject",
+    "SUBJECT_PLACEHOLDER": "Subject of your message",
+    "MESSAGE": "Message",
+    "MESSAGE_PLACEHOLDER": "Your message...",
+    "SEND": "Send",
+    "SENDING": "Sending...",
+    "REQUIRED": "is required",
+    "EMAIL_INVALID": "Invalid email address"
+  },
+  "TIMELINE": {
+    "TITLE": "Professional Experience",
+    "EXPERIENCE": "Experience",
+    "EDUCATION": "Education"
+  }
+}

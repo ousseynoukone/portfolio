@@ -21,6 +21,8 @@
     "@angular/platform-browser-dynamic": "^20.3.2",
     "@angular/router": "^20.3.2",
     "@emailjs/browser": "^4.1.0",
+    "@ngx-translate/core": "^17.0.0",
+    "@ngx-translate/http-loader": "^17.0.0",
     "@popperjs/core": "^2.11.8",
     "@vercel/analytics": "^1.5.0",
     "angular-datatables": "^16.0.1",
@@ -30,7 +32,6 @@
     "jquery": "^3.7.1",
     "ng": "^0.0.0",
     "ngx-toastr": "^19.1.0",
-    "popper.js": "^1.16.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"

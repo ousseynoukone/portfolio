@@ -1,0 +1,62 @@
+<section id="experience" class="timeline-section">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title">{{ 'TIMELINE.TITLE' | translate }}</h2>
+            <div class="title-underline"></div>
+        </div>
+
+        <div class="timeline-wrapper">
+            <!-- Central Line -->
+            <div class="timeline-line"></div>
+
+            <!-- Experience Items -->
+            <div class="timeline-items">
+                <div *ngFor="let item of experiences; let i = index" 
+                     class="timeline-item" 
+                     [ngClass]="i % 2 === 0 ? 'left' : 'right'">
+                    <div class="timeline-dot">
+                        <i [class]="item.icon"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="timeline-date">{{ item.period }}</div>
+                            <h3 class="timeline-title">{{ item.title }}</h3>
+                            <div class="timeline-subtitle">{{ item.subtitle }}</div>
+                            <div class="timeline-location">
+                                <i class="fas fa-map-marker-alt"></i> {{ item.location }}
+                            </div>
+                            <ul class="timeline-description" *ngIf="item.description.length > 0">
+                                <li *ngFor="let desc of item.description">{{ desc }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education Divider -->
+                <div class="timeline-divider">
+                    <span class="badge">{{ 'TIMELINE.EDUCATION' | translate }}</span>
+                </div>
+
+                <!-- Education Items -->
+                <div *ngFor="let item of education; let i = index" 
+                     class="timeline-item" 
+                     [ngClass]="(i + experiences.length) % 2 === 0 ? 'left' : 'right'">
+                    <div class="timeline-dot education-dot">
+                        <i [class]="item.icon"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="timeline-date">{{ item.period }}</div>
+                            <h3 class="timeline-title">{{ item.title }}</h3>
+                            <div class="timeline-subtitle">{{ item.subtitle }}</div>
+                            <div class="timeline-location">
+                                <i class="fas fa-map-marker-alt"></i> {{ item.location }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

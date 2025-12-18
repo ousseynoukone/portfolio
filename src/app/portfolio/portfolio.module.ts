@@ -10,10 +10,12 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { AbilitiesComponent } from './pages/abilities/abilities.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { ProjectsDetailsComponent } from './pages/projects-details/projects-details.component';
+import { TimelineComponent } from './pages/timeline/timeline.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FireBaseCvService } from '../services/firebaseCvService';
 
 import { CustumCarousselComponent } from './pages/Components/custum-caroussel/custum-caroussel.component';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -25,12 +27,14 @@ import { CustumCarousselComponent } from './pages/Components/custum-caroussel/cu
     ProjectsComponent,
     ProjectsDetailsComponent,
     CustumCarousselComponent,
+    TimelineComponent
     
   ],
   imports: [
     PortfolioRoutingModule,
     CommonModule,
     ReactiveFormsModule,
+    TranslateModule
   ],
   providers: [
     FireBaseCvService

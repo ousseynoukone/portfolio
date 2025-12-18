@@ -20,10 +20,10 @@
                         </h1>
                         
                         <div class="hero-subtitle fw-semibold mb-3">
-                            <span class="typing-animation">Développeur FullStack Web/Mobile</span>
+                            <span class="typing-animation">{{ 'HERO.TITLE' | translate }}</span>
                         </div>
                         <p class="hero-description lh-lg">
-                            Passionné par le développement web et mobile, je transforme des idées créatives en expériences digitales exceptionnelles. Basé en Île-de-France, je suis prêt à relever de nouveaux défis technologiques.
+                            {{ 'HERO.DESCRIPTION' | translate }}
                         </p>
                         
                         <!-- CTA Buttons -->
@@ -31,12 +31,12 @@
                           
                             <button class="btn btn-primary me-0 mb-3 mb-sm-0 me-sm-3" (click)="scrollToSection('projets')">
                                 <i class="fas fa-folder-open me-2"></i>
-                                Voir mes Projets
+                                {{ 'HERO.VIEW_PROJECTS' | translate }}
                             </button>
 
                             <button class="btn btn-outline-primary me-0 mb-3 mb-sm-0 me-sm-3" (click)="scrollToSection('contact')">
                                 <i class="fas fa-envelope me-2"></i>
-                                Me Contacter
+                                {{ 'HERO.CONTACT_ME' | translate }}
                             </button>
                         </div>
                     </div>

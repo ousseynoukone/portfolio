@@ -13,6 +13,9 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { provideAnimations } from '@angular/platform-browser/animations'; 
 import { NgModule } from '@angular/core';
 import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
+import { HttpClient, HttpClientModule, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 @NgModule({
   declarations: [
@@ -24,10 +27,18 @@ import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingServ
     PortfolioModule,
     AdminModule,
     AppRoutingModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      defaultLanguage: 'fr'
+    })
   ],
   providers: [
     provideAnimations(), 
-
+    provideHttpClient(withInterceptorsFromDi()),
+    provideTranslateHttpLoader({
+      prefix: './assets/i18n/',
+      suffix: '.json'
+    }),
     ToastrModule.forRoot().providers!, 
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()), // Initialize Firebase Analytics
