@@ -22,7 +22,7 @@ export class TimelineComponent implements OnInit {
       title: 'Alternant Chef de Projet - Développeur Full Stack',
       subtitle: 'XKS GROUP',
       location: 'Cergy, France',
-      period: 'DÉCEMBRE 2024 - PRÉSENT',
+      period: 'DÉCEMBRE 2024 - Janvier 2026',
       description: [
         'Pilotage technique et réalisation Back-End d\'une application de streaming audiovisuel en utilisant SpringBoot (Java) sous une architecture micro-service.',
         'Direction du développement d\'une application mobile de news avec Flutter (Dart).',
