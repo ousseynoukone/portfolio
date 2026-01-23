@@ -59,6 +59,15 @@ export class TimelineComponent implements OnInit {
       icon: 'fas fa-graduation-cap'
     },
     {
+      title: 'CS50x Certificate',
+      subtitle: 'Harvard University',
+      location: 'Online',
+      period: '2024 - Novembre 2024',
+      description: [],
+      type: 'education',
+      icon: 'fas fa-graduation-cap'
+    },
+    {
       title: 'Licence professionnelle en Génie logiciel',
       subtitle: "Institut supérieur d'informatique (ISI)",
       location: 'Sénégal',
