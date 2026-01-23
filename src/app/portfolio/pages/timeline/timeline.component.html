@@ -38,9 +38,8 @@
                 </div>
 
                 <!-- Education Items -->
-                <div *ngFor="let item of education; let i = index" 
-                     class="timeline-item" 
-                     [ngClass]="(i + experiences.length) % 2 === 0 ? 'left' : 'right'">
+                 @for (item of education; track item.title ; let index = $index) {
+                 <div class="timeline-item" [ngClass]="(index + experiences.length) % 2 === 0 ? 'left' : 'right'">
                     <div class="timeline-dot education-dot">
                         <i [class]="item.icon"></i>
                     </div>
@@ -55,6 +54,7 @@
                         </div>
                     </div>
                 </div>
+                 }  
             </div>
         </div>
     </div>

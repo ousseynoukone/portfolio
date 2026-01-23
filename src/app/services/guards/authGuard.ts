@@ -1,7 +1,7 @@
 // auth.guard.ts
 import { CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { FireBaseAuthService } from '../firebaseAbilitiesServices';
+import { FireBaseAuthService } from '../firebaseAuthServices';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 

@@ -222,26 +222,14 @@
         left: 30px;
     }
 
-    .timeline-item {
-        justify-content: flex-start;
+    .timeline-item.left {
         padding-right: 0;
         padding-left: 60px;
-        text-align: left !important;
     }
 
-    .timeline-item.left .timeline-content {
-        text-align: left;
-    }
-
-    .timeline-item.left .timeline-description li {
-        text-align: left;
+    .timeline-item.right {
         padding-right: 0;
-        padding-left: 20px;
-    }
-
-    .timeline-item.left .timeline-description li::before {
-        right: auto;
-        left: 0;
+        padding-left: 60px;
     }
 
     .timeline-dot {
