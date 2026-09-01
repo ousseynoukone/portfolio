@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter, first } from 'rxjs';
 import { Project } from '../../../models/project';
@@ -85,13 +85,19 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   private categorizeProjects(projects: Project[]): void {
+    const mobileList: Project[] = [];
+    const webList: Project[] = [];
+
     projects.forEach(project => {
       if (project.type === 'mobile') {
-        this.state.mobile.push(project);
+        mobileList.push(project);
       } else {
-        this.state.web.push(project);
+        webList.push(project);
       }
     });
+
+    this.state.mobile = mobileList.sort((a, b) => (a.placeIndex || 0) - (b.placeIndex || 0));
+    this.state.web = webList.sort((a, b) => (a.placeIndex || 0) - (b.placeIndex || 0));
   }
 
   private updateProjectAvailability(): void {
