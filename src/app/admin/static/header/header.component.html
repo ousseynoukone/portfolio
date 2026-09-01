@@ -1,17 +1,31 @@
-<header class="bg-dark text-light p-3">
-    <div class="d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-            <button class="btn bg-secondary h1 me-3" (click)="goToHome()">Portfolio Dashboard</button>
-            <nav class="navbar-nav d-flex flex-row">
-                <a class="nav-link text-light me-3" routerLink="/admin" routerLinkActive="active">Dashboard</a>
-                <a class="nav-link text-light me-3" routerLink="/admin/projects" routerLinkActive="active">Projets</a>
-                <a class="nav-link text-light me-3" routerLink="/admin/abilities" routerLinkActive="active">Compétences</a>
-                <a class="nav-link text-light me-3" routerLink="/admin/timeline" routerLinkActive="active">Compétences</a>
+<header class="bg-dark text-light p-3 shadow-sm border-bottom border-danger-subtle">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="d-flex align-items-center flex-wrap gap-2">
+            <button class="btn text-white fw-bold me-2" style="background: #990012;" (click)="goToHome()">
+              <i class="fas fa-shield-alt me-1"></i> Admin Portal
+            </button>
+            <nav class="navbar-nav d-flex flex-row gap-2">
+                <a class="nav-link text-light px-2" routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                  <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                </a>
+                <a class="nav-link text-light px-2" routerLink="/admin/projects" routerLinkActive="active">
+                  <i class="fas fa-folder-open me-1"></i>Projets
+                </a>
+                <a class="nav-link text-light px-2" routerLink="/admin/abilities" routerLinkActive="active">
+                  <i class="fas fa-code me-1"></i>Compétences
+                </a>
+                <a class="nav-link text-light px-2" routerLink="/admin/timeline" routerLinkActive="active">
+                  <i class="fas fa-history me-1"></i>Parcours / CV
+                </a>
             </nav>
         </div>
-        <div>
-            <button class="btn bg-accent-color text-white me-2" (click)="goToClientView()">Client View</button>
-            <button class="btn bg-accent-color text-white" (click)="logout()">Logout</button>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-outline-light btn-sm" (click)="goToClientView()">
+              <i class="fas fa-external-link-alt me-1"></i>Client View
+            </button>
+            <button class="btn btn-sm text-white" style="background: #990012;" (click)="logout()">
+              <i class="fas fa-sign-out-alt me-1"></i>Logout
+            </button>
         </div>
     </div>
 </header>
