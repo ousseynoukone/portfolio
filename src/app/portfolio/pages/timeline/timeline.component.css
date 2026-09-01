@@ -54,51 +54,68 @@
   z-index: 1;
 }
 
-/* Premium Section Divider Badges */
-.timeline-divider {
+/* Premium Section Divider Badges - Solid Elevated Pills */
+.timeline-section-divider {
   position: relative;
-  z-index: 10;
+  z-index: 20;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 60px 0 40px 0;
+  width: 100%;
+  margin: 60px 0 45px 0;
+  clear: both;
 }
 
-.divider-badge {
-  background: #242323;
+.divider-pill {
+  background: #1c1c1f !important;
   color: #ffffff;
-  padding: 12px 32px;
-  border-radius: 40px;
-  font-size: 1.15rem;
+  padding: 12px 36px;
+  border-radius: 50px;
+  font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: 0.5px;
   display: inline-flex;
   align-items: center;
   gap: 12px;
   position: relative;
-  z-index: 10;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  z-index: 25;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  border: 2px solid #990012;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.divider-badge:hover {
-  transform: scale(1.03);
+.divider-pill:hover {
+  transform: translateY(-2px) scale(1.02);
 }
 
-.exp-divider-badge {
+.exp-pill-badge {
   border-color: #0d6efd;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(13, 110, 253, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(13, 110, 253, 0.45);
 }
 
-.edu-divider-badge {
+.exp-pill-badge i {
+  color: #0d6efd;
+  font-size: 1.3rem;
+}
+
+.edu-pill-badge {
   border-color: #198754;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(25, 135, 84, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(25, 135, 84, 0.45);
 }
 
-.cert-divider-badge {
+.edu-pill-badge i {
+  color: #198754;
+  font-size: 1.3rem;
+}
+
+.cert-pill-badge {
   border-color: #ffc107;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(255, 193, 7, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 193, 7, 0.45);
+}
+
+.cert-pill-badge i {
+  color: #ffc107;
+  font-size: 1.3rem;
 }
 
 /* Timeline Items */
@@ -265,7 +282,7 @@
 .education-pill {
   background: rgba(25, 135, 84, 0.2);
   color: #75b798;
-  border: 1px solid rgba(25, 135, 84, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .certification-pill {
@@ -368,15 +385,15 @@
     left: 20px;
   }
   
-  .timeline-divider {
+  .timeline-section-divider {
     justify-content: flex-start;
     padding-left: 55px;
     margin: 40px 0 25px 0;
   }
   
-  .divider-badge {
+  .divider-pill {
     font-size: 1rem;
-    padding: 8px 18px;
+    padding: 8px 20px;
   }
   
   .timeline-item {
