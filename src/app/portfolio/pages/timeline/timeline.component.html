@@ -1,49 +1,88 @@
-﻿<section id="experience" class="timeline-section">
+﻿<section class="timeline-section" id="experience">
   <div class="container">
-    <!-- Section Header -->
     <div class="section-header text-center mb-5">
-      <div class="section-badge mb-2">
-        <span class="badge-pill"><i class="fas fa-history me-1"></i> Mon Parcours</span>
-      </div>
-      <h2 class="section-title">{{ 'TIMELINE.TITLE' | translate }}</h2>
+      <h2 class="section-title">{{ 'NAV.EXPERIENCE' | translate }}</h2>
+      <p class="section-subtitle">Découvrez mon parcours professionnel, mes formations et mes certifications officielles</p>
       <div class="title-underline"></div>
+
+      <!-- Interactive Filter Tabs -->
+      <div class="timeline-filters d-flex justify-content-center flex-wrap gap-2 mt-4">
+        <button class="filter-btn" [class.active]="selectedFilter === 'all'" (click)="setFilter('all')">
+          <i class="fas fa-stream me-1"></i> Tout le Parcours ({{ allItems.length }})
+        </button>
+        <button class="filter-btn" [class.active]="selectedFilter === 'experience'" (click)="setFilter('experience')">
+          <i class="fas fa-briefcase me-1"></i> Expériences
+        </button>
+        <button class="filter-btn" [class.active]="selectedFilter === 'education'" (click)="setFilter('education')">
+          <i class="fas fa-graduation-cap me-1"></i> Formations
+        </button>
+        <button class="filter-btn" [class.active]="selectedFilter === 'certification'" (click)="setFilter('certification')">
+          <i class="fas fa-award me-1"></i> Certifications
+        </button>
+      </div>
     </div>
 
+    <!-- Timeline Wrapper -->
     <div class="timeline-wrapper">
-      <!-- Central Line -->
-      <div class="timeline-line"></div>
-
-      <!-- Experience Items -->
-      <div class="timeline-items">
-        <div *ngFor="let item of experiences; let i = index" 
+      <div class="timeline-tree">
+        <div *ngFor="let item of filteredItems; let i = index" 
              class="timeline-item" 
              [ngClass]="i % 2 === 0 ? 'left' : 'right'">
           
-          <!-- Timeline Dot Icon -->
-          <div class="timeline-dot" [title]="item.title">
+          <!-- Timeline Dot -->
+          <div class="timeline-dot" 
+               [ngClass]="{
+                 'experience-dot': item.type === 'experience',
+                 'education-dot': item.type === 'education',
+                 'certification-dot': item.type === 'certification'
+               }" 
+               [title]="item.title">
             <i [class]="item.icon"></i>
-            <div class="dot-glow"></div>
+            <div class="dot-glow" 
+                 [ngClass]="{
+                   'experience-glow': item.type === 'experience',
+                   'education-glow': item.type === 'education',
+                   'certification-glow': item.type === 'certification'
+                 }"></div>
           </div>
 
-          <!-- Timeline Content Card -->
+          <!-- Timeline Card Content -->
           <div class="timeline-content">
-            <div class="timeline-card shadow-lg">
-              <!-- Date Badge -->
+            <div class="timeline-card shadow-lg" 
+                 [ngClass]="{
+                   'experience-card': item.type === 'experience',
+                   'education-card': item.type === 'education',
+                   'certification-card': item.type === 'certification'
+                 }">
+              
+              <!-- Card Header Meta -->
               <div class="card-header-meta d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                <span class="date-badge">
+                <span class="date-badge" 
+                      [ngClass]="{
+                        'cert-date-badge': item.type === 'certification',
+                        'edu-date-badge': item.type === 'education'
+                      }">
                   <i class="far fa-calendar-alt me-1"></i> {{ item.period }}
                 </span>
-                <span class="type-pill experience-pill">
-                  <i class="fas fa-briefcase me-1"></i> Expérience
+                
+                <span class="type-pill" 
+                      [ngClass]="{
+                        'experience-pill': item.type === 'experience',
+                        'education-pill': item.type === 'education',
+                        'certification-pill': item.type === 'certification'
+                      }">
+                  <i [class]="item.icon + ' me-1'"></i>
+                  {{ item.type === 'experience' ? 'Expérience' : (item.type === 'education' ? 'Formation' : 'Certification') }}
                 </span>
               </div>
 
-              <!-- Title & Subtitle -->
+              <!-- Title -->
               <h3 class="timeline-title">{{ item.title }}</h3>
-              
+
+              <!-- Organization & Location Meta -->
               <div class="timeline-meta-row d-flex align-items-center flex-wrap gap-2 mb-3">
                 <div class="company-chip">
-                  <i class="fas fa-building me-1 text-danger"></i>
+                  <i [class]="(item.type === 'certification' ? 'fas fa-award text-warning' : (item.type === 'education' ? 'fas fa-university text-danger' : 'fas fa-building text-danger')) + ' me-1'"></i>
                   <strong>{{ item.subtitle }}</strong>
                 </div>
                 <div class="location-chip" *ngIf="item.location && item.location.trim().length > 0">
@@ -55,144 +94,25 @@
               <!-- Bullet Points Description -->
               <ul class="timeline-description-list" *ngIf="item.description && item.description.length > 0">
                 <li *ngFor="let desc of item.description" class="desc-item">
-                  <span class="bullet-arrow"><i class="fas fa-chevron-right"></i></span>
+                  <span class="bullet-arrow" [class.cert-bullet]="item.type === 'certification'">
+                    <i [class]="item.type === 'certification' ? 'fas fa-check-circle' : 'fas fa-chevron-right'"></i>
+                  </span>
                   <span class="desc-text">{{ desc }}</span>
                 </li>
               </ul>
 
-              <!-- Optional Link -->
+              <!-- Official Certificate / Degree / Project Link -->
               <div class="credential-link-container mt-3" *ngIf="item.link && item.link.trim().length > 0">
-                <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="credential-link-btn">
-                  <i class="fas fa-external-link-alt me-1"></i> Voir le justificatif / projet
+                <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="credential-link-btn" [class.cert-link-btn]="item.type === 'certification'">
+                  <i [class]="item.type === 'certification' ? 'fas fa-certificate me-1' : 'fas fa-external-link-alt me-1'"></i>
+                  {{ item.type === 'certification' ? 'Voir le certificat officiel' : 'Consulter le justificatif / lien' }}
+                  <i class="fas fa-arrow-up-right-from-square ms-1 small"></i>
                 </a>
               </div>
+
             </div>
           </div>
         </div>
-
-        <!-- Certifications Divider & Section (if any) -->
-        <ng-container *ngIf="certifications && certifications.length > 0">
-          <div class="timeline-divider text-center my-5">
-            <div class="divider-line"></div>
-            <span class="divider-badge cert-divider-badge shadow-sm">
-              <i class="fas fa-award me-2 text-warning"></i>
-              Certifications & Titres
-            </span>
-            <div class="divider-line"></div>
-          </div>
-
-          <div *ngFor="let item of certifications; let cIndex = index" 
-               class="timeline-item" 
-               [ngClass]="(cIndex + experiences.length) % 2 === 0 ? 'left' : 'right'">
-            
-            <div class="timeline-dot certification-dot" [title]="item.title">
-              <i [class]="item.icon"></i>
-              <div class="dot-glow certification-glow"></div>
-            </div>
-
-            <div class="timeline-content">
-              <div class="timeline-card certification-card shadow-lg">
-                <div class="card-header-meta d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                  <span class="date-badge cert-date-badge">
-                    <i class="far fa-calendar-alt me-1"></i> {{ item.period }}
-                  </span>
-                  <span class="type-pill certification-pill">
-                    <i class="fas fa-award me-1"></i> Certification
-                  </span>
-                </div>
-
-                <h3 class="timeline-title">{{ item.title }}</h3>
-
-                <div class="timeline-meta-row d-flex align-items-center flex-wrap gap-2 mb-2">
-                  <div class="company-chip">
-                    <i class="fas fa-university me-1 text-warning"></i>
-                    <strong>{{ item.subtitle }}</strong>
-                  </div>
-                  <div class="location-chip" *ngIf="item.location && item.location.trim().length > 0">
-                    <i class="fas fa-map-marker-alt me-1 text-danger"></i>
-                    <span>{{ item.location }}</span>
-                  </div>
-                </div>
-
-                <ul class="timeline-description-list" *ngIf="item.description && item.description.length > 0">
-                  <li *ngFor="let desc of item.description" class="desc-item">
-                    <span class="bullet-arrow cert-bullet"><i class="fas fa-check-circle"></i></span>
-                    <span class="desc-text">{{ desc }}</span>
-                  </li>
-                </ul>
-
-                <!-- Certificate Link Button -->
-                <div class="credential-link-container mt-3" *ngIf="item.link && item.link.trim().length > 0">
-                  <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="credential-link-btn cert-link-btn">
-                    <i class="fas fa-certificate me-1"></i> Voir le certificat officiel
-                    <i class="fas fa-arrow-up-right-from-square ms-1 small"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-container>
-
-        <!-- Education Divider -->
-        <div class="timeline-divider text-center my-5">
-          <div class="divider-line"></div>
-          <span class="divider-badge shadow-sm">
-            <i class="fas fa-graduation-cap me-2 text-danger"></i>
-            {{ 'TIMELINE.EDUCATION' | translate }}
-          </span>
-          <div class="divider-line"></div>
-        </div>
-
-        <!-- Education Items -->
-        <div *ngFor="let item of education; let index = index" 
-             class="timeline-item" 
-             [ngClass]="(index + experiences.length + (certifications ? certifications.length : 0)) % 2 === 0 ? 'left' : 'right'">
-          
-          <div class="timeline-dot education-dot" [title]="item.title">
-            <i [class]="item.icon"></i>
-            <div class="dot-glow education-glow"></div>
-          </div>
-
-          <div class="timeline-content">
-            <div class="timeline-card education-card shadow-lg">
-              <div class="card-header-meta d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                <span class="date-badge edu-date-badge">
-                  <i class="far fa-calendar-alt me-1"></i> {{ item.period }}
-                </span>
-                <span class="type-pill education-pill">
-                  <i class="fas fa-graduation-cap me-1"></i> Formation
-                </span>
-              </div>
-
-              <h3 class="timeline-title">{{ item.title }}</h3>
-
-              <div class="timeline-meta-row d-flex align-items-center flex-wrap gap-2 mb-2">
-                <div class="company-chip">
-                  <i class="fas fa-university me-1 text-danger"></i>
-                  <strong>{{ item.subtitle }}</strong>
-                </div>
-                <div class="location-chip" *ngIf="item.location && item.location.trim().length > 0">
-                  <i class="fas fa-map-marker-alt me-1 text-danger"></i>
-                  <span>{{ item.location }}</span>
-                </div>
-              </div>
-
-              <ul class="timeline-description-list" *ngIf="item.description && item.description.length > 0">
-                <li *ngFor="let desc of item.description" class="desc-item">
-                  <span class="bullet-arrow"><i class="fas fa-chevron-right"></i></span>
-                  <span class="desc-text">{{ desc }}</span>
-                </li>
-              </ul>
-
-              <div class="credential-link-container mt-3" *ngIf="item.link && item.link.trim().length > 0">
-                <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="credential-link-btn">
-                  <i class="fas fa-external-link-alt me-1"></i> Consulter le diplôme / lien
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
