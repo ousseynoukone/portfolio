@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -21,7 +21,7 @@ export class TimelineAdminComponent implements OnInit, OnDestroy {
 
   timelineItems: TimelineItem[] = [];
   filteredItems: TimelineItem[] = [];
-  currentFilter: 'all' | 'experience' | 'education' = 'all';
+  currentFilter: 'all' | 'experience' | 'education' | 'certification' = 'all';
 
   timelineForm!: FormGroup;
   isSubmitting: boolean = false;
@@ -37,8 +37,9 @@ export class TimelineAdminComponent implements OnInit, OnDestroy {
     { value: 'fas fa-briefcase', label: '💼 Briefcase (Entreprise / Management)' },
     { value: 'fas fa-graduation-cap', label: '🎓 Graduation Cap (Master / Diplôme)' },
     { value: 'fas fa-university', label: '🏛️ University (Université / École)' },
-    { value: 'fas fa-code', label: '⚙️ Code' },
-    { value: 'fas fa-award', label: '🏆 Award / Certification' }
+    { value: 'fas fa-award', label: '🏆 Award (Certificat / Distinction)' },
+    { value: 'fas fa-certificate', label: '📜 Certificate (Certification)' },
+    { value: 'fas fa-code', label: '⚙️ Code' }
   ];
 
   ngOnInit(): void {
@@ -61,16 +62,17 @@ export class TimelineAdminComponent implements OnInit, OnDestroy {
     this.timelineForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(80)]],
       subtitle: ['', [Validators.required, Validators.maxLength(80)]],
-      location: ['', [Validators.required, Validators.maxLength(60)]],
+      location: ['', [Validators.maxLength(60)]], // Optional
       period: ['', [Validators.required, Validators.maxLength(50)]],
       type: ['experience', [Validators.required]],
       icon: ['fas fa-laptop-code', [Validators.required]],
+      link: ['', [Validators.maxLength(300)]], // Optional link
       descriptionText: [''],
       order: [1]
     });
   }
 
-  applyFilter(filter: 'all' | 'experience' | 'education'): void {
+  applyFilter(filter: 'all' | 'experience' | 'education' | 'certification'): void {
     this.currentFilter = filter;
     if (filter === 'all') {
       this.filteredItems = [...this.timelineItems];
@@ -85,10 +87,11 @@ export class TimelineAdminComponent implements OnInit, OnDestroy {
     this.timelineForm.reset({
       title: '',
       subtitle: '',
-      location: 'Paris, France',
+      location: '',
       period: '',
       type: 'experience',
       icon: 'fas fa-laptop-code',
+      link: '',
       descriptionText: '',
       order: this.timelineItems.length + 1
     });
@@ -103,10 +106,11 @@ export class TimelineAdminComponent implements OnInit, OnDestroy {
     this.timelineForm.patchValue({
       title: item.title,
       subtitle: item.subtitle,
-      location: item.location,
+      location: item.location || '',
       period: item.period,
       type: item.type,
       icon: item.icon,
+      link: item.link || '',
       descriptionText: descText,
       order: item.order || 1
     });
@@ -161,10 +165,11 @@ export class TimelineAdminComponent implements OnInit, OnDestroy {
     const item: TimelineItem = {
       title: formVal.title,
       subtitle: formVal.subtitle,
-      location: formVal.location,
+      location: formVal.location ? formVal.location.trim() : '',
       period: formVal.period,
       type: formVal.type,
       icon: formVal.icon,
+      link: formVal.link ? formVal.link.trim() : '',
       description: descriptions,
       order: Number(formVal.order) || 1
     };
@@ -174,7 +179,7 @@ export class TimelineAdminComponent implements OnInit, OnDestroy {
       const res = await this.timelineService.updateTimelineItem(item);
       this.isSubmitting = false;
       if (res.status) {
-        this.toastr.success('Expérience / Formation mise à jour avec succès !', 'Succès');
+        this.toastr.success('Élément de parcours mis à jour avec succès !', 'Succès');
         this.hideModal();
       } else {
         this.toastr.error(res.message || 'Une erreur est survenue', 'Erreur');

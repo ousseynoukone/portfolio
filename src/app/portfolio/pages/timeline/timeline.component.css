@@ -1,4 +1,4 @@
-/* High-Performance Cyber Dark Timeline Section */
+﻿/* High-Performance Cyber Dark Timeline Section */
 .timeline-section {
   background: #0d0d0f;
   color: #FCF6F6;
@@ -183,6 +183,44 @@
   border: 1px solid rgba(25, 135, 84, 0.3);
 }
 
+.certification-pill {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.35);
+}
+
+.cert-date-badge {
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px solid rgba(255, 193, 7, 0.35);
+  color: #ffca2c;
+}
+
+.certification-card {
+  border-top: 2px solid rgba(255, 193, 7, 0.7) !important;
+}
+
+.timeline-dot.certification-dot {
+  border-color: #ffc107;
+  color: #ffc107;
+}
+
+.timeline-item:hover .timeline-dot.certification-dot {
+  background: #ffc107;
+  color: #141416;
+  border-color: #ffe082;
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+.cert-divider-badge {
+  border-color: #ffc107;
+  color: #ffc107;
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.3);
+}
+
+.cert-bullet {
+  color: #ffc107;
+}
+
 .timeline-title {
   font-size: 1.2rem;
   font-weight: 700;
@@ -198,6 +236,48 @@
   padding: 3px 9px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Credential & Document Link Button */
+.credential-link-container {
+  margin-top: 1rem;
+}
+
+.credential-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.credential-link-btn:hover {
+  background: #990012;
+  border-color: #ff334b;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(153, 0, 18, 0.4);
+}
+
+.credential-link-btn.cert-link-btn {
+  background: rgba(255, 193, 7, 0.12);
+  border-color: rgba(255, 193, 7, 0.4);
+  color: #ffe082;
+}
+
+.credential-link-btn.cert-link-btn:hover {
+  background: #d39e00;
+  border-color: #ffe082;
+  color: #141416;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 193, 7, 0.45);
 }
 
 /* Bullet list */

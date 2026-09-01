@@ -1,4 +1,4 @@
-<section id="experience" class="timeline-section">
+﻿<section id="experience" class="timeline-section">
   <div class="container">
     <!-- Section Header -->
     <div class="section-header text-center mb-5">
@@ -46,7 +46,7 @@
                   <i class="fas fa-building me-1 text-danger"></i>
                   <strong>{{ item.subtitle }}</strong>
                 </div>
-                <div class="location-chip" *ngIf="item.location">
+                <div class="location-chip" *ngIf="item.location && item.location.trim().length > 0">
                   <i class="fas fa-map-marker-alt me-1 text-danger"></i>
                   <span>{{ item.location }}</span>
                 </div>
@@ -59,9 +59,79 @@
                   <span class="desc-text">{{ desc }}</span>
                 </li>
               </ul>
+
+              <!-- Optional Link -->
+              <div class="credential-link-container mt-3" *ngIf="item.link && item.link.trim().length > 0">
+                <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="credential-link-btn">
+                  <i class="fas fa-external-link-alt me-1"></i> Voir le justificatif / projet
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- Certifications Divider & Section (if any) -->
+        <ng-container *ngIf="certifications && certifications.length > 0">
+          <div class="timeline-divider text-center my-5">
+            <div class="divider-line"></div>
+            <span class="divider-badge cert-divider-badge shadow-sm">
+              <i class="fas fa-award me-2 text-warning"></i>
+              Certifications & Titres
+            </span>
+            <div class="divider-line"></div>
+          </div>
+
+          <div *ngFor="let item of certifications; let cIndex = index" 
+               class="timeline-item" 
+               [ngClass]="(cIndex + experiences.length) % 2 === 0 ? 'left' : 'right'">
+            
+            <div class="timeline-dot certification-dot" [title]="item.title">
+              <i [class]="item.icon"></i>
+              <div class="dot-glow certification-glow"></div>
+            </div>
+
+            <div class="timeline-content">
+              <div class="timeline-card certification-card shadow-lg">
+                <div class="card-header-meta d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                  <span class="date-badge cert-date-badge">
+                    <i class="far fa-calendar-alt me-1"></i> {{ item.period }}
+                  </span>
+                  <span class="type-pill certification-pill">
+                    <i class="fas fa-award me-1"></i> Certification
+                  </span>
+                </div>
+
+                <h3 class="timeline-title">{{ item.title }}</h3>
+
+                <div class="timeline-meta-row d-flex align-items-center flex-wrap gap-2 mb-2">
+                  <div class="company-chip">
+                    <i class="fas fa-university me-1 text-warning"></i>
+                    <strong>{{ item.subtitle }}</strong>
+                  </div>
+                  <div class="location-chip" *ngIf="item.location && item.location.trim().length > 0">
+                    <i class="fas fa-map-marker-alt me-1 text-danger"></i>
+                    <span>{{ item.location }}</span>
+                  </div>
+                </div>
+
+                <ul class="timeline-description-list" *ngIf="item.description && item.description.length > 0">
+                  <li *ngFor="let desc of item.description" class="desc-item">
+                    <span class="bullet-arrow cert-bullet"><i class="fas fa-check-circle"></i></span>
+                    <span class="desc-text">{{ desc }}</span>
+                  </li>
+                </ul>
+
+                <!-- Certificate Link Button -->
+                <div class="credential-link-container mt-3" *ngIf="item.link && item.link.trim().length > 0">
+                  <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="credential-link-btn cert-link-btn">
+                    <i class="fas fa-certificate me-1"></i> Voir le certificat officiel
+                    <i class="fas fa-arrow-up-right-from-square ms-1 small"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
 
         <!-- Education Divider -->
         <div class="timeline-divider text-center my-5">
@@ -76,7 +146,7 @@
         <!-- Education Items -->
         <div *ngFor="let item of education; let index = index" 
              class="timeline-item" 
-             [ngClass]="(index + experiences.length) % 2 === 0 ? 'left' : 'right'">
+             [ngClass]="(index + experiences.length + (certifications ? certifications.length : 0)) % 2 === 0 ? 'left' : 'right'">
           
           <div class="timeline-dot education-dot" [title]="item.title">
             <i [class]="item.icon"></i>
@@ -101,7 +171,7 @@
                   <i class="fas fa-university me-1 text-danger"></i>
                   <strong>{{ item.subtitle }}</strong>
                 </div>
-                <div class="location-chip" *ngIf="item.location">
+                <div class="location-chip" *ngIf="item.location && item.location.trim().length > 0">
                   <i class="fas fa-map-marker-alt me-1 text-danger"></i>
                   <span>{{ item.location }}</span>
                 </div>
@@ -113,6 +183,12 @@
                   <span class="desc-text">{{ desc }}</span>
                 </li>
               </ul>
+
+              <div class="credential-link-container mt-3" *ngIf="item.link && item.link.trim().length > 0">
+                <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="credential-link-btn">
+                  <i class="fas fa-external-link-alt me-1"></i> Consulter le diplôme / lien
+                </a>
+              </div>
             </div>
           </div>
         </div>

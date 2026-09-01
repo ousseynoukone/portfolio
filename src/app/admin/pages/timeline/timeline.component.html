@@ -1,17 +1,23 @@
-<div class="container-fluid bg-primary-color mt-3">
-  <h3 class="bg-secondary-color text-white p-3 text-center mb-4 shadow-sm rounded">
-    <i class="fas fa-history me-2"></i>Gestion du Parcours & Expériences (Timeline)
-  </h3>
-
-  <!-- Action & Filter Bar -->
-  <div class="row mb-4 align-items-center">
-    <div class="col-md-6 mb-2 mb-md-0">
-      <button class="btn btn-lg shadow-sm" (click)="openAddModal()" style="background: #990012; border-color: #990012; color: white;">
-        <i class="fas fa-plus me-2"></i>Ajouter une Expérience / Formation
+﻿<div class="container-fluid py-4">
+  <!-- Header -->
+  <div class="row align-items-center mb-4">
+    <div class="col-md-6">
+      <h3 class="fw-bold mb-1" style="color: #990012;">
+        <i class="fas fa-history me-2"></i>Gestion du Parcours (Expériences, Formations & Certificats)
+      </h3>
+      <p class="text-muted mb-0">Gérez, ajoutez, modifiez vos expériences, diplômes et certifications affichés sur la Timeline.</p>
+    </div>
+    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+      <button class="btn btn-lg shadow-sm text-white" style="background: #990012; border-color: #990012;" (click)="openAddModal()">
+        <i class="fas fa-plus me-2"></i>Ajouter un élément
       </button>
     </div>
-    <div class="col-md-6 text-md-end">
-      <div class="btn-group shadow-sm" role="group">
+  </div>
+
+  <!-- Filters Row -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="btn-group shadow-sm flex-wrap" role="group">
         <button type="button" class="btn btn-outline-dark" [class.active]="currentFilter === 'all'" (click)="applyFilter('all')">
           Tous ({{ timelineItems.length }})
         </button>
@@ -20,6 +26,9 @@
         </button>
         <button type="button" class="btn btn-outline-dark" [class.active]="currentFilter === 'education'" (click)="applyFilter('education')">
           <i class="fas fa-graduation-cap me-1"></i>Formations
+        </button>
+        <button type="button" class="btn btn-outline-dark" [class.active]="currentFilter === 'certification'" (click)="applyFilter('certification')">
+          <i class="fas fa-award me-1 text-warning"></i>Certifications
         </button>
       </div>
     </div>
@@ -40,10 +49,11 @@
           <tr>
             <th style="width: 50px;">Ordre</th>
             <th>Type</th>
-            <th>Poste / Diplôme</th>
-            <th>Entreprise / École</th>
+            <th>Poste / Diplôme / Certificat</th>
+            <th>Entreprise / École / Organisme</th>
             <th>Période</th>
             <th>Lieu</th>
+            <th>Lien</th>
             <th>Missions</th>
             <th class="text-center" style="width: 160px;">Actions</th>
           </tr>
@@ -52,9 +62,16 @@
           <tr *ngFor="let item of filteredItems">
             <td class="text-center fw-bold">{{ item.order }}</td>
             <td>
-              <span class="badge" [ngClass]="item.type === 'experience' ? 'bg-primary' : 'bg-success'">
+              <span class="badge" 
+                    [ngClass]="{
+                      'bg-primary': item.type === 'experience',
+                      'bg-success': item.type === 'education',
+                      'bg-warning text-dark': item.type === 'certification'
+                    }">
                 <i [class]="item.icon + ' me-1'"></i>
-                {{ item.type === 'experience' ? 'Expérience' : 'Formation' }}
+                <span *ngIf="item.type === 'experience'">Expérience</span>
+                <span *ngIf="item.type === 'education'">Formation</span>
+                <span *ngIf="item.type === 'certification'">Certificat</span>
               </span>
             </td>
             <td class="fw-bold text-dark">{{ item.title }}</td>
@@ -62,7 +79,18 @@
               <span class="badge bg-secondary">{{ item.subtitle }}</span>
             </td>
             <td><small class="text-muted"><i class="fas fa-calendar-alt me-1"></i>{{ item.period }}</small></td>
-            <td><small><i class="fas fa-map-marker-alt text-danger me-1"></i>{{ item.location }}</small></td>
+            <td>
+              <small *ngIf="item.location && item.location.trim().length > 0">
+                <i class="fas fa-map-marker-alt text-danger me-1"></i>{{ item.location }}
+              </small>
+              <span *ngIf="!item.location || item.location.trim().length === 0" class="text-muted small"><em>Non spécifié</em></span>
+            </td>
+            <td>
+              <a *ngIf="item.link && item.link.trim().length > 0" [href]="item.link" target="_blank" class="btn btn-xs btn-outline-info" title="Consulter le lien">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+              <span *ngIf="!item.link || item.link.trim().length === 0" class="text-muted small">-</span>
+            </td>
             <td>
               <span class="badge bg-info text-dark" *ngIf="item.description && item.description.length > 0">
                 {{ item.description.length }} point(s)
@@ -79,7 +107,7 @@
             </td>
           </tr>
           <tr *ngIf="filteredItems.length === 0">
-            <td colspan="8" class="text-center text-muted py-4">
+            <td colspan="9" class="text-center text-muted py-4">
               Aucun élément trouvé dans cette catégorie.
             </td>
           </tr>
@@ -95,7 +123,7 @@
         <div class="modal-header bg-dark text-white" style="border-bottom: 3px solid #990012;">
           <h5 class="modal-title" id="timelineModalLabel">
             <i class="fas fa-edit me-2 text-danger"></i>
-            {{ editMode ? 'Modifier le parcours' : 'Ajouter une expérience ou formation' }}
+            {{ editMode ? 'Modifier le parcours' : 'Ajouter une expérience, formation ou certificat' }}
           </h5>
           <button type="button" class="btn-close btn-close-white" (click)="hideModal()" aria-label="Close"></button>
         </div>
@@ -109,6 +137,7 @@
                 <select class="form-select" formControlName="type">
                   <option value="experience">💼 Expérience Professionnelle</option>
                   <option value="education">🎓 Formation & Diplôme</option>
+                  <option value="certification">🏆 Certificat & Certification</option>
                 </select>
               </div>
 
@@ -122,26 +151,32 @@
 
               <!-- Title -->
               <div class="col-md-12">
-                <label class="form-label fw-bold">Intitulé du Poste / Diplôme *</label>
-                <input type="text" class="form-control" formControlName="title" placeholder="ex: DÉVELOPPEUR FULL STACK / LEAD DEV">
+                <label class="form-label fw-bold">Intitulé du Poste / Diplôme / Certificat *</label>
+                <input type="text" class="form-control" formControlName="title" placeholder="ex: CS50x Certificate ou LEAD DEV">
               </div>
 
-              <!-- Subtitle (Company / School) -->
+              <!-- Subtitle (Company / School / Org) -->
               <div class="col-md-6">
                 <label class="form-label fw-bold">Entreprise / École / Organisme *</label>
-                <input type="text" class="form-control" formControlName="subtitle" placeholder="ex: ITIC Paris">
+                <input type="text" class="form-control" formControlName="subtitle" placeholder="ex: Harvard University ou ITIC Paris">
               </div>
 
-              <!-- Location -->
+              <!-- Location (Optional) -->
               <div class="col-md-6">
-                <label class="form-label fw-bold">Lieu / Ville *</label>
-                <input type="text" class="form-control" formControlName="location" placeholder="ex: Paris, France">
+                <label class="form-label fw-bold">Lieu / Ville <span class="text-muted fw-normal">(Optionnel)</span></label>
+                <input type="text" class="form-control" formControlName="location" placeholder="ex: Paris, France ou En ligne (laisser vide si non applicable)">
               </div>
 
               <!-- Period -->
-              <div class="col-md-8">
+              <div class="col-md-6">
                 <label class="form-label fw-bold">Période / Dates *</label>
-                <input type="text" class="form-control" formControlName="period" placeholder="ex: MAI - SEPTEMBRE 2026">
+                <input type="text" class="form-control" formControlName="period" placeholder="ex: 2024 - Novembre 2024">
+              </div>
+
+              <!-- Link (Optional) -->
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Lien / URL du Certificat ou Projet <span class="text-muted fw-normal">(Optionnel)</span></label>
+                <input type="url" class="form-control" formControlName="link" placeholder="https://cs50.harvard.edu/certificates/...">
               </div>
 
               <!-- Order -->
@@ -153,10 +188,10 @@
               <!-- Description Points -->
               <div class="col-md-12">
                 <label class="form-label fw-bold">
-                  Missions / Réalisations clés (1 puce par ligne)
+                  Missions / Réalisations / Compétences clés (1 puce par ligne)
                 </label>
                 <textarea class="form-control" formControlName="descriptionText" rows="5" 
-                          placeholder="Architecture et développement Full-Stack...&#10;Développement de l'API et centralisation...&#10;Conception des interfaces..."></textarea>
+                          placeholder="Compétences acquises...&#10;Structures de données et algorithmes...&#10;Architecture logicielle..."></textarea>
                 <div class="form-text">Chaque ligne saisie apparaîtra sous forme de puce dans la timeline.</div>
               </div>
             </div>

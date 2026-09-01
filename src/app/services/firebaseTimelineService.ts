@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { 
   Firestore, CollectionReference, collection, query, orderBy, 
@@ -21,6 +21,7 @@ export const DEFAULT_TIMELINE_ITEMS: TimelineItem[] = [
     ],
     type: 'experience',
     icon: 'fas fa-laptop-code',
+    link: '',
     order: 1
   },
   {
@@ -36,12 +37,13 @@ export const DEFAULT_TIMELINE_ITEMS: TimelineItem[] = [
     ],
     type: 'experience',
     icon: 'fas fa-briefcase',
+    link: '',
     order: 2
   },
   {
     title: 'Stage Développeur Full-stack',
     subtitle: 'Rezilux S.A.R.L',
-    location: 'France',
+    location: '',
     period: 'AOUT 2023 - FÉVRIER 2024',
     description: [
       "Participation à la création d'une app mobile cross-platform avec Flutter, intégrant géolocalisation et notifications push.",
@@ -51,6 +53,7 @@ export const DEFAULT_TIMELINE_ITEMS: TimelineItem[] = [
     ],
     type: 'experience',
     icon: 'fas fa-laptop-code',
+    link: '',
     order: 3
   },
   {
@@ -61,16 +64,21 @@ export const DEFAULT_TIMELINE_ITEMS: TimelineItem[] = [
     description: [],
     type: 'education',
     icon: 'fas fa-graduation-cap',
+    link: '',
     order: 4
   },
   {
     title: 'CS50x Certificate',
     subtitle: 'Harvard University',
-    location: 'Online',
+    location: '',
     period: '2024 - Novembre 2024',
-    description: [],
-    type: 'education',
-    icon: 'fas fa-graduation-cap',
+    description: [
+      "Certification d'excellence en informatique et génie logiciel délivrée par Harvard University (edX).",
+      "Maîtrise approfondie des algorithmes, structures de données, gestion de la mémoire en C, développement Python, SQL et frameworks web modernes."
+    ],
+    type: 'certification',
+    icon: 'fas fa-award',
+    link: 'https://cs50.harvard.edu/certificates/',
     order: 5
   },
   {
@@ -81,6 +89,7 @@ export const DEFAULT_TIMELINE_ITEMS: TimelineItem[] = [
     description: [],
     type: 'education',
     icon: 'fas fa-university',
+    link: '',
     order: 6
   }
 ];
