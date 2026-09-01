@@ -28,41 +28,6 @@
   border-radius: 2px;
 }
 
-/* Timeline Filter Tabs */
-.timeline-filters {
-  margin-top: 2rem;
-  gap: 0.75rem;
-}
-
-.filter-btn {
-  background: #242323;
-  color: #e0e0e0;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 10px 22px;
-  border-radius: 25px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  display: inline-flex;
-  align-items: center;
-}
-
-.filter-btn:hover {
-  background: #333;
-  color: #ffffff;
-  border-color: rgba(153, 0, 18, 0.6);
-  transform: translateY(-2px);
-}
-
-.filter-btn.active {
-  background: linear-gradient(135deg, #990012 0%, #cc0018 100%);
-  color: #ffffff;
-  border-color: #cc0018;
-  box-shadow: 0 4px 14px rgba(153, 0, 18, 0.45);
-  transform: translateY(-2px);
-}
-
 /* Timeline Structure */
 .timeline-wrapper {
   position: relative;
@@ -86,12 +51,62 @@
   transform: translateX(-50%);
   border-radius: 2px;
   box-shadow: 0 0 10px rgba(153, 0, 18, 0.5);
+  z-index: 1;
 }
 
+/* Premium Section Divider Badges */
+.timeline-divider {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 60px 0 40px 0;
+}
+
+.divider-badge {
+  background: #242323;
+  color: #ffffff;
+  padding: 12px 32px;
+  border-radius: 40px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.divider-badge:hover {
+  transform: scale(1.03);
+}
+
+.exp-divider-badge {
+  border-color: #0d6efd;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(13, 110, 253, 0.4);
+}
+
+.edu-divider-badge {
+  border-color: #198754;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(25, 135, 84, 0.4);
+}
+
+.cert-divider-badge {
+  border-color: #ffc107;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(255, 193, 7, 0.4);
+}
+
+/* Timeline Items */
 .timeline-item {
   position: relative;
   margin-bottom: 50px;
   width: 50%;
+  z-index: 2;
 }
 
 .timeline-item.left {
@@ -118,7 +133,7 @@
   justify-content: center;
   color: #fff;
   font-size: 1.1rem;
-  z-index: 2;
+  z-index: 5;
   transition: all 0.3s ease;
 }
 
@@ -132,10 +147,12 @@
 
 .experience-dot {
   border-color: #0d6efd;
+  color: #6ea8fe;
 }
 
 .education-dot {
   border-color: #198754;
+  color: #75b798;
 }
 
 .certification-dot {
@@ -156,15 +173,15 @@
 }
 
 .experience-glow {
-  background: rgba(13, 110, 253, 0.25);
+  background: rgba(13, 110, 253, 0.3);
 }
 
 .education-glow {
-  background: rgba(25, 135, 84, 0.25);
+  background: rgba(25, 135, 84, 0.3);
 }
 
 .certification-glow {
-  background: rgba(255, 193, 7, 0.25);
+  background: rgba(255, 193, 7, 0.3);
 }
 
 @keyframes pulse {
@@ -178,31 +195,33 @@
   background: #242323;
   border-radius: 15px;
   padding: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .timeline-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
 }
 
 .experience-card:hover {
-  border-color: rgba(13, 110, 253, 0.4);
+  border-color: rgba(13, 110, 253, 0.5);
+  box-shadow: 0 12px 30px rgba(13, 110, 253, 0.2) !important;
 }
 
 .education-card:hover {
-  border-color: rgba(25, 135, 84, 0.4);
+  border-color: rgba(25, 135, 84, 0.5);
+  box-shadow: 0 12px 30px rgba(25, 135, 84, 0.2) !important;
 }
 
 .certification-card {
-  border-color: rgba(255, 193, 7, 0.25);
+  border-color: rgba(255, 193, 7, 0.3);
 }
 
 .certification-card:hover {
   border-color: rgba(255, 193, 7, 0.6);
-  box-shadow: 0 12px 30px rgba(255, 193, 7, 0.15) !important;
+  box-shadow: 0 12px 30px rgba(255, 193, 7, 0.2) !important;
 }
 
 /* Badges & Pills */
@@ -292,6 +311,10 @@
   font-size: 0.8rem;
 }
 
+.edu-bullet {
+  color: #198754;
+}
+
 .cert-bullet {
   color: #ffc107;
 }
@@ -315,6 +338,18 @@
   color: #fff;
 }
 
+.edu-link-btn {
+  background: rgba(25, 135, 84, 0.15);
+  color: #75b798;
+  border-color: rgba(25, 135, 84, 0.3);
+}
+
+.edu-link-btn:hover {
+  background: #198754;
+  color: #fff;
+  border-color: #198754;
+}
+
 .cert-link-btn {
   background: rgba(255, 193, 7, 0.15);
   color: #ffc107;
@@ -331,6 +366,17 @@
 @media (max-width: 768px) {
   .timeline-tree::before {
     left: 20px;
+  }
+  
+  .timeline-divider {
+    justify-content: flex-start;
+    padding-left: 55px;
+    margin: 40px 0 25px 0;
+  }
+  
+  .divider-badge {
+    font-size: 1rem;
+    padding: 8px 18px;
   }
   
   .timeline-item {

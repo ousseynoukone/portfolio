@@ -13,13 +13,11 @@
         <!-- ========================================== -->
         <!-- 1. EXPÉRIENCES PROFESSIONNELLES SECTION    -->
         <!-- ========================================== -->
-        <div class="timeline-divider text-center mb-5">
-          <div class="divider-line"></div>
-          <span class="divider-badge shadow-sm">
-            <i class="fas fa-briefcase me-2 text-danger"></i>
-            Expériences Professionnelles
-          </span>
-          <div class="divider-line"></div>
+        <div class="timeline-divider text-center">
+          <div class="divider-badge exp-divider-badge shadow-lg">
+            <i class="fas fa-briefcase text-danger"></i>
+            <span>Expériences Professionnelles</span>
+          </div>
         </div>
 
         <div *ngFor="let item of experiences; let i = index" 
@@ -74,13 +72,11 @@
         <!-- ========================================== -->
         <!-- 2. FORMATIONS & DIPLÔMES SECTION           -->
         <!-- ========================================== -->
-        <div class="timeline-divider text-center my-5">
-          <div class="divider-line"></div>
-          <span class="divider-badge shadow-sm">
-            <i class="fas fa-graduation-cap me-2 text-danger"></i>
-            Formations & Diplômes
-          </span>
-          <div class="divider-line"></div>
+        <div class="timeline-divider text-center">
+          <div class="divider-badge edu-divider-badge shadow-lg">
+            <i class="fas fa-graduation-cap text-success"></i>
+            <span>Formations & Diplômes</span>
+          </div>
         </div>
 
         <div *ngFor="let item of education; let i = index" 
@@ -107,7 +103,7 @@
 
               <div class="timeline-meta-row d-flex align-items-center flex-wrap gap-2 mb-3">
                 <div class="company-chip">
-                  <i class="fas fa-university me-1 text-danger"></i>
+                  <i class="fas fa-university me-1 text-success"></i>
                   <strong>{{ item.subtitle }}</strong>
                 </div>
                 <div class="location-chip" *ngIf="item.location && item.location.trim().length > 0">
@@ -118,13 +114,13 @@
 
               <ul class="timeline-description-list" *ngIf="item.description && item.description.length > 0">
                 <li *ngFor="let desc of item.description" class="desc-item">
-                  <span class="bullet-arrow"><i class="fas fa-chevron-right"></i></span>
+                  <span class="bullet-arrow edu-bullet"><i class="fas fa-chevron-right"></i></span>
                   <span class="desc-text">{{ desc }}</span>
                 </li>
               </ul>
 
               <div class="credential-link-container mt-3" *ngIf="item.link && item.link.trim().length > 0">
-                <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="credential-link-btn">
+                <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="credential-link-btn edu-link-btn">
                   <i class="fas fa-external-link-alt me-1"></i> Consulter le diplôme / lien
                 </a>
               </div>
@@ -136,13 +132,11 @@
         <!-- 3. CERTIFICATIONS & TITRES SECTION         -->
         <!-- ========================================== -->
         <ng-container *ngIf="certifications && certifications.length > 0">
-          <div class="timeline-divider text-center my-5">
-            <div class="divider-line"></div>
-            <span class="divider-badge cert-divider-badge shadow-sm">
-              <i class="fas fa-award me-2 text-warning"></i>
-              Certifications & Titres
-            </span>
-            <div class="divider-line"></div>
+          <div class="timeline-divider text-center">
+            <div class="divider-badge cert-divider-badge shadow-lg">
+              <i class="fas fa-award text-warning"></i>
+              <span>Certifications & Titres</span>
+            </div>
           </div>
 
           <div *ngFor="let item of certifications; let i = index" 
