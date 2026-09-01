@@ -10,9 +10,9 @@ import { FirebaseTimelineService, DEFAULT_TIMELINE_ITEMS } from '../../../servic
   standalone: false
 })
 export class TimelineComponent implements OnInit, OnDestroy {
-  allItems: TimelineItem[] = [...DEFAULT_TIMELINE_ITEMS].sort((a, b) => (a.order || 0) - (b.order || 0));
-  filteredItems: TimelineItem[] = [...DEFAULT_TIMELINE_ITEMS].sort((a, b) => (a.order || 0) - (b.order || 0));
-  selectedFilter: 'all' | 'experience' | 'education' | 'certification' = 'all';
+  experiences: TimelineItem[] = DEFAULT_TIMELINE_ITEMS.filter(i => i.type === 'experience');
+  education: TimelineItem[] = DEFAULT_TIMELINE_ITEMS.filter(i => i.type === 'education');
+  certifications: TimelineItem[] = DEFAULT_TIMELINE_ITEMS.filter(i => i.type === 'certification');
   private subscription?: Subscription;
 
   constructor(private timelineService: FirebaseTimelineService) { }
@@ -20,23 +20,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.timelineService.timeline$.subscribe(items => {
       if (items && items.length > 0) {
-        this.allItems = [...items].sort((a, b) => (a.order || 0) - (b.order || 0));
-        this.applyFilter(this.selectedFilter);
+        this.experiences = items.filter(i => i.type === 'experience').sort((a, b) => (a.order || 0) - (b.order || 0));
+        this.education = items.filter(i => i.type === 'education').sort((a, b) => (a.order || 0) - (b.order || 0));
+        this.certifications = items.filter(i => i.type === 'certification').sort((a, b) => (a.order || 0) - (b.order || 0));
       }
     });
-  }
-
-  setFilter(filter: 'all' | 'experience' | 'education' | 'certification'): void {
-    this.selectedFilter = filter;
-    this.applyFilter(filter);
-  }
-
-  applyFilter(filter: 'all' | 'experience' | 'education' | 'certification'): void {
-    if (filter === 'all') {
-      this.filteredItems = this.allItems;
-    } else {
-      this.filteredItems = this.allItems.filter(i => i.type === filter);
-    }
   }
 
   ngOnDestroy(): void {
