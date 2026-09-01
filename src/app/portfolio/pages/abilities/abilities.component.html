@@ -9,15 +9,15 @@
         </div>
 
         <!-- Loading State -->
-        <div *ngIf="isDataComing" class="text-center">
-            <div class="spinner-border text-primary" role="status">
+        <div *ngIf="isDataComing" class="text-center my-4">
+            <div class="spinner-border text-danger" role="status">
                 <span class="visually-hidden">{{ 'SKILLS.LOADING' | translate }}</span>
             </div>
         </div>
 
         <!-- Skills Filter Tabs -->
         <div class="skills-filter">
-            <div class="filter-tabs">
+            <div class="filter-tabs shadow-sm">
                 <button class="filter-tab active" (click)="showInformation('framework')" id="frameworkButton">
                     <i class="fas fa-layer-group"></i>
                     <span>{{ 'SKILLS.FRAMEWORKS' | translate }}</span>
@@ -53,21 +53,27 @@
 
         <!-- Skills Content -->
         <div class="skills-content">
-            <!-- Frameworks -->
+            <!-- Frameworks & Bibliothèques -->
             <div id="framework" class="skill-category" hidden>
                 <div class="category-header">
-                    <h3><i class="fas fa-layer-group"></i> Frameworks & Bibliothèques</h3>
-                    <p>Technologies modernes pour le développement web et mobile</p>
+                    <div class="category-icon-badge">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3>Frameworks & Bibliothèques</h3>
+                    <p>Technologies modernes pour le développement d'applications web, microservices et mobiles performantes</p>
                 </div>
                 <div class="skills-grid">
                     <ng-container *ngFor="let ability of abilities">
                         <div *ngIf="ability.type === 'fr'" class="skill-card">
-                            <div class="skill-image">
-                                <img [src]="ability.image" [alt]="ability.name">
+                            <div class="card-accent-line"></div>
+                            <div class="skill-image-wrapper">
+                                <div class="skill-image">
+                                    <img [src]="ability.image" [alt]="ability.name" loading="lazy">
+                                </div>
                             </div>
                             <div class="skill-info">
-                                <h4>{{ ability.name }}</h4>
-                                <div class="skill-rating">
+                                <h4 class="skill-title">{{ ability.name }}</h4>
+                                <div class="skill-rating-badge">
                                     <div class="stars">
                                         <i *ngFor="let star of getStarArray(5); let i = index" 
                                            class="fas fa-star" 
@@ -85,18 +91,24 @@
             <!-- Programming Languages -->
             <div id="langProg" class="skill-category" hidden>
                 <div class="category-header">
-                    <h3><i class="fas fa-code"></i> Langages de Programmation</h3>
-                    <p>Langages que j'utilise pour créer des applications</p>
+                    <div class="category-icon-badge">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Langages de Programmation</h3>
+                    <p>Langages que j'utilise pour concevoir des architectures robustes et algorithmes avancés</p>
                 </div>
                 <div class="skills-grid">
                     <ng-container *ngFor="let ability of abilities">
                         <div *ngIf="ability.type === 'lg'" class="skill-card">
-                            <div class="skill-image">
-                                <img [src]="ability.image" [alt]="ability.name">
+                            <div class="card-accent-line"></div>
+                            <div class="skill-image-wrapper">
+                                <div class="skill-image">
+                                    <img [src]="ability.image" [alt]="ability.name" loading="lazy">
+                                </div>
                             </div>
                             <div class="skill-info">
-                                <h4>{{ ability.name }}</h4>
-                                <div class="skill-rating">
+                                <h4 class="skill-title">{{ ability.name }}</h4>
+                                <div class="skill-rating-badge">
                                     <div class="stars">
                                         <i *ngFor="let star of getStarArray(5); let i = index" 
                                            class="fas fa-star" 
@@ -114,18 +126,24 @@
             <!-- Architecture & Concepts -->
             <div id="archiConcept" class="skill-category" hidden>
                 <div class="category-header">
-                    <h3><i class="fas fa-sitemap"></i> Architecture & Concepts</h3>
-                    <p>Concepts d'architecture et systèmes d'information</p>
+                    <div class="category-icon-badge">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <h3>Architecture & Concepts</h3>
+                    <p>Conception distribuée, microservices, Clean Architecture, CQRS et sécurité RBAC</p>
                 </div>
                 <div class="skills-grid">
                     <ng-container *ngFor="let ability of abilities">
                         <div *ngIf="ability.type === 'ac'" class="skill-card">
-                            <div class="skill-image">
-                                <img [src]="ability.image" [alt]="ability.name">
+                            <div class="card-accent-line"></div>
+                            <div class="skill-image-wrapper">
+                                <div class="skill-image">
+                                    <img [src]="ability.image" [alt]="ability.name" loading="lazy">
+                                </div>
                             </div>
                             <div class="skill-info">
-                                <h4>{{ ability.name }}</h4>
-                                <div class="skill-rating">
+                                <h4 class="skill-title">{{ ability.name }}</h4>
+                                <div class="skill-rating-badge">
                                     <div class="stars">
                                         <i *ngFor="let star of getStarArray(5); let i = index" 
                                            class="fas fa-star" 
@@ -143,17 +161,23 @@
             <!-- Project Management -->
             <div id="gestionProjet" class="skill-category" hidden>
                 <div class="category-header">
-                    <h3><i class="fas fa-tasks"></i> Gestion de Projet</h3>
-                    <p>Méthodologies et outils de gestion de projet</p>
+                    <div class="category-icon-badge">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>Gestion de Projet</h3>
+                    <p>Méthodologies agiles, pilotage de sprints, rituels Scrum et intégration continue</p>
                 </div>
                 <div class="skills-grid">
                     <div *ngFor="let gestion of gestionProjs" class="skill-card">
-                        <div class="skill-image">
-                            <img [src]="gestion.image" [alt]="gestion.name">
+                        <div class="card-accent-line"></div>
+                        <div class="skill-image-wrapper">
+                            <div class="skill-image">
+                                <img [src]="gestion.image" [alt]="gestion.name" loading="lazy">
+                            </div>
                         </div>
                         <div class="skill-info">
-                            <h4>{{ gestion.name }}</h4>
-                            <div class="skill-rating">
+                            <h4 class="skill-title">{{ gestion.name }}</h4>
+                            <div class="skill-rating-badge">
                                 <div class="stars">
                                     <i *ngFor="let star of getStarArray(5); let i = index" 
                                        class="fas fa-star" 
@@ -170,17 +194,23 @@
             <!-- Modeling -->
             <div id="modelisation" class="skill-category" hidden>
                 <div class="category-header">
-                    <h3><i class="fas fa-project-diagram"></i> Modélisation</h3>
-                    <p>Outils et techniques de modélisation</p>
+                    <div class="category-icon-badge">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Modélisation & Conception</h3>
+                    <p>Schématisation orientée objet UML, modélisation relationnelle Merise et spécifications</p>
                 </div>
                 <div class="skills-grid">
                     <div *ngFor="let modelisation of modelisations" class="skill-card">
-                        <div class="skill-image">
-                            <img [src]="modelisation.image" [alt]="modelisation.name">
+                        <div class="card-accent-line"></div>
+                        <div class="skill-image-wrapper">
+                            <div class="skill-image">
+                                <img [src]="modelisation.image" [alt]="modelisation.name" loading="lazy">
+                            </div>
                         </div>
                         <div class="skill-info">
-                            <h4>{{ modelisation.name }}</h4>
-                            <div class="skill-rating">
+                            <h4 class="skill-title">{{ modelisation.name }}</h4>
+                            <div class="skill-rating-badge">
                                 <div class="stars">
                                     <i *ngFor="let star of getStarArray(5); let i = index" 
                                        class="fas fa-star" 
@@ -197,36 +227,39 @@
             <!-- Additional Tools -->
             <div id="autreCompetence" class="skill-category" hidden>
                 <div class="category-header">
-                    <h3><i class="fas fa-tools"></i> Outils & Compétences Additionnelles</h3>
-                    <p>Outils d'automatisation, design et bureautique</p>
+                    <div class="category-icon-badge">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Outils & DevOps</h3>
+                    <p>Conteneurisation, automatisation CI/CD, orchestration et outils collaboratifs</p>
                 </div>
                 <div class="tools-grid">
                     <div class="tool-category">
-                        <div class="tool-card">
+                        <div class="tool-card shadow-sm">
                             <div class="tool-icon">
                                 <i class="fas fa-cogs"></i>
                             </div>
-                            <h4>Outils d'Automatisation</h4>
+                            <h4>DevOps & Automatisation</h4>
                             <ul class="tool-list">
                                 <li><i class="fab fa-docker"></i> Docker</li>
                                 <li><i class="fas fa-cube"></i> Maven</li>
-                                <li><i class="fas fa-tools"></i> Jenkins</li>
+                                <li><i class="fas fa-tools"></i> Jenkins / GitHub Actions</li>
                                 <li><i class="fas fa-server"></i> Nexus</li>
                                 <li><i class="fas fa-cloud"></i> Kubernetes</li>
                             </ul>
                         </div>
                     </div>
                     <div class="tool-category">
-                        <div class="tool-card">
+                        <div class="tool-card shadow-sm">
                             <div class="tool-icon">
                                 <i class="fas fa-palette"></i>
                             </div>
-                            <h4>Design & Bureautique</h4>
+                            <h4>Design & Productivité</h4>
                             <ul class="tool-list">
                                 <li><i class="fab fa-figma"></i> Figma</li>
                                 <li><i class="fas fa-image"></i> Photoshop</li>
-                                <li><i class="fab fa-microsoft"></i> Microsoft Word</li>
-                                <li><i class="fas fa-table"></i> Microsoft Excel</li>
+                                <li><i class="fab fa-microsoft"></i> Suite Office</li>
+                                <li><i class="fas fa-terminal"></i> Git & Bash</li>
                             </ul>
                         </div>
                     </div>
