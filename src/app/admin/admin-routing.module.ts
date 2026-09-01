@@ -8,12 +8,14 @@ import { ProjectsComponent } from './pages/projects/projects.component';
 import { AbilitiesComponent } from './pages/abilities/abilities.component';
 import {  isRouteGuard } from '../services/guards/routeGuard';
 import { OrderProjectComponent } from './pages/projects/sub-component/order-project/order-project.component';
+import { TimelineAdminComponent } from './pages/timeline/timeline.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     children: [
+      { path: 'timeline', component: TimelineAdminComponent, data: { breadcrumb: 'Parcours & Expériences' } },
       { path: '', component: HomeComponent, data: { breadcrumb: 'Dashboard' } }, 
       { path: 'projects', component: ProjectsComponent, data: { breadcrumb: 'Projets' } },
       { path: 'abilities', component: AbilitiesComponent, data: { breadcrumb: 'Compétences' } },

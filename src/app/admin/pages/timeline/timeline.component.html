@@ -1,0 +1,176 @@
+<div class="container-fluid bg-primary-color mt-3">
+  <h3 class="bg-secondary-color text-white p-3 text-center mb-4 shadow-sm rounded">
+    <i class="fas fa-history me-2"></i>Gestion du Parcours & Expériences (Timeline)
+  </h3>
+
+  <!-- Action & Filter Bar -->
+  <div class="row mb-4 align-items-center">
+    <div class="col-md-6 mb-2 mb-md-0">
+      <button class="btn btn-lg shadow-sm" (click)="openAddModal()" style="background: #990012; border-color: #990012; color: white;">
+        <i class="fas fa-plus me-2"></i>Ajouter une Expérience / Formation
+      </button>
+    </div>
+    <div class="col-md-6 text-md-end">
+      <div class="btn-group shadow-sm" role="group">
+        <button type="button" class="btn btn-outline-dark" [class.active]="currentFilter === 'all'" (click)="applyFilter('all')">
+          Tous ({{ timelineItems.length }})
+        </button>
+        <button type="button" class="btn btn-outline-dark" [class.active]="currentFilter === 'experience'" (click)="applyFilter('experience')">
+          <i class="fas fa-briefcase me-1"></i>Expériences
+        </button>
+        <button type="button" class="btn btn-outline-dark" [class.active]="currentFilter === 'education'" (click)="applyFilter('education')">
+          <i class="fas fa-graduation-cap me-1"></i>Formations
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center my-5">
+    <div class="spinner-grow text-danger" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+  </div>
+
+  <!-- Timeline Management Table -->
+  <div *ngIf="!isLoading" class="timeline-admin-container shadow-sm p-4 bg-white rounded">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 50px;">Ordre</th>
+            <th>Type</th>
+            <th>Poste / Diplôme</th>
+            <th>Entreprise / École</th>
+            <th>Période</th>
+            <th>Lieu</th>
+            <th>Missions</th>
+            <th class="text-center" style="width: 160px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredItems">
+            <td class="text-center fw-bold">{{ item.order }}</td>
+            <td>
+              <span class="badge" [ngClass]="item.type === 'experience' ? 'bg-primary' : 'bg-success'">
+                <i [class]="item.icon + ' me-1'"></i>
+                {{ item.type === 'experience' ? 'Expérience' : 'Formation' }}
+              </span>
+            </td>
+            <td class="fw-bold text-dark">{{ item.title }}</td>
+            <td>
+              <span class="badge bg-secondary">{{ item.subtitle }}</span>
+            </td>
+            <td><small class="text-muted"><i class="fas fa-calendar-alt me-1"></i>{{ item.period }}</small></td>
+            <td><small><i class="fas fa-map-marker-alt text-danger me-1"></i>{{ item.location }}</small></td>
+            <td>
+              <span class="badge bg-info text-dark" *ngIf="item.description && item.description.length > 0">
+                {{ item.description.length }} point(s)
+              </span>
+              <span class="text-muted small" *ngIf="!item.description || item.description.length === 0">-</span>
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="openEditModal(item)" title="Modifier">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem(item)" title="Supprimer">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredItems.length === 0">
+            <td colspan="8" class="text-center text-muted py-4">
+              Aucun élément trouvé dans cette catégorie.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal for Add/Edit -->
+  <div class="modal fade" id="timelineModal" tabindex="-1" aria-labelledby="timelineModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content shadow-lg border-0">
+        <div class="modal-header bg-dark text-white" style="border-bottom: 3px solid #990012;">
+          <h5 class="modal-title" id="timelineModalLabel">
+            <i class="fas fa-edit me-2 text-danger"></i>
+            {{ editMode ? 'Modifier le parcours' : 'Ajouter une expérience ou formation' }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="hideModal()" aria-label="Close"></button>
+        </div>
+
+        <form [formGroup]="timelineForm" (ngSubmit)="onSubmit()">
+          <div class="modal-body p-4">
+            <div class="row g-3">
+              <!-- Type -->
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Type d'élément *</label>
+                <select class="form-select" formControlName="type">
+                  <option value="experience">💼 Expérience Professionnelle</option>
+                  <option value="education">🎓 Formation & Diplôme</option>
+                </select>
+              </div>
+
+              <!-- Icon -->
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Icône *</label>
+                <select class="form-select" formControlName="icon">
+                  <option *ngFor="let opt of iconOptions" [value]="opt.value">{{ opt.label }}</option>
+                </select>
+              </div>
+
+              <!-- Title -->
+              <div class="col-md-12">
+                <label class="form-label fw-bold">Intitulé du Poste / Diplôme *</label>
+                <input type="text" class="form-control" formControlName="title" placeholder="ex: DÉVELOPPEUR FULL STACK / LEAD DEV">
+              </div>
+
+              <!-- Subtitle (Company / School) -->
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Entreprise / École / Organisme *</label>
+                <input type="text" class="form-control" formControlName="subtitle" placeholder="ex: ITIC Paris">
+              </div>
+
+              <!-- Location -->
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Lieu / Ville *</label>
+                <input type="text" class="form-control" formControlName="location" placeholder="ex: Paris, France">
+              </div>
+
+              <!-- Period -->
+              <div class="col-md-8">
+                <label class="form-label fw-bold">Période / Dates *</label>
+                <input type="text" class="form-control" formControlName="period" placeholder="ex: MAI - SEPTEMBRE 2026">
+              </div>
+
+              <!-- Order -->
+              <div class="col-md-4">
+                <label class="form-label fw-bold">Ordre d'affichage</label>
+                <input type="number" class="form-control" formControlName="order" min="1">
+              </div>
+
+              <!-- Description Points -->
+              <div class="col-md-12">
+                <label class="form-label fw-bold">
+                  Missions / Réalisations clés (1 puce par ligne)
+                </label>
+                <textarea class="form-control" formControlName="descriptionText" rows="5" 
+                          placeholder="Architecture et développement Full-Stack...&#10;Développement de l'API et centralisation...&#10;Conception des interfaces..."></textarea>
+                <div class="form-text">Chaque ligne saisie apparaîtra sous forme de puce dans la timeline.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer bg-light">
+            <button type="button" class="btn btn-secondary" (click)="hideModal()">Annuler</button>
+            <button type="submit" class="btn text-white" style="background: #990012; border-color: #990012;" [disabled]="isSubmitting">
+              <i class="fas fa-spinner fa-spin me-1" *ngIf="isSubmitting"></i>
+              {{ editMode ? 'Enregistrer les modifications' : 'Ajouter à la Timeline' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

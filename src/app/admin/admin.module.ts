@@ -17,6 +17,7 @@ import { OrderImagesComponent } from './pages/order-images/order-images.componen
 import { HeaderComponent } from './static/header/header.component';
 import { OrderProjectComponent } from './pages/projects/sub-component/order-project/order-project.component';
 import { BreadcrumbComponent } from './static/breadcrumb/breadcrumb.component';
+import { TimelineAdminComponent } from './pages/timeline/timeline.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { BreadcrumbComponent } from './static/breadcrumb/breadcrumb.component';
     HeaderComponent,
     OrderProjectComponent,
     BreadcrumbComponent,
+    TimelineAdminComponent,
     
   ],
   imports: [
