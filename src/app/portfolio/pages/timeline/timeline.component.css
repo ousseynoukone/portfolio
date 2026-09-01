@@ -1,26 +1,12 @@
-/* Premium Cyber Dark Timeline Section */
+/* High-Performance Cyber Dark Timeline Section */
 .timeline-section {
-  background: radial-gradient(circle at 50% 20%, #1c0608 0%, #0d0d0e 60%, #050505 100%);
+  background: #0d0d0f;
   color: #FCF6F6;
-  padding: 100px 0;
+  padding: 90px 0;
   position: relative;
   overflow: hidden;
-}
-
-.timeline-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(rgba(153, 0, 18, 0.08) 1px, transparent 1px),
-    radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 30px 30px;
-  background-position: 0 0, 15px 15px;
-  opacity: 0.8;
-  pointer-events: none;
+  contain: paint;
+  transform: translateZ(0);
 }
 
 .section-badge .badge-pill {
@@ -55,16 +41,16 @@
   background: linear-gradient(90deg, transparent, #990012, #ff2238, transparent);
   margin: 0 auto;
   border-radius: 4px;
-  box-shadow: 0 0 12px rgba(255, 34, 56, 0.6);
+  box-shadow: 0 0 10px rgba(255, 34, 56, 0.5);
 }
 
 .timeline-wrapper {
   position: relative;
   max-width: 1050px;
-  margin: 60px auto 0;
+  margin: 50px auto 0;
 }
 
-/* Glowing Central Line */
+/* Central Line */
 .timeline-line {
   position: absolute;
   left: 50%;
@@ -72,7 +58,7 @@
   width: 3px;
   height: 100%;
   background: linear-gradient(180deg, rgba(153, 0, 18, 0.2) 0%, #990012 15%, #ff2238 50%, #990012 85%, rgba(153, 0, 18, 0.2) 100%);
-  box-shadow: 0 0 10px rgba(153, 0, 18, 0.4);
+  box-shadow: 0 0 8px rgba(153, 0, 18, 0.35);
   z-index: 1;
 }
 
@@ -86,8 +72,11 @@
   justify-content: flex-end;
   padding-right: 50%;
   position: relative;
-  margin-bottom: 50px;
+  margin-bottom: 45px;
   width: 100%;
+  content-visibility: auto;
+  contain-intrinsic-size: 240px;
+  transform: translateZ(0);
 }
 
 .timeline-item.right {
@@ -96,13 +85,13 @@
   padding-left: 50%;
 }
 
-/* Glowing Node Dot */
+/* Node Dot */
 .timeline-dot {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   background: #141416;
   border: 2.5px solid #990012;
   border-radius: 50%;
@@ -110,18 +99,19 @@
   align-items: center;
   justify-content: center;
   color: #ff334b;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   z-index: 10;
-  box-shadow: 0 0 20px rgba(153, 0, 18, 0.4);
-  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 0 14px rgba(153, 0, 18, 0.4);
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
 }
 
 .timeline-item:hover .timeline-dot {
   background: #990012;
   color: #ffffff;
   border-color: #ff334b;
-  transform: translateX(-50%) scale(1.18);
-  box-shadow: 0 0 30px rgba(255, 34, 56, 0.8);
+  transform: translateX(-50%) scale(1.12);
+  box-shadow: 0 0 20px rgba(255, 34, 56, 0.7);
 }
 
 .timeline-content {
@@ -130,25 +120,26 @@
   position: relative;
 }
 
-/* Glassmorphism Card */
+/* High-Performance Card */
 .timeline-card {
-  background: rgba(22, 22, 25, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #18181c;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-top: 2px solid rgba(153, 0, 18, 0.6);
-  border-radius: 18px;
-  padding: 1.8rem 2rem;
-  transition: all 0.35s ease;
+  border-radius: 16px;
+  padding: 1.6rem 1.8rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   position: relative;
   text-align: left !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  contain: content;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .timeline-item:hover .timeline-card {
-  transform: translateY(-6px);
-  background: rgba(28, 28, 32, 0.95);
+  transform: translateY(-4px);
   border-color: rgba(153, 0, 18, 0.6);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(153, 0, 18, 0.2) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(153, 0, 18, 0.25) !important;
 }
 
 /* Badges & Chips */
@@ -184,18 +175,18 @@
 }
 
 .timeline-title {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: #ffffff;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
   line-height: 1.4;
 }
 
 .company-chip, .location-chip {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: #d1d1d6;
   background: rgba(255, 255, 255, 0.05);
-  padding: 4px 10px;
+  padding: 3px 9px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
@@ -204,24 +195,24 @@
 .timeline-description-list {
   list-style: none;
   padding-left: 0;
-  margin-top: 1rem;
+  margin-top: 0.9rem;
   margin-bottom: 0;
 }
 
 .desc-item {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 0.65rem;
-  font-size: 0.92rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.9rem;
   color: #b0b0b8;
-  line-height: 1.55;
+  line-height: 1.5;
 }
 
 .bullet-arrow {
   color: #ff334b;
   font-size: 0.75rem;
   margin-right: 10px;
-  margin-top: 4px;
+  margin-top: 3px;
   flex-shrink: 0;
 }
 
@@ -233,6 +224,7 @@
   gap: 15px;
   position: relative;
   z-index: 5;
+  margin: 35px 0;
 }
 
 .divider-line {
@@ -245,12 +237,12 @@
   background: #18181b;
   border: 1.5px solid #990012;
   color: #ffffff;
-  padding: 8px 24px;
+  padding: 6px 20px;
   border-radius: 30px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.5px;
-  box-shadow: 0 0 15px rgba(153, 0, 18, 0.3);
+  box-shadow: 0 0 12px rgba(153, 0, 18, 0.3);
 }
 
 /* Mobile Responsiveness */
@@ -263,6 +255,7 @@
     justify-content: flex-start;
     padding-left: 60px;
     padding-right: 0;
+    margin-bottom: 35px;
   }
 
   .timeline-item.right {
@@ -271,9 +264,9 @@
 
   .timeline-dot {
     left: 25px;
-    width: 42px;
-    height: 42px;
-    font-size: 1.1rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
   }
 
   .timeline-content {

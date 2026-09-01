@@ -52,7 +52,7 @@
                         </button>
                         }
                         
-                        <div id="carousselMobile" class="carousel slide" data-bs-ride="carousel">
+                        <div id="carousselMobile" class="carousel slide" data-bs-interval="false">
                             <div class="carousel-inner">
                                 <div *ngFor="let project of state.mobile; index as i" 
                                      class="carousel-item" 
@@ -60,7 +60,7 @@
                                     
                                     <div class="project-card">
                                         <div class="project-image">
-                                            <img [src]="project.ppLink" [alt]="project.title">
+                                            <img [src]="project.ppLink" [alt]="project.title" loading="lazy" decoding="async">
                                             <div class="project-overlay">
                                                 <button class="btn btn-primary" (click)="navigateToDetailsPage(project)">
                                                     <i class="fas fa-eye"></i>
@@ -129,7 +129,7 @@
                         </button>
                         }
                         
-                        <div id="carousselWeb" class="carousel slide" data-bs-ride="carousel">
+                        <div id="carousselWeb" class="carousel slide" data-bs-interval="false">
                             <div class="carousel-inner">
                                 <div *ngFor="let project of state.web; index as i" 
                                      class="carousel-item" 
@@ -137,7 +137,7 @@
                                     
                                     <div class="project-card">
                                         <div class="project-image">
-                                            <img [src]="project.ppLink" [alt]="project.title">
+                                            <img [src]="project.ppLink" [alt]="project.title" loading="lazy" decoding="async">
                                             <div class="project-overlay">
                                                 <button class="btn btn-primary" (click)="navigateToDetailsPage(project)">
                                                     <i class="fas fa-eye"></i>
