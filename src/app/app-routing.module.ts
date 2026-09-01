@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { ServerErrorComponent } from './server-error/server-error.component';
 
 const routes: Routes = [
 
@@ -16,7 +15,6 @@ const routes: Routes = [
     loadChildren: () => import('./portfolio/portfolio.module').then(m => m.PortfolioModule)
   },
   
-  { path: '500', component: ServerErrorComponent },
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' }, 
 ];
