@@ -60,12 +60,29 @@ export const DEFAULT_TIMELINE_ITEMS: TimelineItem[] = [
     title: 'Master : EXPERT LEAD DÉVELOPPEUR FULLSTACK',
     subtitle: 'ITIC Paris',
     location: 'Paris, France',
-    period: '2024 - En cours',
-    description: [],
+    period: '2024 - AOÛT 2026',
+    description: [
+      "Formation d'excellence préparant au titre d'Expert Lead Développeur Full-Stack (Niveau 7 - Bac+5).",
+      "Architecture logicielle, microservices, cloud computing, sécurité applicative et gouvernance agile de projets d'envergure."
+    ],
     type: 'education',
     icon: 'fas fa-graduation-cap',
     link: '',
     order: 4
+  },
+  {
+    title: 'AWS Academy Graduate - Cloud Foundations',
+    subtitle: 'Amazon Web Services (AWS)',
+    location: '',
+    period: 'Avril 2026',
+    description: [
+      "Certification officielle AWS Academy Cloud Foundations délivrée par Amazon Web Services.",
+      "Maîtrise des concepts fondamentaux du Cloud AWS : Compute (EC2), Stockage (S3), Réseau (VPC), Sécurité (IAM) et Architecture Cloud Well-Architected."
+    ],
+    type: 'certification',
+    icon: 'fas fa-award',
+    link: 'https://www.credly.com/users/ousseynou-kone',
+    order: 5
   },
   {
     title: 'CS50x Certificate',
@@ -79,18 +96,20 @@ export const DEFAULT_TIMELINE_ITEMS: TimelineItem[] = [
     type: 'certification',
     icon: 'fas fa-award',
     link: 'https://cs50.harvard.edu/certificates/',
-    order: 5
+    order: 6
   },
   {
     title: 'Licence professionnelle en Génie logiciel',
     subtitle: "Institut supérieur d'informatique (ISI)",
     location: 'Sénégal',
     period: '2020 - 2023',
-    description: [],
+    description: [
+      "Formation approfondie en génie logiciel, algorithmique, bases de données relationnelles et développement applicatif."
+    ],
     type: 'education',
     icon: 'fas fa-university',
     link: '',
-    order: 6
+    order: 7
   }
 ];
 
