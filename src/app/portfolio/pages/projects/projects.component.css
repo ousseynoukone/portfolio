@@ -1,4 +1,4 @@
-/* Modern High-Performance Projects Section */
+﻿/* Modern High-Performance Projects Section */
 .projects-section {
   background: #161618;
   color: #FCF6F6;
@@ -144,7 +144,7 @@
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  height: 400px;
+  min-height: 360px;
   display: flex;
   flex-direction: column;
   transform: translateZ(0);
@@ -209,15 +209,12 @@
 }
 
 .project-info {
-  padding: 1rem 2rem;
+  padding: 1.2rem 1.8rem 1.4rem;
   flex: 1;
   display: flex;
   flex-direction: column;
-  text-align: center;
-}
-
-.project-info h4,
-.project-info p {
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
@@ -225,21 +222,26 @@
   font-size: 1.3rem;
   font-weight: 700;
   color: #242323;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
+  text-align: center;
 }
 
 .project-info p {
   color: #666;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
-  flex: 1;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  flex: none;
 }
 
 .project-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.2rem;
 }
 
 .tag {

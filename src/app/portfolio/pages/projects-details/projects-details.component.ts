@@ -1,10 +1,11 @@
-import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
+﻿import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
 import { Project } from 'src/app/models/project';
 import { PassDataThrough } from '../../shared/sharedService';
 import { ToastrService } from 'ngx-toastr';
 import { NavigationEnd, Router } from '@angular/router';
 import { Helpers } from '../../shared/helper';
 declare var window: any;
+declare var $: any;
 
 @Component({
     selector: 'app-projects-details',
@@ -28,11 +29,32 @@ export class ProjectsDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.project = this.shareData.getData as Project;
-    this.usefullLinks = this.project.usefullLinks.map(link => this.ensureHttps(link));
     
-    this.initImageModal();
-    this.initImagesLoaded();
+    // Normalize usedTools to ensure it is always a proper array of strings
+    if (this.project && this.project.usedTools) {
+      if (typeof this.project.usedTools === 'string') {
+        this.project.usedTools = (this.project.usedTools as string).split(',').map(t => t.trim()).filter(Boolean);
+      } else if (Array.isArray(this.project.usedTools)) {
+        const flattened: string[] = [];
+        this.project.usedTools.forEach(t => {
+          if (typeof t === 'string' && t.includes(',')) {
+            flattened.push(...t.split(',').map(s => s.trim()).filter(Boolean));
+          } else if (t) {
+            flattened.push(String(t).trim());
+          }
+        });
+        this.project.usedTools = flattened;
+      }
+    }
+
+    if (this.project && this.project.usefullLinks && Array.isArray(this.project.usefullLinks)) {
+      this.usefullLinks = this.project.usefullLinks.map(link => this.ensureHttps(link));
+    }
     
+    if (this.project && this.project.imgsLink) {
+      this.initImageModal();
+      this.initImagesLoaded();
+    }
   }
 
   initImagesLoaded() {
@@ -44,18 +66,23 @@ export class ProjectsDetailsComponent implements OnInit {
   }
 
   initImageModal() {
-    this.modalImages = new window.bootstrap.Modal($('#modalImages'));
+    const modalEl = document.getElementById('modalImages');
+    if (modalEl && typeof window.bootstrap !== 'undefined' && window.bootstrap.Modal) {
+      this.modalImages = new window.bootstrap.Modal(modalEl);
+    }
   }
 
   openImageModal() {
-    this.modalImages.show();
+    if (this.modalImages) {
+      this.modalImages.show();
+    }
   }
 
   displayImage(): boolean {
     const screenWidth = window.innerWidth;
     if (screenWidth < 700 && this.project.type != "mobile") {
       if (!this.isMessageDisplayed) {
-        this.toastrService.info("Les captures d'écran de bureau ne sont visible que sur ordinateur 🥺.");
+        this.toastrService.info("Les captures d'écran de bureau ne sont visibles que sur ordinateur.");
       }
       this.isMessageDisplayed = true;
       return false;
@@ -69,8 +96,7 @@ export class ProjectsDetailsComponent implements OnInit {
   }
 
   getProjectDate(): string {
-    if (this.project.createdAt) {
-      // Handle Firestore FieldValue
+    if (this.project && this.project.createdAt) {
       const date = this.project.createdAt as any;
       if (date.toDate) {
         return date.toDate().toLocaleDateString('fr-FR', { 
@@ -110,16 +136,13 @@ export class ProjectsDetailsComponent implements OnInit {
   }
 
   ensureHttps(link: string): string {
-  link = link.trim();
-
-  if (/^https?:\/\//i.test(link)) {
-    return link;
+    link = link.trim();
+    if (/^https?:\/\//i.test(link)) {
+      return link;
+    }
+    if (link.startsWith('//')) {
+      return 'https:' + link;
+    }
+    return 'https://' + link;
   }
-
-  if (link.startsWith('//')) {
-    return 'https:' + link;
-  }
-  return 'https://' + link;
-}
-
 }
