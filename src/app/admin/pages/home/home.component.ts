@@ -1,27 +1,52 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
 import { FireBaseCvService, CvData } from '../../../services/firebaseCvService';
+import { FireBaseProjectService } from '../../../services/firebaseProjectServices';
+import { FireBaseAbilityService } from '../../../services/firebaseAbilitiesServices';
+import { FirebaseTimelineService } from '../../../services/firebaseTimelineService';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css'],
-    standalone: false
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
+  standalone: false
 })
 export class HomeComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   
+  private cvService = inject(FireBaseCvService);
+  private projectService = inject(FireBaseProjectService);
+  private abilityService = inject(FireBaseAbilityService);
+  private timelineService = inject(FirebaseTimelineService);
+  private toastr = inject(ToastrService);
+
   currentCv: CvData | null = null;
   isUploading = false;
   uploadProgress = 0;
 
-  constructor(
-    private cvService: FireBaseCvService,
-    private toastr: ToastrService
-  ) {}
+  totalProjects: number = 0;
+  totalAbilities: number = 0;
+  totalTimeline: number = 0;
 
   ngOnInit() {
     this.loadCurrentCv();
+    this.loadStats();
+  }
+
+  async loadStats() {
+    try {
+      await this.projectService.getProjectNumber();
+      this.totalProjects = this.projectService.totalOfItems || 0;
+    } catch (e) {}
+
+    try {
+      await this.abilityService.getAbilitiesNumber();
+      this.totalAbilities = this.abilityService.totalOfItems || 0;
+    } catch (e) {}
+
+    this.timelineService.timeline$.subscribe(items => {
+      this.totalTimeline = items ? items.length : 0;
+    });
   }
 
   async loadCurrentCv() {
@@ -36,15 +61,13 @@ export class HomeComponent implements OnInit {
   }
 
   async uploadCv(file: File) {
-    // Validate file type
     const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     if (!allowedTypes.includes(file.type)) {
       this.toastr.error('Veuillez sélectionner un fichier PDF ou Word valide.');
       return;
     }
 
-    // Validate file size (max 10MB)
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 10 * 1024 * 1024;
     if (file.size > maxSize) {
       this.toastr.error('Le fichier est trop volumineux. Taille maximale: 10MB');
       return;
@@ -53,7 +76,6 @@ export class HomeComponent implements OnInit {
     this.isUploading = true;
     this.uploadProgress = 0;
 
-    // Subscribe to upload progress
     this.cvService.percentage$.subscribe(progress => {
       this.uploadProgress = progress;
     });
@@ -61,17 +83,16 @@ export class HomeComponent implements OnInit {
     try {
       const result = await this.cvService.uploadCv(file);
       if (result.status) {
-        this.toastr.success(result.message || 'CV uploaded successfully!');
+        this.toastr.success(result.message || 'CV téléversé avec succès !');
         await this.loadCurrentCv();
       } else {
-        this.toastr.error(result.message || 'Upload failed');
+        this.toastr.error(result.message || 'Échec du téléversement');
       }
     } catch (error) {
       this.toastr.error('Erreur lors de l\'upload: ' + error);
     } finally {
       this.isUploading = false;
       this.uploadProgress = 0;
-      // Reset file input
       if (this.fileInput) {
         this.fileInput.nativeElement.value = '';
       }

@@ -6,6 +6,9 @@ import { AdminModule } from './admin/admin.module';
 import { environment } from '../app/constent/constant';
 import { ToastrModule } from 'ngx-toastr';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { ServerErrorComponent } from './server-error/server-error.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ErrorInterceptor } from './services/interceptors/error.interceptor';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import {  getFirestore,provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
@@ -35,6 +38,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
   providers: [
     provideAnimations(), 
     provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     provideTranslateHttpLoader({
       prefix: './assets/i18n/',
       suffix: '.json'
