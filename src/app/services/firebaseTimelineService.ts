@@ -25,6 +25,34 @@ export const DEFAULT_TIMELINE_ITEMS: TimelineItem[] = [
     order: 1
   },
   {
+    title: 'Master : EXPERT LEAD DÉVELOPPEUR FULLSTACK',
+    subtitle: 'ITIC Paris',
+    location: 'Paris, France',
+    period: '2024 - AOÛT 2026',
+    description: [
+      "Formation d'excellence préparant au titre d'Expert Lead Développeur Full-Stack (Niveau 7 - Bac+5).",
+      "Architecture logicielle, microservices, cloud computing, sécurité applicative et gouvernance agile de projets d'envergure."
+    ],
+    type: 'education',
+    icon: 'fas fa-graduation-cap',
+    link: '',
+    order: 2
+  },
+  {
+    title: 'AWS Academy Graduate - Cloud Foundations',
+    subtitle: 'Amazon Web Services (AWS)',
+    location: '',
+    period: 'Avril 2026',
+    description: [
+      "Certification officielle AWS Academy Cloud Foundations délivrée par Amazon Web Services Training and Certification.",
+      "Maîtrise approfondie des piliers du Cloud AWS : Architecture Cloud, Compute (EC2), Stockage (S3/EBS), Réseau (VPC), Sécurité (IAM) et Facturation/Pricing."
+    ],
+    type: 'certification',
+    icon: 'fas fa-award',
+    link: 'https://www.credly.com/badges/c14443d3-4650-49f2-8b1e-c495c2bfad4e',
+    order: 3
+  },
+  {
     title: 'Alternant Chef de Projet - Développeur Full Stack',
     subtitle: 'XKS GROUP',
     location: 'Cergy, France',
@@ -38,7 +66,21 @@ export const DEFAULT_TIMELINE_ITEMS: TimelineItem[] = [
     type: 'experience',
     icon: 'fas fa-briefcase',
     link: '',
-    order: 2
+    order: 4
+  },
+  {
+    title: 'CS50x Certificate',
+    subtitle: 'Harvard University',
+    location: '',
+    period: '2024 - Novembre 2024',
+    description: [
+      "Certification d'excellence en informatique et génie logiciel délivrée par Harvard University (edX).",
+      "Maîtrise approfondie des algorithmes, structures de données, gestion de la mémoire en C, développement Python, SQL et frameworks web modernes."
+    ],
+    type: 'certification',
+    icon: 'fas fa-award',
+    link: 'https://certificates.cs50.io/750339f1-79ff-405e-bbda-5fd2de1ed5d1.pdf?size=letter',
+    order: 5
   },
   {
     title: 'Stage Développeur Full-stack',
@@ -54,48 +96,6 @@ export const DEFAULT_TIMELINE_ITEMS: TimelineItem[] = [
     type: 'experience',
     icon: 'fas fa-laptop-code',
     link: '',
-    order: 3
-  },
-  {
-    title: 'Master : EXPERT LEAD DÉVELOPPEUR FULLSTACK',
-    subtitle: 'ITIC Paris',
-    location: 'Paris, France',
-    period: '2024 - AOÛT 2026',
-    description: [
-      "Formation d'excellence préparant au titre d'Expert Lead Développeur Full-Stack (Niveau 7 - Bac+5).",
-      "Architecture logicielle, microservices, cloud computing, sécurité applicative et gouvernance agile de projets d'envergure."
-    ],
-    type: 'education',
-    icon: 'fas fa-graduation-cap',
-    link: '',
-    order: 4
-  },
-  {
-    title: 'AWS Academy Graduate - Cloud Foundations',
-    subtitle: 'Amazon Web Services (AWS)',
-    location: '',
-    period: 'Avril 2026',
-    description: [
-      "Certification officielle AWS Academy Cloud Foundations délivrée par Amazon Web Services.",
-      "Maîtrise des concepts fondamentaux du Cloud AWS : Compute (EC2), Stockage (S3), Réseau (VPC), Sécurité (IAM) et Architecture Cloud Well-Architected."
-    ],
-    type: 'certification',
-    icon: 'fas fa-award',
-    link: 'https://www.credly.com/users/ousseynou-kone',
-    order: 5
-  },
-  {
-    title: 'CS50x Certificate',
-    subtitle: 'Harvard University',
-    location: '',
-    period: '2024 - Novembre 2024',
-    description: [
-      "Certification d'excellence en informatique et génie logiciel délivrée par Harvard University (edX).",
-      "Maîtrise approfondie des algorithmes, structures de données, gestion de la mémoire en C, développement Python, SQL et frameworks web modernes."
-    ],
-    type: 'certification',
-    icon: 'fas fa-award',
-    link: 'https://cs50.harvard.edu/certificates/',
     order: 6
   },
   {
@@ -133,7 +133,6 @@ export class FirebaseTimelineService {
       const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
-        // Auto seed default items to Firestore if collection is empty
         await this.seedDefaults();
         return DEFAULT_TIMELINE_ITEMS;
       }
