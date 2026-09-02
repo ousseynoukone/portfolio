@@ -47,8 +47,12 @@ export class ProjectsDetailsComponent implements OnInit {
       }
     }
 
-    if (this.project && this.project.usefullLinks && Array.isArray(this.project.usefullLinks)) {
-      this.usefullLinks = this.project.usefullLinks.map(link => this.ensureHttps(link));
+    if (this.project && this.project.usefullLinks) {
+      if (Array.isArray(this.project.usefullLinks)) {
+        this.usefullLinks = this.project.usefullLinks.map(link => this.ensureHttps(link));
+      } else if (typeof this.project.usefullLinks === 'string') {
+        this.usefullLinks = this.helper.splitAndTrim(this.project.usefullLinks).map(link => this.ensureHttps(link));
+      }
     }
     
     if (this.project && this.project.imgsLink) {
