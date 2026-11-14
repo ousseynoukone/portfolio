@@ -2,8 +2,11 @@
 import { Project } from 'src/app/models/project';
 import { PassDataThrough } from '../../shared/sharedService';
 import { ToastrService } from 'ngx-toastr';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { Helpers } from '../../shared/helper';
+import { FireBaseProjectClientService } from 'src/app/services/firebaseProjectClientServices';
+import { slugify } from 'src/app/services/helpers/slug';
 declare var window: any;
 declare var $: any;
 
@@ -27,9 +30,46 @@ export class ProjectsDetailsComponent implements OnInit {
   imagesLoaded: boolean[] = [];
   isVideoPlaying: boolean = false;
 
+  route = inject(ActivatedRoute);
+  projectService = inject(FireBaseProjectClientService);
+  titleService = inject(Title);
+  isLoading = true;
+  notFound = false;
+
   ngOnInit(): void {
-    this.project = this.shareData.getData as Project;
-    
+    this.route.paramMap.subscribe(params => this.loadProject(params.get('slug') ?? ''));
+  }
+
+  /** Utilise le projet déjà en mémoire s'il correspond au slug, sinon le charge depuis Firestore. */
+  private async loadProject(slug: string): Promise<void> {
+    this.isLoading = true;
+    this.notFound = false;
+    this.isMessageDisplayed = false;
+
+    let project = this.shareData.getData as Project | undefined;
+    if (!project || (project.slug || slugify(project.title)) !== slug) {
+      try {
+        project = await this.projectService.getProjectBySlug(slug);
+      } catch (error) {
+        console.error('Erreur lors du chargement du projet :', error);
+        project = undefined;
+      }
+    }
+
+    if (!project) {
+      this.notFound = true;
+      this.isLoading = false;
+      return;
+    }
+
+    this.project = project;
+    this.shareData.setData = project;
+    this.setupProject();
+    this.isLoading = false;
+    this.titleService.setTitle(`${project.title} | Ousseynou Koné`);
+  }
+
+  private setupProject(): void {
     // Normalize usedTools to ensure it is always a proper array of strings
     if (this.project && this.project.usedTools) {
       if (typeof this.project.usedTools === 'string') {
@@ -56,8 +96,9 @@ export class ProjectsDetailsComponent implements OnInit {
     }
     
     if (this.project && this.project.imgsLink) {
-      this.initImageModal();
       this.initImagesLoaded();
+      // Le modal n'existe dans le DOM qu'après le rendu du projet
+      setTimeout(() => this.initImageModal(), 0);
     }
   }
 

@@ -4,6 +4,7 @@ import { Subscription, filter, first } from 'rxjs';
 import { Project } from '../../../models/project';
 import { PassDataThrough } from '../../shared/sharedService';
 import { FireBaseProjectClientService } from 'src/app/services/firebaseProjectClientServices';
+import { slugify } from 'src/app/services/helpers/slug';
 
 interface ProjectState {
   mobile: Project[];
@@ -50,7 +51,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   protected navigateToDetailsPage(project: Project): void {
     this.shareData.setData = project;
-    this.router.navigate(['/project-details']);
+    const slug = project.slug || slugify(project.title);
+    this.router.navigate(['/project-details', slug]);
     this.scrollToTop();
   }
 

@@ -13,6 +13,7 @@ import { Storage, ref, deleteObject, uploadBytesResumable, getDownloadURL } from
 import { Project } from '../models/project';
 import { ProjectDto, ProjectFileUpdateDto, WithImgVideoDto } from '../models/dtos/projectDto';
 import { removeStringFromArray } from './helpers/helper';
+import { slugify } from './helpers/slug';
 import { uploadFile, uploadFileList } from './helpers/fileUploadHelper'; // Assumed to be// Type definition for firestore documents (to enforce ID presence)
 export interface ProjectDtoWithID extends ProjectDto { id: string; }
 
@@ -129,6 +130,8 @@ export class FireBaseProjectService implements OnInit {
       this.percentageImg = 0;
       this.percentageVideo=0;
 
+      const slug = await this.generateUniqueSlug(project.title);
+
       const uploadFileList$ = uploadFileList(project.imgsFile,this.basePathImgs,this.storage);
       const uploadFile$ = uploadFile(project.videoFile,this.basePathVideo,this.storage);
       const uploadPPFile$ = uploadFile(project.profilePicture,this.basePathVideo,this.storage);
@@ -159,6 +162,7 @@ export class FireBaseProjectService implements OnInit {
             const projectDto: ProjectDtoWithID = {
               id: newId, // Use the newD
               title: project.title,
+              slug: slug,
               demoLink: project.demoLink,
               minDescription: project.minDescription,
               fullDescription: project.fullDescription,
@@ -192,6 +196,17 @@ export class FireBaseProjectService implements OnInit {
       this.initImgVideoPercentage()
       return { status: false, message: String(error) };
     }
+  }
+
+  /** Génère un slug d'URL unique à partir du titre (suffixe -2, -3... en cas de doublon). */
+  private async generateUniqueSlug(title: string): Promise<string> {
+    const base = slugify(title) || 'projet';
+    let candidate = base;
+    let n = 2;
+    while (!(await getDocs(query(this.projectsDb, where('slug', '==', candidate), limit(1)))).empty) {
+      candidate = `${base}-${n++}`;
+    }
+    return candidate;
   }
 
   fetchProjectWithoutLimit(){

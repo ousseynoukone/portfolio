@@ -13,6 +13,7 @@ export interface ProjectDto {
      type : string,
      ppLink : string,
      isVisible : boolean,
+     slug? : string,
      createdAt:FieldValue
      
 }

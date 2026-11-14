@@ -21,4 +21,7 @@ export class Project {
 
         ) {
     }
+
+    /** Identifiant lisible utilisé dans l'URL : /project-details/:slug */
+    slug?: string;
 }

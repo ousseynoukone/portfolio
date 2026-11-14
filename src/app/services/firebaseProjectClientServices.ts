@@ -10,6 +10,9 @@ import {
   query,
   orderBy,
   collectionData,
+  where,
+  limit,
+  getDocs,
 } from '@angular/fire/firestore';
 
 import { Storage } from '@angular/fire/storage';
@@ -64,6 +67,17 @@ export class FireBaseProjectClientService {
     this._totalOfItems.next(mobileCount + webCount);
   }
 
+
+  /** Charge un projet visible à partir de son slug (permet les URLs partageables / le rafraîchissement). */
+  async getProjectBySlug(slug: string): Promise<Project | undefined> {
+    const q = query(this.projectsDb, where('slug', '==', slug), limit(1));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) {
+      return undefined;
+    }
+    const project = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id } as Project;
+    return project.isVisible ? project : undefined;
+  }
 
   fetchProjects() {
     const q = query(this.projectsDb, orderBy('placeIndex', 'asc'));
